@@ -1,0 +1,7 @@
+/node_modules/
+dist/
+public/assets/
+coverage/
+.env
+*.log
+*.sqlite

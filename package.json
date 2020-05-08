@@ -1,0 +1,70 @@
+{
+  "name": "task-manager",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "gulp server",
+    "build": "npx webpack -p --env production",
+    "prepublishOnly": "npm run build",
+    "preinstall": "npm run build",
+    "eslint": "eslint"
+  },
+  "engines": {
+    "node": ">=13"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andr-off/backend-project-lvl4.git"
+  },
+  "author": "Andrey Khlokhlov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andr-off/backend-project-lvl4/issues"
+  },
+  "homepage": "https://github.com/andr-off/backend-project-lvl4#readme",
+  "dependencies": {
+    "autoprefixer": "^9.7.6",
+    "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
+    "jquery": "^3.5.0",
+    "koa": "^2.11.0",
+    "koa-pug": "^4.0.3",
+    "koa-static": "^5.0.0",
+    "koa-webpack": "^5.3.0",
+    "lodash": "^4.17.15",
+    "popper.js": "^1.16.1",
+    "rollbar": "^2.15.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.2",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cli": "^2.2.0",
+    "gulp-util": "^3.0.8",
+    "jest": "^25.4.0",
+    "jest-cli": "^25.4.0",
+    "nodemon": "^2.0.3",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^1.1.4",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "files": [
+    "dist"
+  ]
+}
