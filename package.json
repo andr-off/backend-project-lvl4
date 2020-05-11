@@ -36,6 +36,7 @@
     "koa-webpack": "^5.3.0",
     "lodash": "^4.17.15",
     "popper.js": "^1.16.1",
+    "webpack": "^4.43.0",
     "rollbar": "^2.15.2"
   },
   "devDependencies": {
@@ -59,7 +60,6 @@
     "nodemon": "^2.0.3",
     "postcss-loader": "^3.0.0",
     "style-loader": "^1.1.4",
-    "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
   "jest": {
