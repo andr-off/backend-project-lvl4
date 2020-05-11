@@ -5,8 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "start": "gulp server",
-    "build": "npx webpack -p --env production",
+    "start": "node ./dist/server.js",
+    "build": "NODE_ENV=production babel server --out-dir dist && npx webpack -p",
+    "devbuild": "NODE_ENV=development babel server --out-dir dist --source-maps inline && npx webpack",
     "prepublishOnly": "npm run build",
     "preinstall": "npm run build",
     "eslint": "eslint"

@@ -7,7 +7,7 @@ import koaWebpack from 'koa-webpack';
 import Rollbar from 'rollbar';
 import dotenv from 'dotenv';
 
-import webpackConfig from './webpack.config';
+import webpackConfig from '../webpack.config';
 
 export default () => {
   dotenv.config();
@@ -20,7 +20,7 @@ export default () => {
     captureUnhandledRejections: true
   });
 
-  app.use(serve(path.join(__dirname, '/public')));
+  app.use(serve(path.join(__dirname, '../public')));
 
   koaWebpack({
     config: webpackConfig,
@@ -28,9 +28,9 @@ export default () => {
     .then((midleware) => app.use(midleware));
 
   const pug = new Pug({
-    viewPath: path.join(__dirname, './views'),
+    viewPath: path.join(__dirname, '../views'),
     locals: {},
-    basedir: path.join(__dirname, './views'),
+    basedir: path.join(__dirname, '../views'),
     helperPath: [
       { _ },
     ],
@@ -39,7 +39,7 @@ export default () => {
   pug.use(app);
 
   app.use(async (ctx) => {
-    await ctx.render('index', { title: 'Hello, World' });
+    await ctx.render('index');
   });
 
   return app;

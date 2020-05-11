@@ -14,6 +14,10 @@ build:
 	rm -rf dist
 	npm run build
 
+devbuild:
+	rm -rf dist
+	npm run devbuild
+
 test:
 	npm test
 
