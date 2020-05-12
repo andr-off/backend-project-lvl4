@@ -36,14 +36,14 @@ export default () => {
 
   app.use(router.routes());
   app.use(router.allowedMethods());
-
+  console.log(path.join(__dirname, '../server/views'));
   const pug = new Pug({
-    viewPath: path.join(__dirname, './views'),
+    viewPath: path.join(__dirname, '../server/views'),
     noCache: process.env.NODE_ENV === 'development',
     debug: process.env.NODE_ENV === 'development',
     compileDebug: true,
     locals: {},
-    basedir: path.join(__dirname, './views'),
+    basedir: path.join(__dirname, 'views'),
     helperPath: [
       { _ },
       { urlFor: (...args) => router.url(...args) },
