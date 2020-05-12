@@ -9,7 +9,7 @@ import Rollbar from 'rollbar';
 import dotenv from 'dotenv';
 
 import webpackConfig from '../webpack.config';
-import addRoutes from '../routes';
+import addRoutes from './routes';
 
 export default () => {
   dotenv.config();
@@ -38,12 +38,12 @@ export default () => {
   app.use(router.allowedMethods());
 
   const pug = new Pug({
-    viewPath: path.join(__dirname, '../views'),
+    viewPath: path.join(__dirname, './views'),
     noCache: process.env.NODE_ENV === 'development',
     debug: process.env.NODE_ENV === 'development',
     compileDebug: true,
     locals: {},
-    basedir: path.join(__dirname, '../views'),
+    basedir: path.join(__dirname, './views'),
     helperPath: [
       { _ },
       { urlFor: (...args) => router.url(...args) },
