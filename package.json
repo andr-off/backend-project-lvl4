@@ -2,13 +2,12 @@
   "name": "task-manager",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/index.js",
+  "main": "",
   "scripts": {
     "test": "jest",
-    "start": "node ./dist/server.js",
-    "build": "NODE_ENV=production babel server --out-dir dist && npx webpack -p",
-    "devbuild": "NODE_ENV=development babel server --out-dir dist --source-maps inline && npx webpack",
-    "prepublishOnly": "npm run build",
+    "start": "NODE_ENV=production node dist/server/bin/server.js",
+    "build": "NODE_ENV=production babel server --out-dir dist/server && npx webpack -p",
+    "devbuild": "NODE_ENV=development babel server --out-dir dist/server --source-maps inline && npx webpack",
     "postinstall": "npm run build",
     "eslint": "eslint"
   },

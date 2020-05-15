@@ -8,7 +8,7 @@ import Router from 'koa-router';
 import Rollbar from 'rollbar';
 import dotenv from 'dotenv';
 
-import webpackConfig from '../webpack.config';
+import webpackConfig from '../../webpack.config';
 import addRoutes from './routes';
 
 export default () => {
@@ -22,7 +22,7 @@ export default () => {
     captureUnhandledRejections: true,
   });
 
-  app.use(serve(path.join(__dirname, '../public')));
+  app.use(serve(path.join(__dirname, '../../public')));
 
   if (process.env.NODE_ENV === 'development') {
     koaWebpack({
@@ -36,9 +36,9 @@ export default () => {
 
   app.use(router.routes());
   app.use(router.allowedMethods());
-  console.log(path.join(__dirname, '../server/views'));
+  console.log(path.join(__dirname, '../../server/views'));
   const pug = new Pug({
-    viewPath: path.join(__dirname, '../server/views'),
+    viewPath: path.join(__dirname, '../../server/views'),
     noCache: process.env.NODE_ENV === 'development',
     debug: process.env.NODE_ENV === 'development',
     compileDebug: true,
