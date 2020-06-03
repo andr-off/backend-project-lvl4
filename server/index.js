@@ -12,7 +12,6 @@ import bodyPareser from 'koa-bodyparser';
 import methodOverride from 'koa-methodoverride';
 import koaLogger from 'koa-logger';
 
-import webpackConfig from '../../webpack.config';
 import addRoutes from './routes';
 import container from '../container';
 
@@ -27,25 +26,57 @@ export default () => {
     captureUnhandledRejections: true,
   });
 
-  app.use(serve(path.join(__dirname, '../../public')));
+  app.use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (err) {
+      rollbar.error(err, ctx.request);
+    }
+  });
 
-  if (process.env.NODE_ENV === 'development') {
+  app.keys = ['the most secret key in the world'];
+  app.use(session(app));
+  app.use(flash());
+  app.use(async (ctx, next) => {
+    ctx.state = {
+      flash: ctx.flash,
+      isSignedIn: () => ctx.session.userId !== undefined,
+    };
+    await next();
+  });
+  app.use(bodyPareser());
+  app.use(methodOverride((req) => {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+      return req.body._method; //eslint-disable-line
+    }
+    return null;
+  }));
+
+  const publicDir = isDevelopment ? '../public' : '../../public';
+  const publicDirPath = path.join(__dirname, publicDir);
+
+  app.use(serve(publicDirPath));
+
+  if (isDevelopment) {
+    const configPath = path.join(__dirname, '../webpack.config');
     koaWebpack({
-      config: webpackConfig,
+      configPath,
     }).then((midleware) => app.use(midleware));
   }
 
+  app.use(koaLogger());
+
   const router = new Router();
 
-  addRoutes(router);
+  addRoutes(router, container);
 
   app.use(router.routes());
   app.use(router.allowedMethods());
-  console.log(path.join(__dirname, '../../server/views'));
+
   const pug = new Pug({
-    viewPath: path.join(__dirname, '../../server/views'),
-    noCache: process.env.NODE_ENV === 'development',
-    debug: process.env.NODE_ENV === 'development',
+    viewPath: path.join(__dirname, 'views'),
+    noCache: isDevelopment,
+    debug: isDevelopment,
     compileDebug: true,
     locals: {},
     basedir: path.join(__dirname, 'views'),
@@ -56,14 +87,6 @@ export default () => {
   });
 
   pug.use(app);
-
-  app.use(async (ctx, next) => {
-    try {
-      await next();
-    } catch (err) {
-      rollbar.error(err, ctx.request);
-    }
-  });
 
   return app;
 };
