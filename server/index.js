@@ -6,13 +6,18 @@ import _ from 'lodash';
 import koaWebpack from 'koa-webpack';
 import Router from 'koa-router';
 import Rollbar from 'rollbar';
-import dotenv from 'dotenv';
+import session from 'koa-generic-session';
+import flash from 'koa-flash-simple';
+import bodyPareser from 'koa-bodyparser';
+import methodOverride from 'koa-methodoverride';
+import koaLogger from 'koa-logger';
 
 import webpackConfig from '../../webpack.config';
 import addRoutes from './routes';
+import container from '../container';
 
 export default () => {
-  dotenv.config();
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   const app = new Koa();
 
