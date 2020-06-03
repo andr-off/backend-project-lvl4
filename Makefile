@@ -2,7 +2,7 @@ install:
 	npm install
 
 start:
-	NODE_ENV=development DEBUG=application:* npx nodemon --watch . --exec npx gulp server
+	NODE_ENV=development DEBUG=app:* npx nodemon --watch . --exec npx gulp server
 
 publish:
 	npm publish --dry-run
@@ -11,15 +11,19 @@ lint:
 	npx eslint .
 
 build:
-	rm -rf dist
 	npm run build
-
-devbuild:
-	rm -rf dist
-	npm run devbuild
 
 test:
 	npm test
+
+deploy:
+	git push heroku master
+
+db-setup:
+	npx sequelize db:migrate
+
+setup:
+	install db-setup
 
 test-coverage:
 	npm test -- --coverage
