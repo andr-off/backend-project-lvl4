@@ -19,10 +19,7 @@ module.exports = {
         unique: true
       },
       passwordDigest: {
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
