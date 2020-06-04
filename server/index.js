@@ -13,7 +13,7 @@ import methodOverride from 'koa-methodoverride';
 import koaLogger from 'koa-logger';
 
 import addRoutes from './routes';
-import container from '../container';
+import container from './container';
 
 export default () => {
   const isDevelopment = process.env.NODE_ENV === 'development';

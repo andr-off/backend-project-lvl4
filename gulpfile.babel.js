@@ -1,7 +1,7 @@
 import gulp from 'gulp';
 import repl from 'repl';
 
-import container from './container';
+import container from './server/container';
 import getServer from './server';
 
 gulp.task('server', (cb) => {
