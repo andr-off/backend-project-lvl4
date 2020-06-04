@@ -21,12 +21,13 @@ export default () => {
   const app = new Koa();
 
   const rollbar = new Rollbar({
-    accessToken: process.env.ACCESS_TOKEN,
+    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     captureUncaught: true,
     captureUnhandledRejections: true,
   });
 
   app.use(async (ctx, next) => {
+    rollbar.log('Hello world!');
     try {
       await next();
     } catch (err) {
