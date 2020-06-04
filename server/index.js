@@ -27,7 +27,6 @@ export default () => {
   });
 
   app.use(async (ctx, next) => {
-    rollbar.log('Hello world!');
     try {
       await next();
     } catch (err) {
