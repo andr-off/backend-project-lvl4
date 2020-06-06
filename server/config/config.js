@@ -4,22 +4,32 @@ import parseDbUrl from 'parse-db-url';
 dotenv.config();
 const config = parseDbUrl(process.env.DATABASE_URL);
 
-console.log(config);
+const {
+  user: username,
+  password,
+  database,
+  host,
+  port,
+  adapter: dialect,
+  ...rest
+} = config;
+
 export default {
   development: {
-    username: config.user,
-    password: config.password,
-    database: config.database,
-    host: config.host,
-    port: config.port,
-    dialect: config.adapter,
-  },
-  test: {
     storage: './db.development.sqlite',
     dialect: 'sqlite',
   },
+  test: {
+    storage: ':memory:',
+    dialect: 'sqlite',
+  },
   production: {
-    url: process.env.DATABASE_URL,
-    dialect: 'postgres',
+    username,
+    password,
+    database,
+    host,
+    port,
+    dialect,
+    options: rest,
   },
 };
