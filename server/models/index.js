@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import Sequelize from 'sequelize';
 
-import configByEnv from '../config/config.json';
+import configByEnv from '../config/config';
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';

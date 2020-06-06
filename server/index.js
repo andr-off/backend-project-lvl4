@@ -20,6 +20,8 @@ export default () => {
 
   const app = new Koa();
 
+  const log = container.logger;
+
   const rollbar = new Rollbar({
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     captureUncaught: true,
@@ -30,6 +32,7 @@ export default () => {
     try {
       await next();
     } catch (err) {
+      log(err);
       rollbar.error(err, ctx.request);
     }
   });
@@ -76,8 +79,8 @@ export default () => {
   const pug = new Pug({
     viewPath: path.join(__dirname, 'views'),
     noCache: isDevelopment,
-    debug: isDevelopment,
-    compileDebug: true,
+    // debug: isDevelopment,
+    // compileDebug: true,
     locals: {},
     basedir: path.join(__dirname, 'views'),
     helperPath: [
