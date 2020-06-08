@@ -3,7 +3,9 @@ import buildFormObj from '../lib/formObjectBuilder';
 
 const { User } = db;
 
-export default (router) => {
+export default (router, container) => {
+  const log = container.logger;
+
   router
     .get('users', '/users', async (ctx) => {
       const users = await User.findAll();
@@ -16,13 +18,13 @@ export default (router) => {
     .post('users', '/users', async (ctx) => {
       const { request: { body: { form } } } = ctx;
       const user = User.build(form);
-      console.log(ctx.request.body);
       try {
         await user.save();
         ctx.flash.set('User has been created');
         ctx.redirect(router.url('root'));
       } catch (e) {
-        console.log(e);
+        log(e);
+        ctx.status = 422;
         await ctx.render('users/new', { f: buildFormObj(user, e) });
       }
     });
