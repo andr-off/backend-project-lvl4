@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 import parseDbUrl from 'parse-db-url';
 
 dotenv.config();
-const config = parseDbUrl(process.env.DATABASE_URL || '');
+const databaseUrl = process.env.DATABASE_URL || 'postgres://localhost';
+const config = parseDbUrl();
 
 const {
   user: username,
