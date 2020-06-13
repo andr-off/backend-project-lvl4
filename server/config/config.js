@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import parseDbUrl from 'parse-db-url';
 
 dotenv.config();
-const config = parseDbUrl(process.env.DATABASE_URL);
+const config = parseDbUrl(process.env.DATABASE_URL || '');
 
 const {
   user: username,
