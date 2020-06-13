@@ -30,6 +30,6 @@ export default {
     host,
     port,
     dialect,
-    options: rest,
+    ...rest,
   },
 };
