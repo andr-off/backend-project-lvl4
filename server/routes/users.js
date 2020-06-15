@@ -47,7 +47,6 @@ export default (router, container) => {
       const { id } = ctx.params;
       const userId = String(ctx.session.userId);
       let user;
-      console.log('userProfile ', id, userId);
 
       if (id !== userId) {
         ctx.status = 403;
@@ -92,6 +91,34 @@ export default (router, container) => {
         log(e);
         ctx.status = 422;
         await ctx.render('users/new', { f: buildFormObj(user, e) });
+      }
+    })
+
+    .patch('userUpdate', '/users/:id', async (ctx) => {
+      const { id } = ctx.params;
+      const { request: { body: { form } } } = ctx;
+
+      form.email = normalizeEmail(form.email);
+      form.firstName = normalizeName(form.firstName);
+      form.lastName = normalizeName(form.lastName);
+
+      let user;
+
+      try {
+        user = await User.findOne({
+          where: {
+            id,
+          },
+        });
+
+        await user.update(form);
+
+        ctx.flash.set('User has been updated');
+        ctx.redirect(router.url('userProfile', { id }));
+      } catch (e) {
+        log(e);
+        ctx.status = 422;
+        await ctx.render('users/profile', { f: buildFormObj(user, e), user });
       }
     });
 };
