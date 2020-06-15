@@ -23,7 +23,7 @@ describe('requests', () => {
     data = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email(),
+      email: faker.internet.email().toLowerCase(),
       password: faker.internet.password(),
     };
 
@@ -106,47 +106,39 @@ describe('requests', () => {
   });
 
   test('POST /users (errors)', async () => {
-    const res1 = await request.agent(server)
+    const res = await request.agent(server)
       .post('/users')
       .type('form')
-      .send({ form: { email: '', password: formData.form.password } });
-    expect(res1).toHaveHTTPStatus(422);
-
-    const res2 = await request.agent(server)
-      .post('/users')
-      .type('form')
-      .send({ form: { email: formData.form.email, password: '' } });
-    expect(res2).toHaveHTTPStatus(422);
+      .send({
+        form:
+        {
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: formData.form.password,
+        },
+      });
+    expect(res).toHaveHTTPStatus(422);
   });
 
   test('GET /users/:id/profile', async () => {
-    const urlToProfile = `${url}/profile`;
-
-    await request.agent(server)
-      .post('/users')
-      .type('form')
-      .send(formData);
-
-    const res = await request.agent(server)
-      .get(urlToProfile);
-    expect(res).toHaveHTTPStatus(200);
-  });
-
-  test('GET /users/:id/profile (errors)', async () => {
     const urlToProfile = `${url}/profile`;
 
     const res1 = await request.agent(server)
       .get(urlToProfile);
     expect(res1).toHaveHTTPStatus(403);
 
-    await request.agent(server)
-      .post('/users')
-      .type('form')
-      .send(newData);
-
     const res2 = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send(formData);
+
+    const cookie = res2.headers['set-cookie'];
+
+    const res3 = await request.agent(server)
+      .set('Cookie', cookie)
       .get(urlToProfile);
-    expect(res2).toHaveHTTPStatus(403);
+    expect(res3).toHaveHTTPStatus(200);
   });
 
   test('GET /users/:id', async () => {
