@@ -12,6 +12,7 @@ describe('requests', () => {
   let data;
   let formData;
   let url;
+  let newData;
 
 
   beforeAll(async () => {
@@ -34,6 +35,14 @@ describe('requests', () => {
 
   beforeEach(async () => {
     server = getApp().listen();
+    newData = {
+      form: {
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      },
+    };
   });
 
   test('GET 200', async () => {
@@ -92,14 +101,7 @@ describe('requests', () => {
     const res = await request.agent(server)
       .post('/users')
       .type('form')
-      .send({
-        form: {
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
-          email: faker.internet.email(),
-          password: faker.internet.password(),
-        },
-      });
+      .send(newData);
     expect(res).toHaveHTTPStatus(302);
   });
 
@@ -120,33 +122,72 @@ describe('requests', () => {
   test('GET /users/:id/profile', async () => {
     const urlToProfile = `${url}/profile`;
 
+    await request.agent(server)
+      .post('/users')
+      .type('form')
+      .send(formData);
+
     const res = await request.agent(server)
       .get(urlToProfile);
     expect(res).toHaveHTTPStatus(200);
+  });
+
+  test('GET /users/:id/profile (errors)', async () => {
+    const urlToProfile = `${url}/profile`;
+
+    const res1 = await request.agent(server)
+      .get(urlToProfile);
+    expect(res1).toHaveHTTPStatus(403);
+
+    await request.agent(server)
+      .post('/users')
+      .type('form')
+      .send(newData);
+
+    const res2 = await request.agent(server)
+      .get(urlToProfile);
+    expect(res2).toHaveHTTPStatus(403);
+  });
+
+  test('GET /users/:id', async () => {
+    const res = await request.agent(server)
+      .get(url);
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  test('GET /users/:id (errors)', async () => {
+    const urlOfUnexistedUser = '/users/10000000';
+    const res = await request.agent(server)
+      .get(urlOfUnexistedUser);
+    expect(res).toHaveHTTPStatus(404);
   });
 
   test('PATCH /users/:id', async () => {
     const res = await request.agent(server)
       .patch(url)
       .type('form')
-      .send({
-        email: faker.internet.email(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        password: faker.internet.password(),
-      });
+      .send(newData);
     expect(res).toHaveHTTPStatus(302);
   });
 
   test('PATCH /users/:id (errors)', async () => {
-    const res = await request.agent(server)
+    const res1 = await request.agent(server)
       .patch(url)
       .type('form')
       .send({
         ...formData,
         email: '',
       });
-    expect(res).toHaveHTTPStatus(422);
+    expect(res1).toHaveHTTPStatus(422);
+
+    const res2 = await request.agent(server)
+      .patch(url)
+      .type('form')
+      .send({
+        ...formData,
+        password: '',
+      });
+    expect(res2).toHaveHTTPStatus(422);
   });
 
   test('DELETE /users/:id', async () => {
