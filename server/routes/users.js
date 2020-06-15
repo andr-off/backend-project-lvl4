@@ -43,10 +43,41 @@ export default (router, container) => {
       }
     })
 
+    .get('userProfile', '/users/:id/profile', async (ctx) => {
+      const { id } = ctx.params;
+      const userId = String(ctx.session.userId);
+      let user;
+      console.log('userProfile ', id, userId);
+
+      if (id !== userId) {
+        ctx.status = 403;
+        return;
+      }
+
+      try {
+        user = await User.findOne({
+          where: {
+            id,
+          },
+        });
+
+        if (!user) {
+          ctx.status = 404;
+          return;
+        }
+
+        await ctx.render('users/profile', { f: buildFormObj(user), user });
+      } catch (e) {
+        log(e);
+        ctx.status = 422;
+        await ctx.render('users/profile', { f: buildFormObj(user, e) });
+      }
+    })
+
     .post('users', '/users', async (ctx) => {
       const { request: { body: { form } } } = ctx;
 
-      form.email = normalizeEmail(form);
+      form.email = normalizeEmail(form.email);
       form.firstName = normalizeName(form.firstName);
       form.lastName = normalizeName(form.lastName);
 
