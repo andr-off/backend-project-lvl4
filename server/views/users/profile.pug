@@ -1,0 +1,11 @@
+extends /layouts/application.pug
+
+block content
+  h1.h1.text-center= user.fullName
+
+  +formFor(f, { url: urlFor('usersUpdate', { id: user.id }), method: 'patch' })
+    +input(f, 'email')
+    +input(f, 'firstName')
+    +input(f, 'lastName')
+    +input(f, 'password', { as: 'password' })
+    +button(f)
