@@ -1,5 +1,9 @@
 import db from '../models';
 import buildFormObj from '../lib/formObjectBuilder';
+import {
+  normalizeEmail,
+  normalizeName,
+} from '../lib/normilazer';
 
 const { User } = db;
 
@@ -41,12 +45,18 @@ export default (router, container) => {
 
     .post('users', '/users', async (ctx) => {
       const { request: { body: { form } } } = ctx;
+
+      form.email = normalizeEmail(form);
+      form.firstName = normalizeName(form.firstName);
+      form.lastName = normalizeName(form.lastName);
+
       const user = User.build(form);
 
       try {
         await user.save();
+
         ctx.flash.set('User has been created');
-        ctx.redirect(router.url('root'));
+        ctx.redirect(router.url('newSession'));
       } catch (e) {
         log(e);
         ctx.status = 422;
