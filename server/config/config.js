@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import parseDbUrl from 'parse-db-url';
+const dotenv = require('dotenv');
+const parseDbUrl = require('parse-db-url');
 
 dotenv.config();
 const databaseUrl = process.env.DATABASE_URL || 'postgres://localhost';
@@ -15,7 +15,7 @@ const {
   ...rest
 } = config;
 
-export default {
+module.exports = {
   development: {
     storage: './db.development.sqlite',
     dialect: 'sqlite',
