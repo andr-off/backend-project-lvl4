@@ -9,7 +9,6 @@ import getApp from '../server';
 describe('requests', () => {
   const { User } = db;
   let server;
-  let data;
   let formData;
   let url;
   let newData;
@@ -20,7 +19,7 @@ describe('requests', () => {
 
     await User.sync();
 
-    data = {
+    const data = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email().toLowerCase(),
@@ -163,22 +162,30 @@ describe('requests', () => {
   });
 
   test('PATCH /users/:id (errors)', async () => {
+    const wrongData1 = {
+      form: {
+        ...formData.form,
+        email: '',
+      },
+    };
+
+    const wrongData2 = {
+      form: {
+        ...formData.form,
+        password: '',
+      },
+    };
+
     const res1 = await request.agent(server)
       .patch(url)
       .type('form')
-      .send({
-        ...formData,
-        email: '',
-      });
+      .send(wrongData1);
     expect(res1).toHaveHTTPStatus(422);
 
     const res2 = await request.agent(server)
       .patch(url)
       .type('form')
-      .send({
-        ...formData,
-        password: '',
-      });
+      .send(wrongData2);
     expect(res2).toHaveHTTPStatus(422);
   });
 
