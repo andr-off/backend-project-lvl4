@@ -190,9 +190,13 @@ describe('requests', () => {
   });
 
   test('DELETE /users/:id', async () => {
-    const res = await request.agent(server)
+    const res1 = await request.agent(server)
       .delete(url);
-    expect(res).toHaveHTTPStatus(302);
+    expect(res1).toHaveHTTPStatus(302);
+
+    const res2 = await request.agent(server)
+      .get(url);
+    expect(res2).toHaveHTTPStatus(404);
   });
 
   afterEach((done) => {
