@@ -82,7 +82,7 @@ export default (router, container) => {
       form.firstName = normalizeName(form.firstName);
       form.lastName = normalizeName(form.lastName);
 
-      const user = await User.findOne(id);
+      const user = await User.findByPk(id);
 
       try {
         await user.update(form);
