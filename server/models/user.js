@@ -9,6 +9,11 @@ export default (sequelize, DataTypes) => {
     },
     firstName: {
       type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'This field must be filled out',
+        },
+      },
     },
     lastName: {
       type: DataTypes.STRING,
