@@ -9,3 +9,8 @@ block content
     +input(f, 'lastName')
     +input(f, 'password', { as: 'password' })
     +button(f)
+
+
+  .row.justify-content-md-center
+    .col-md-6
+      +buttonTo(urlFor('deleteUser', { id: user.id }), 'delete')(class="btn btn-danger" value="Delete User")
