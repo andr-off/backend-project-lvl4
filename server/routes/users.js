@@ -120,5 +120,20 @@ export default (router, container) => {
         ctx.status = 422;
         await ctx.render('users/profile', { f: buildFormObj(user, e), user });
       }
+    })
+
+    .delete('deleteUser', '/users/:id', async (ctx) => {
+      const { id } = ctx.params;
+
+      const user = await User.findByPk(id);
+
+      if (!user) {
+        ctx.status = 404;
+        return;
+      }
+
+      await user.destroy();
+      ctx.session = {};
+      ctx.redirect(router.url('root'));
     });
 };
