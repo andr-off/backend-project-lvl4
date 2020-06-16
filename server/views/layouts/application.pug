@@ -17,6 +17,8 @@ html(lang="en")
         ul.navbar-nav
           if isSignedIn()
             li.nav-item
+              a.nav-link(href=urlFor('userProfile', { id: user.id }))= user.firstName
+            li.nav-item
               +buttonTo(urlFor('session'), 'delete')(class="btn nav-link" value="Sign Out")
           else
             li.nav-item

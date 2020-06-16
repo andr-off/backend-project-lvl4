@@ -25,6 +25,7 @@ export default (router) => {
 
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
+        ctx.session.user = user;
         ctx.redirect(router.url('root'));
         return;
       }
