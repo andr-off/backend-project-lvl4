@@ -24,53 +24,33 @@ export default (router, container) => {
     .get('userPage', '/users/:id', async (ctx) => {
       const { id } = ctx.params;
 
-      try {
-        const user = await User.findOne({
-          where: {
-            id,
-          },
-        });
+      const user = await User.findByPk(id);
 
-        if (!user) {
-          ctx.status = 404;
-          return;
-        }
-
-        await ctx.render('users/page', { user });
-      } catch (e) {
-        log(e);
-        ctx.status = 500;
+      if (!user) {
+        ctx.status = 404;
+        return;
       }
+
+      await ctx.render('users/page', { user });
     })
 
     .get('userProfile', '/users/:id/profile', async (ctx) => {
       const { id } = ctx.params;
       const userId = String(ctx.session.userId);
-      let user;
 
       if (id !== userId) {
         ctx.status = 403;
         return;
       }
 
-      try {
-        user = await User.findOne({
-          where: {
-            id,
-          },
-        });
+      const user = await User.findByPk(id);
 
-        if (!user) {
-          ctx.status = 404;
-          return;
-        }
-
-        await ctx.render('users/profile', { f: buildFormObj(user), user });
-      } catch (e) {
-        log(e);
-        ctx.status = 422;
-        await ctx.render('users/profile', { f: buildFormObj(user, e) });
+      if (!user) {
+        ctx.status = 404;
+        return;
       }
+
+      await ctx.render('users/profile', { f: buildFormObj(user), user });
     })
 
     .post('users', '/users', async (ctx) => {
@@ -102,15 +82,9 @@ export default (router, container) => {
       form.firstName = normalizeName(form.firstName);
       form.lastName = normalizeName(form.lastName);
 
-      let user;
+      const user = await User.findOne(id);
 
       try {
-        user = await User.findOne({
-          where: {
-            id,
-          },
-        });
-
         await user.update(form);
 
         ctx.flash.set('User has been updated');

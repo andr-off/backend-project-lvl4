@@ -33,7 +33,7 @@ export default (router) => {
       const message = 'email or password were wrong';
 
       ctx.status = 422;
-      await ctx.render('sessions/new', { f: buildFormObj({ email, message }) });
+      await ctx.render('sessions/new', { f: buildFormObj({ email }), message });
     })
 
     .delete('session', '/session', (ctx) => {
