@@ -1,16 +1,17 @@
 extends /layouts/application.pug
 
 block content
-  table.table.table-striped
-    thead
-      tr
-        th Full Name
-        th Email
-        th Created At
-    tbody
-      each user in users
+  .container
+    table.table.table-striped
+      thead
         tr
-          td
-            a(href= urlFor('userPage', { id: user.id }))= user.fullName
-          td= user.email
-          td= user.createdAt
+          th Full Name
+          th Email
+          th Created At
+      tbody
+        each user in users
+          tr
+            td
+              a(href= urlFor('userPage', { id: user.id }))= user.fullName
+            td= user.email
+            td= user.createdAt
