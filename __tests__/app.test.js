@@ -120,9 +120,11 @@ describe('requests', () => {
     expect(res).toHaveHTTPStatus(422);
   });
 
-  test('GET /users/:id', async () => {
+  test('GET /users/:id/edit', async () => {
+    const urlToEditPage = `${url}/edit`;
+
     const res1 = await request.agent(server)
-      .get(url);
+      .get(urlToEditPage);
     expect(res1).toHaveHTTPStatus(403);
 
     const res2 = await request.agent(server)
@@ -134,15 +136,13 @@ describe('requests', () => {
 
     const res3 = await request.agent(server)
       .set('Cookie', cookie)
-      .get(urlToProfile);
+      .get(urlToEditPage);
     expect(res3).toHaveHTTPStatus(200);
   });
 
-  test('GET /users/:id/edit', async () => {
-    const urlToEditPage = `${url}/edit`;
-
+  test('GET /users/:id', async () => {
     const res = await request.agent(server)
-      .get(urlToEditPage);
+      .get(url);
     expect(res).toHaveHTTPStatus(200);
   });
 
