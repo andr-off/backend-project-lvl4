@@ -120,11 +120,9 @@ describe('requests', () => {
     expect(res).toHaveHTTPStatus(422);
   });
 
-  test('GET /users/:id/profile', async () => {
-    const urlToProfile = `${url}/profile`;
-
+  test('GET /users/:id', async () => {
     const res1 = await request.agent(server)
-      .get(urlToProfile);
+      .get(url);
     expect(res1).toHaveHTTPStatus(403);
 
     const res2 = await request.agent(server)
@@ -140,17 +138,12 @@ describe('requests', () => {
     expect(res3).toHaveHTTPStatus(200);
   });
 
-  test('GET /users/:id', async () => {
-    const res = await request.agent(server)
-      .get(url);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  test('GET /users/:id/edit', async () => {
+    const urlToEditPage = `${url}/edit`;
 
-  test('GET /users/:id (errors)', async () => {
-    const urlOfUnexistedUser = '/users/10000000';
     const res = await request.agent(server)
-      .get(urlOfUnexistedUser);
-    expect(res).toHaveHTTPStatus(404);
+      .get(urlToEditPage);
+    expect(res).toHaveHTTPStatus(200);
   });
 
   test('PATCH /users/:id', async () => {
