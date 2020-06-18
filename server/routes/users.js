@@ -7,9 +7,7 @@ import {
 
 const { User } = db;
 
-export default (router, container) => {
-  const log = container.logger;
-
+export default (router) => {
   router
     .get('users', '/users', async (ctx) => {
       const users = await User.findAll();
@@ -21,20 +19,7 @@ export default (router, container) => {
       await ctx.render('users/new', { f: buildFormObj(user) });
     })
 
-    .get('userPage', '/users/:id', async (ctx) => {
-      const { id } = ctx.params;
-
-      const user = await User.findByPk(id);
-
-      if (!user) {
-        ctx.status = 404;
-        return;
-      }
-
-      await ctx.render('users/page', { user });
-    })
-
-    .get('userProfile', '/users/:id/profile', async (ctx) => {
+    .get('editUser', '/users/:id/edit', async (ctx) => {
       const { id } = ctx.params;
       const userId = String(ctx.session.userId);
 
@@ -50,10 +35,23 @@ export default (router, container) => {
         return;
       }
 
-      await ctx.render('users/profile', { f: buildFormObj(user), user });
+      await ctx.render('users/edit', { f: buildFormObj(user), user });
     })
 
-    .post('users', '/users', async (ctx) => {
+    .get('user', '/users/:id', async (ctx) => {
+      const { id } = ctx.params;
+
+      const user = await User.findByPk(id);
+
+      if (!user) {
+        ctx.status = 404;
+        return;
+      }
+
+      await ctx.render('users/show', { user });
+    })
+
+    .post('/users', async (ctx) => {
       const { request: { body: { form } } } = ctx;
 
       form.email = normalizeEmail(form.email);
@@ -68,13 +66,12 @@ export default (router, container) => {
         ctx.flash.set('User has been created');
         ctx.redirect(router.url('newSession'));
       } catch (e) {
-        log(e);
         ctx.status = 422;
         await ctx.render('users/new', { f: buildFormObj(user, e) });
       }
     })
 
-    .patch('userUpdate', '/users/:id', async (ctx) => {
+    .patch('/users/:id', async (ctx) => {
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
 
@@ -90,13 +87,12 @@ export default (router, container) => {
         ctx.flash.set('User has been updated');
         ctx.redirect(router.url('userProfile', { id }));
       } catch (e) {
-        log(e);
         ctx.status = 422;
-        await ctx.render('users/profile', { f: buildFormObj(user, e), user });
+        await ctx.render('users/show', { f: buildFormObj(user, e), user });
       }
     })
 
-    .delete('deleteUser', '/users/:id', async (ctx) => {
+    .delete('/users/:id', async (ctx) => {
       const { id } = ctx.params;
 
       const user = await User.findByPk(id);

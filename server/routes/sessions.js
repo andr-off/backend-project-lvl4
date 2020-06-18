@@ -36,7 +36,7 @@ export default (router) => {
       await ctx.render('sessions/new', { f: buildFormObj({ email }), message });
     })
 
-    .delete('session', '/session', (ctx) => {
+    .delete('/session', (ctx) => {
       ctx.session = {};
       ctx.redirect(router.url('root'));
     });

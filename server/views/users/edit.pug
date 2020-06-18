@@ -2,9 +2,9 @@ extends /layouts/application.pug
 
 block content
   .container
-    h1.h1.text-center= user.fullName
+    h1.h1.text-center Edit user
 
-    +formFor(f, { url: urlFor('userUpdate', { id: user.id }), method: 'patch' })
+    +formFor(f, { url: urlFor('user', user.id), method: 'patch' })
       +input(f, 'email')
       +input(f, 'firstName')
       +input(f, 'lastName')
@@ -14,4 +14,4 @@ block content
 
     .row.justify-content-md-center
       .col-md-6
-        +buttonTo(urlFor('deleteUser', { id: user.id }), 'delete')(class="btn btn-danger" value="Delete User")
+        +buttonTo(urlFor('user', user.id), 'delete')(class="btn btn-danger" value="Delete User")
