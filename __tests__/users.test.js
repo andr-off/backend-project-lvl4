@@ -6,7 +6,7 @@ import db from '../server/models';
 import getApp from '../server';
 
 
-describe('requests', () => {
+describe('requests to /users', () => {
   let req;
   let server;
 
@@ -77,26 +77,26 @@ describe('requests', () => {
     await User.create(dataForUser2);
   });
 
-  test.each(getQueriesTestCases)('%s', async (_testName, url, httpStatus) => {
+  test.each(getQueriesTestCases)('%s', async (_testName, url, statusCode) => {
     const res = await req
       .get(url);
-    expect(res).toHaveHTTPStatus(httpStatus);
+    expect(res).toHaveHTTPStatus(statusCode);
   });
 
-  test.each(postQueriesTestCases)('%s', async (_testName, url, data, httpStatus) => {
+  test.each(postQueriesTestCases)('%s', async (_testName, url, data, statusCode) => {
     const res = await req
       .post(url)
       .type('form')
       .send(data);
-    expect(res).toHaveHTTPStatus(httpStatus);
+    expect(res).toHaveHTTPStatus(statusCode);
   });
 
-  test.each(patchQueriesTestCases)('%s', async (_testName, url, data, httpStatus) => {
+  test.each(patchQueriesTestCases)('%s', async (_testName, url, data, statusCode) => {
     const res = await req
       .patch(url)
       .type('form')
       .send(data);
-    expect(res).toHaveHTTPStatus(httpStatus);
+    expect(res).toHaveHTTPStatus(statusCode);
   });
 
   test('DELETE /session', async () => {
