@@ -1,0 +1,19 @@
+extends /layouts/application.pug
+
+block content
+  .container
+    table.table.table-striped
+      thead
+        tr
+          th Status
+          th Actions
+          th(colspan="2")
+      tbody
+        each taskStatus in taskStatuses
+          tr
+            td= taskStatus.name
+            td
+              a(href= urlFor('taskStatus', taskStatus.id)) edit
+            td
+              +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class="btn btn-link" value="Delete")
+
