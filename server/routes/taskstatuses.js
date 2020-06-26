@@ -33,11 +33,20 @@ export default (router) => {
       }
     })
 
-    // .post('/taskstatuses/:id', async (ctx) => {
+    .patch('taskStatus', '/taskstatuses/:id', async (ctx) => {
+      const { id } = ctx.params;
+      const { request: { body: { form } } } = ctx;
+      const taskStatus = await TaskStatus.findByPk(id);
 
-    // })
+      form.name = normalizeName(form.name);
 
-    // .delete('/taskstatuses/:id', (ctx) => {
-
-    // });
+      try {
+        await taskStatus.update(form);
+        ctx.flash.set('Status has been updated');
+        ctx.redirect(router.url('taskStatuses'));
+      } catch (e) {
+        ctx.status = 422;
+        await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus, e) });
+      }
+    })
 };

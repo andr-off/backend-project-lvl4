@@ -19,7 +19,7 @@ describe('requests to /taskstatuses', () => {
     await TaskStatus.drop();
     await TaskStatus.sync();
 
-    const { id } = TaskStatus.create({ name: 'new' });
+    const { id } = await TaskStatus.create({ name: 'new' });
     url = `/taskstatuses/${id}`;
 
     server = getApp().listen();
@@ -48,6 +48,20 @@ describe('requests to /taskstatuses', () => {
   test('POST /taskstatuses (errors)', async () => {
     const res = await req
       .post('/taskstatuses')
+      .send({ form: { name: 'do' } });
+    expect(res).toHaveHTTPStatus(422);
+  });
+
+  test('PATCH /taskstatuses/:id', async () => {
+    const res = await req
+      .patch(url)
+      .send({ form: { name: 'done' } });
+    expect(res).toHaveHTTPStatus(302);
+  });
+
+  test('PATCH /taskstatuses/:id (errors)', async () => {
+    const res = await req
+      .patch(url)
       .send({ form: { name: 'do' } });
     expect(res).toHaveHTTPStatus(422);
   });
