@@ -7,6 +7,7 @@ import getApp from '../server';
 describe('requests to /taskstatuses', () => {
   let req;
   let server;
+  let url;
 
   const { TaskStatus } = db;
 
@@ -17,6 +18,9 @@ describe('requests to /taskstatuses', () => {
   beforeEach(async () => {
     await TaskStatus.drop();
     await TaskStatus.sync();
+
+    const { id } = TaskStatus.create({ name: 'new' });
+    url = `/taskstatuses/${id}`;
 
     server = getApp().listen();
     req = request.agent(server);
@@ -32,6 +36,20 @@ describe('requests to /taskstatuses', () => {
     const res = await req
       .get('/taskstatuses/new');
     expect(res).toHaveHTTPStatus(200);
+  });
+
+  test('POST /taskstatuses', async () => {
+    const res = await req
+      .post('/taskstatuses')
+      .send({ form: { taskStatus: 'done' } });
+    expect(res).toHaveHTTPStatus(302);
+  });
+
+  test('POST /taskstatuses (errors)', async () => {
+    const res = await req
+      .post('/taskstatuses')
+      .send({ form: { taskStatus: '' } });
+    expect(res).toHaveHTTPStatus(422);
   });
 
   afterEach((done) => {
