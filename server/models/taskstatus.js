@@ -8,6 +8,14 @@ export default (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       unique: true,
+      notEmpty: true,
+      validate: {
+        isLongEnough(value) {
+          if (value.length < 3) {
+            throw new Error('Name must be at least 3 characters long');
+          }
+        },
+      },
     },
   }, {});
 

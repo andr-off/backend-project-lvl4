@@ -41,14 +41,14 @@ describe('requests to /taskstatuses', () => {
   test('POST /taskstatuses', async () => {
     const res = await req
       .post('/taskstatuses')
-      .send({ form: { taskStatus: 'done' } });
+      .send({ form: { name: 'done' } });
     expect(res).toHaveHTTPStatus(302);
   });
 
   test('POST /taskstatuses (errors)', async () => {
     const res = await req
       .post('/taskstatuses')
-      .send({ form: { taskStatus: '' } });
+      .send({ form: { name: 'do' } });
     expect(res).toHaveHTTPStatus(422);
   });
 
