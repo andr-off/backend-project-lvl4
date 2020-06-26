@@ -4,6 +4,7 @@ import {
   normalizeEmail,
   normalizeName,
 } from '../lib/normilazer';
+import requiredAuthorizetion from '../middlewares/authorization.middleware';
 
 const { User } = db;
 
@@ -19,15 +20,8 @@ export default (router) => {
       await ctx.render('users/new', { f: buildFormObj(user) });
     })
 
-    .get('editUser', '/users/:id/edit', async (ctx) => {
+    .get('editUser', '/users/:id/edit', requiredAuthorizetion, async (ctx) => {
       const { id } = ctx.params;
-      const userId = String(ctx.session.userId);
-
-      if (id !== userId) {
-        ctx.status = 403;
-        return;
-      }
-
       const user = await User.findByPk(id);
 
       if (!user) {
@@ -40,7 +34,6 @@ export default (router) => {
 
     .get('user', '/users/:id', async (ctx) => {
       const { id } = ctx.params;
-
       const user = await User.findByPk(id);
 
       if (!user) {
@@ -71,7 +64,7 @@ export default (router) => {
       }
     })
 
-    .patch('/users/:id', async (ctx) => {
+    .patch('/users/:id', requiredAuthorizetion, async (ctx) => {
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
 
@@ -92,7 +85,7 @@ export default (router) => {
       }
     })
 
-    .delete('/users/:id', async (ctx) => {
+    .delete('/users/:id', requiredAuthorizetion, async (ctx) => {
       const { id } = ctx.params;
 
       const user = await User.findByPk(id);

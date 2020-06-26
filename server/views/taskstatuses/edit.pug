@@ -4,7 +4,7 @@ block content
   .container
     h1.h1.text-center Edit Status
 
-    +formFor(f, { url: urlFor('editTaskStatus', taskStatus.id), method: 'patch' })
+    +formFor(f, { url: urlFor('taskStatus', taskStatus.id), method: 'patch' })
       +input(f, 'name')
       +button(f)
 

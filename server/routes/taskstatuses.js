@@ -1,6 +1,7 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
 import db from '../models';
+import requiredAuthentication from '../middlewares/authentication.middleware';
 
 const { TaskStatus } = db;
 
@@ -28,7 +29,7 @@ export default (router) => {
       await ctx.render('taskstatuses/edit', { f: buildFormObj(taskStatus), taskStatus });
     })
 
-    .post('/taskstatuses', async (ctx) => {
+    .post('/taskstatuses', requiredAuthentication, async (ctx) => {
       const { request: { body: { form } } } = ctx;
 
       form.name = normalizeName(form.name);
@@ -45,7 +46,7 @@ export default (router) => {
       }
     })
 
-    .patch('taskStatus', '/taskstatuses/:id', async (ctx) => {
+    .patch('taskStatus', '/taskstatuses/:id', requiredAuthentication, async (ctx) => {
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
       const taskStatus = await TaskStatus.findByPk(id);
@@ -62,7 +63,7 @@ export default (router) => {
       }
     })
 
-    .delete('/taskstatuses/:id', async (ctx) => {
+    .delete('/taskstatuses/:id', requiredAuthentication, async (ctx) => {
       const { id } = ctx.params;
       const taskStatus = await TaskStatus.findByPk(id);
 
