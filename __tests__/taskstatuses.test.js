@@ -73,6 +73,19 @@ describe('requests to /taskstatuses', () => {
     expect(res).toHaveHTTPStatus(422);
   });
 
+  test('DELETE /taskstatuses/:id', async () => {
+    const res = await req
+      .delete(url);
+    expect(res).toHaveHTTPStatus(302);
+  });
+
+  test('DELETE /taskstatuses/:id (errors)', async () => {
+    const unexistedUrl = '/taskstatuses/5';
+    const res = await req
+      .delete(unexistedUrl);
+    expect(res).toHaveHTTPStatus(404);
+  });
+
   afterEach((done) => {
     server.close();
     done();

@@ -61,4 +61,17 @@ export default (router) => {
         await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus, e) });
       }
     })
+
+    .delete('/taskstatuses/:id', async (ctx) => {
+      const { id } = ctx.params;
+      const taskStatus = await TaskStatus.findByPk(id);
+
+      if (!taskStatus) {
+        ctx.status = 404;
+        return;
+      }
+
+      await taskStatus.destroy();
+      ctx.redirect(router.url('taskStatuses'));
+    });
 };
