@@ -28,6 +28,12 @@ describe('requests to /taskstatuses', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  test('GET /taskstatuses/new', async () => {
+    const res = await req
+      .get('/taskstatuses/new');
+    expect(res).toHaveHTTPStatus(200);
+  });
+
   afterEach((done) => {
     server.close();
     done();
