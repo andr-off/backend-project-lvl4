@@ -9,4 +9,9 @@ export default (router) => {
       const taskStatuses = await TaskStatus.findAll();
       await ctx.render('taskstatuses', { taskStatuses });
     })
+
+    .get('newTaskStatus', '/taskstatuses/new', async (ctx) => {
+      const taskStatus = TaskStatus.build();
+      await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus) });
+    })
 };
