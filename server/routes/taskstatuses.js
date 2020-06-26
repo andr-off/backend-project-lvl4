@@ -16,6 +16,18 @@ export default (router) => {
       await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus) });
     })
 
+    .get('editTaskStatus', '/taskstatuses/:id/edit', async (ctx) => {
+      const { id } = ctx.params;
+      const taskStatus = await TaskStatus.findByPk(id);
+
+      if (!taskStatus) {
+        ctx.status = 404;
+        return;
+      }
+
+      await ctx.render('taskstatuses/edit', { f: buildFormObj(taskStatus), taskStatus });
+    })
+
     .post('/taskstatuses', async (ctx) => {
       const { request: { body: { form } } } = ctx;
 

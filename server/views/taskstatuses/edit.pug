@@ -1,0 +1,14 @@
+extends /layouts/application.pug
+
+block content
+  .container
+    h1.h1.text-center Edit Status
+
+    +formFor(f, { url: urlFor('editTaskStatus', taskStatus.id), method: 'patch' })
+      +input(f, 'name')
+      +button(f)
+
+
+    .row.justify-content-md-center
+      .col-md-6
+        +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class="btn btn-danger" value="Delete Status")

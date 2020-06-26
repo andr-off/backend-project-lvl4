@@ -38,6 +38,13 @@ describe('requests to /taskstatuses', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  test('GET /taskstatuses/:id/edit', async () => {
+    const editPageUrl = `${url}/edit`;
+    const res = await req
+      .get(editPageUrl);
+    expect(res).toHaveHTTPStatus(200);
+  });
+
   test('POST /taskstatuses', async () => {
     const res = await req
       .post('/taskstatuses')
