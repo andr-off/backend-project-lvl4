@@ -22,6 +22,17 @@ describe('requests to /users', () => {
   const sessionUrl = '/session';
   const newSessionUrl = '/session/new';
 
+  const singIn = async (data) => {
+    const res = await req
+      .post('/session')
+      .type('form')
+      .send(data);
+
+    const cookie = res.headers['set-cookie'];
+
+    return cookie;
+  };
+
   const getDataForUser = () => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
@@ -32,7 +43,7 @@ describe('requests to /users', () => {
   const dataForUser1 = getDataForUser();
   const dataForUser2 = getDataForUser();
 
-  const formData = {
+  const formData1 = {
     form: dataForUser1,
   };
 
@@ -40,7 +51,7 @@ describe('requests to /users', () => {
     form: dataForUser2,
   };
 
-  const getQueriesTestCases = [
+  const getRequestTestCases = [
     ['GET 200', rootUrl, 200],
     ['GET 404', wrongUrl, 404],
     ['GET /session/new', newSessionUrl, 200],
@@ -49,17 +60,17 @@ describe('requests to /users', () => {
     ['GET /users/:id 404', wrongUserUrl, 404],
   ];
 
-  const postQueriesTestCases = [
-    ['POST /session', sessionUrl, formData, 302],
+  const postRequestTestCases = [
+    ['POST /session', sessionUrl, formData1, 302],
     ['POST /users', usersUrl, { form: getDataForUser() }, 302],
     ['POST /session (errors)', sessionUrl, { form: { email: '', password: '' } }, 422],
     ['POST /users (errors)', usersUrl, { form: { ...dataForUser1, email: '' } }, 422],
   ];
 
-  const patchQueriesTestCases = [
+  const patchRequestTestCases = [
     ['PATCH /users/:id', userUrl1, { form: getDataForUser() }, 302],
-    ['PATCH /users/:id (errors1)', userUrl1, { form: { ...formData.form, email: '' } }, 422],
-    ['PATCH /users/:id (errors2)', userUrl1, { form: { ...formData.form, password: '' } }, 422],
+    ['PATCH /users/:id (errors1)', userUrl1, { form: { ...formData1.form, email: '' } }, 422],
+    ['PATCH /users/:id (errors2)', userUrl1, { form: { ...formData1.form, password: '' } }, 422],
   ];
 
   beforeAll(async () => {
@@ -70,20 +81,20 @@ describe('requests to /users', () => {
     await User.drop();
     await User.sync();
 
-    server = getApp().listen();
-    req = request.agent(server);
-
     await User.create(dataForUser1);
     await User.create(dataForUser2);
+
+    server = getApp().listen();
+    req = request.agent(server);
   });
 
-  test.each(getQueriesTestCases)('%s', async (_testName, url, statusCode) => {
+  test.each(getRequestTestCases)('%s', async (_testName, url, statusCode) => {
     const res = await req
       .get(url);
     expect(res).toHaveHTTPStatus(statusCode);
   });
 
-  test.each(postQueriesTestCases)('%s', async (_testName, url, data, statusCode) => {
+  test.each(postRequestTestCases)('%s', async (_testName, url, data, statusCode) => {
     const res = await req
       .post(url)
       .type('form')
@@ -91,19 +102,28 @@ describe('requests to /users', () => {
     expect(res).toHaveHTTPStatus(statusCode);
   });
 
-  test.each(patchQueriesTestCases)('%s', async (_testName, url, data, statusCode) => {
-    const res = await req
+  test.each(patchRequestTestCases)('%s', async (_testName, url, data, statusCode) => {
+    const res1 = await req
       .patch(url)
       .type('form')
       .send(data);
-    expect(res).toHaveHTTPStatus(statusCode);
+    expect(res1).toHaveHTTPStatus(403);
+
+    const cookie = await singIn(formData1);
+
+    const res2 = await req
+      .set('Cookie', cookie)
+      .patch(url)
+      .type('form')
+      .send(data);
+    expect(res2).toHaveHTTPStatus(statusCode);
   });
 
   test('DELETE /session', async () => {
     const res1 = await req
       .post('/session')
       .type('form')
-      .send(formData);
+      .send(formData1);
     expect(res1).toHaveHTTPStatus(302);
 
     const res2 = await req
@@ -114,11 +134,19 @@ describe('requests to /users', () => {
   test('DELETE /users/:id', async () => {
     const res1 = await req
       .delete(userUrl1);
-    expect(res1).toHaveHTTPStatus(302);
+    expect(res1).toHaveHTTPStatus(403);
+
+    const cookie = await singIn(formData1);
 
     const res2 = await req
+      .set('Cookie', cookie)
+      .delete(userUrl1);
+    expect(res2).toHaveHTTPStatus(302);
+
+    const res3 = await req
+      .set('Cookie', cookie)
       .get(userUrl1);
-    expect(res2).toHaveHTTPStatus(404);
+    expect(res3).toHaveHTTPStatus(404);
   });
 
 
@@ -127,33 +155,23 @@ describe('requests to /users', () => {
       .get(editUserUrl1);
     expect(res1).toHaveHTTPStatus(403);
 
+    const cookie = await singIn(formData1);
+
     const res2 = await req
-      .post('/session')
-      .type('form')
-      .send(formData);
-
-    const cookie = res2.headers['set-cookie'];
-
-    const res3 = await req
       .set('Cookie', cookie)
       .get(editUserUrl1);
-    expect(res3).toHaveHTTPStatus(200);
+    expect(res2).toHaveHTTPStatus(200);
+
+    const res3 = await req
+      .delete('/session');
+    expect(res3).toHaveHTTPStatus(302);
+
+    const cookie2 = await singIn(formData2);
 
     const res4 = await req
-      .delete('/session');
-    expect(res4).toHaveHTTPStatus(302);
-
-    const res5 = await req
-      .post('/session')
-      .type('form')
-      .send(formData2);
-
-    const cookie2 = res5.headers['set-cookie'];
-
-    const res6 = await req
       .set('Cookie', cookie2)
       .get(editUserUrl1);
-    expect(res6).toHaveHTTPStatus(403);
+    expect(res4).toHaveHTTPStatus(403);
   });
 
   afterEach((done) => {
