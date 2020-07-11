@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const TaskStatus = sequelize.define('TaskStatus', {
+  const Task = sequelize.define('Task', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -7,7 +7,6 @@ export default (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      unique: true,
       notEmpty: true,
       validate: {
         isLongEnough(value) {
@@ -17,7 +16,24 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
+    description: DataTypes.TEXT,
   });
 
-  return TaskStatus;
+  Task.associate = (models) => {
+    Task.belongsTo(models.User, {
+      foreignKey: 'creator',
+      as: 'maker',
+    });
+
+    Task.belongsTo(models.User, {
+      foreignKey: 'assignedTo',
+      as: 'assignee',
+    });
+
+    Task.belongsTo(models.TaskStatus, {
+      foreignKey: 'status',
+    });
+  };
+
+  return Task;
 };

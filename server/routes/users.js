@@ -4,7 +4,7 @@ import {
   normalizeEmail,
   normalizeName,
 } from '../lib/normilazer';
-import requiredAuthorizetion from '../middlewares/authorization.middleware';
+import requiredAuthorization from '../middlewares/authorization.middleware';
 
 const { User } = db;
 
@@ -20,7 +20,7 @@ export default (router) => {
       await ctx.render('users/new', { f: buildFormObj(user) });
     })
 
-    .get('editUser', '/users/:id/edit', requiredAuthorizetion, async (ctx) => {
+    .get('editUser', '/users/:id/edit', requiredAuthorization, async (ctx) => {
       const { id } = ctx.params;
       const user = await User.findByPk(id);
 
@@ -64,7 +64,7 @@ export default (router) => {
       }
     })
 
-    .patch('/users/:id', requiredAuthorizetion, async (ctx) => {
+    .patch('/users/:id', requiredAuthorization, async (ctx) => {
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
 
@@ -85,7 +85,7 @@ export default (router) => {
       }
     })
 
-    .delete('/users/:id', requiredAuthorizetion, async (ctx) => {
+    .delete('/users/:id', requiredAuthorization, async (ctx) => {
       const { id } = ctx.params;
 
       const user = await User.findByPk(id);

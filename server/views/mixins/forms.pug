@@ -17,11 +17,20 @@ mixin input(f, property, options = { as: 'text' })
     if f.errors[property]
       .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
-mixin button(f, type = 'submit')
+mixin select(f, property, items, itemProperty, size=1)
+    label= property
+    select(class='custom-select', name=getInputName(f, property), size=`${size}`)
+      each item in items
+        if f.object[property] === item.id
+          option(value= item.id, selected)= item[itemProperty]
+        else
+          option(value= item.id)= item[itemProperty]
+
+mixin button(f, type = 'submit', value = 'Save')
   .form-group
-    input(class='btn btn-primary' type=`${type}` value=`Save`)
+    input(class='btn btn-primary' type=`${type}` value=`${value}`)
 
 mixin buttonTo(action, method)
   form(action=action, method="post")
-    input(name="_method" type="hidden" value=method)
+    input(name='_method' type='hidden' value=method)
     input(type='submit' class='form-control')&attributes(attributes)

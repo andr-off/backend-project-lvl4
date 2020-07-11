@@ -12,8 +12,10 @@ html(lang="en")
         span.navbar-toggler-icon
       .collapse.navbar-collapse
         ul.navbar-nav.mr-auto
-          li.nav-item.active
+          li.nav-item
             a.nav-link(href=urlFor('users')) Users
+          li.nav-item
+            a.nav-link(href=urlFor('tasks')) Tasks
         ul.navbar-nav
           if isSignedIn()
             li.nav-item.mr-2
@@ -25,8 +27,8 @@ html(lang="en")
               a.nav-link.btn.btn-outline-secondary.my-sm-0(href=urlFor('newSession')) Sign In
             li.nav-item
               a.nav-link.btn.btn-outline-primary.my-2.my-sm-0(href=urlFor('newUser')) Sign Up
-    .container
-      - const msg = flash.get()
-      if msg
+    - const msg = flash.get()
+    if msg
+      .container
         .alert.alert-info.m-3= msg
     block content

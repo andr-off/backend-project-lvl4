@@ -1,0 +1,13 @@
+extends /layouts/application.pug
+
+block content
+  .container
+    +formFor(f, { url: urlFor('tasks'), method: 'post' })
+      +input(f, 'name')
+      +input(f, 'description')
+      .form-group
+        +select(f, 'assignedTo', users, 'fullName')
+      .form-group
+        +select(f, 'status', taskStatuses, 'name')
+        a(href=urlFor('newTaskStatus')) Add new status
+      +button(f)

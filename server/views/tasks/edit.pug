@@ -1,0 +1,18 @@
+extends /layouts/application.pug
+
+block content
+  .container
+    h1.h1.text-center Edit task
+
+    +formFor(f, { url: urlFor('task', task.id), method: 'patch' })
+      +input(f, 'name')
+      +input(f, 'description')
+      .form-group
+        +select(f, 'assignedTo', users, 'fullName')
+      .form-group
+        +select(f, 'status', taskStatuses, 'name')
+      +button(f)
+
+    .row.justify-content-md-center
+      .col-md-2
+        +buttonTo(urlFor('task', task.id), 'delete')(class="btn btn-danger" value="Delete Task")

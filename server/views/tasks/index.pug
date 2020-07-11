@@ -1,0 +1,22 @@
+extends /layouts/application.pug
+
+block content
+  .container
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th Description
+          th Creator
+          th Assigned to
+          th Status
+      tbody
+        each task in tasks
+          tr
+            td
+              a(href= urlFor('editTask', task.id))= task.name
+            td= task.description
+            td= task.creator
+            td= task.assignedTo
+            td= task.status
+    a(href= urlFor('newTask')) Create new task
