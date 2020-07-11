@@ -59,7 +59,7 @@ describe('requests to /tasks', () => {
     await Task.sync();
 
     const { id: userId } = await User.create(userData);
-    const { id: statusId } = await TaskStatus.create({ name: 'new' });
+    const { id: statusId } = await TaskStatus.create({ name: 'New' });
     await TaskStatus.create({ name: 'In progress' });
 
     const taskData = {

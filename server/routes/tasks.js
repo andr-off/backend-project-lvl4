@@ -39,6 +39,8 @@ export default (router) => {
       const task = Task.build();
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
+      const [newStatus] = await TaskStatus.findOrCreate({ where: { name: 'New' } });
+      task.status = newStatus.id;
 
       await ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
     })
