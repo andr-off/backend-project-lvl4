@@ -4,15 +4,17 @@ block content
   .container
     h1.h1.text-center Edit task
 
-    +formFor(f, { url: urlFor('task', task.id), method: 'patch' })
+    +formFor(f, { url: urlFor('task', f.object.id), method: 'patch' })
       +input(f, 'name')
       +input(f, 'description')
       .form-group
         +select(f, 'assignedTo', users, 'fullName')
       .form-group
         +select(f, 'status', taskStatuses, 'name')
+      +input(f, 'tags')
+      .text Use comma to separate tags
       +button(f)
 
     .row.justify-content-md-center
       .col-md-2
-        +buttonTo(urlFor('task', task.id), 'delete')(class="btn btn-danger" value="Delete Task")
+        +buttonTo(urlFor('task', f.object.id), 'delete')(class="btn btn-danger" value="Delete Task")

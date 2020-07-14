@@ -8,7 +8,13 @@ describe('requests to /tasks', () => {
   let req;
   let server;
 
-  const { TaskStatus, Task, User } = db;
+  const {
+    TaskStatus,
+    Task,
+    User,
+    Tag,
+    TaskTag,
+  } = db;
 
   const singIn = async (data) => {
     const res = await req
@@ -37,6 +43,7 @@ describe('requests to /tasks', () => {
       creator: 1,
       assignedTo: 1,
       status: 1,
+      tags: '',
     },
   };
 
@@ -57,6 +64,10 @@ describe('requests to /tasks', () => {
     await TaskStatus.sync();
     await Task.drop();
     await Task.sync();
+    await Tag.drop();
+    await Tag.sync();
+    await TaskTag.drop();
+    await TaskTag.sync();
 
     const { id: userId } = await User.create(userData);
     const { id: statusId } = await TaskStatus.create({ name: 'New' });
@@ -68,6 +79,7 @@ describe('requests to /tasks', () => {
       creator: userId,
       assignedTo: userId,
       status: statusId,
+      tags: 'foo, bar',
     };
 
     taskFormData = { form: taskData };

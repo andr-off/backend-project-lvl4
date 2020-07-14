@@ -3,51 +3,63 @@ import { normalizeName } from '../lib/normilazer';
 import db from '../models';
 import requiredAuthentication from '../middlewares/authentication.middleware';
 
-const { Task, User, TaskStatus } = db;
+const {
+  Task,
+  User,
+  TaskStatus,
+  Tag,
+} = db;
+
+const getTagsFromStr = async (str) => {
+  if (str.length === 0) {
+    return [];
+  }
+
+  const promises = str.split(',')
+    .map((name) => ({ name: name.trim() }))
+    .map(async (item) => {
+      const [tag] = await Tag.findCreateFind({ where: item });
+      return tag;
+    });
+
+  const tags = await Promise.all(promises);
+
+  return tags;
+};
 
 export default (router) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
-      const rawTasks = await Task.findAll();
-
-      const promises = rawTasks.map(async (task) => {
-        const maker = await task.getMaker();
-        const creator = maker.fullName;
-
-        const assignee = await task.getAssignee();
-        const assignedTo = assignee.fullName;
-
-        const taskStatus = await task.getTaskStatus();
-        const status = taskStatus.name;
-
-        return {
-          id: task.id,
-          name: task.name,
-          description: task.description,
-          creator,
-          assignedTo,
-          status,
-        };
+      const tasks = await Task.findAll({
+        order: [['updatedAt', 'DESC']],
+        include: [
+          { model: User, as: 'maker' },
+          { model: User, as: 'assignee' },
+          TaskStatus,
+        ],
       });
-
-      const tasks = await Promise.all(promises);
 
       await ctx.render('tasks', { tasks });
     })
 
     .get('newTask', '/tasks/new', async (ctx) => {
       const task = Task.build();
+
+      const [{ id }] = await TaskStatus.findCreateFind({ where: { name: 'New' } });
+      task.status = id;
+
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
-      const [newStatus] = await TaskStatus.findOrCreate({ where: { name: 'New' } });
-      task.status = newStatus.id;
 
       await ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
     })
 
     .get('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.findByPk(id);
+      const task = await Task.findOne({
+        where: { id },
+        include: [{ model: Tag, as: 'tags' }],
+      });
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
 
@@ -58,7 +70,6 @@ export default (router) => {
 
       await ctx.render('tasks/edit', {
         f: buildFormObj(task),
-        task,
         users,
         taskStatuses,
       });
@@ -73,18 +84,28 @@ export default (router) => {
       form.assignedTo = Number(form.assignedTo);
       form.status = Number(form.status);
 
+      const tags = await getTagsFromStr(form.tags);
 
       const task = Task.build(form);
 
       try {
         await task.save();
+        await task.setTags(tags);
 
         ctx.flash.set('Task has been created');
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.status = 422;
+        console.log(e);
 
-        await ctx.render('tasks/new', { f: buildFormObj(task, e) });
+        const users = await User.findAll();
+        const taskStatuses = await TaskStatus.findAll();
+
+        await ctx.render('tasks/new', {
+          f: buildFormObj(task, e),
+          users,
+          taskStatuses,
+        });
       }
     })
 
@@ -98,17 +119,25 @@ export default (router) => {
       form.assignedTo = Number(form.assignedTo);
       form.status = Number(form.status);
 
-      const task = await Task.findByPk(id);
-      const users = await User.findAll();
-      const taskStatuses = await TaskStatus.findAll();
+      const tags = await getTagsFromStr(form.tags);
+
+      const task = await Task.findOne({
+        where: { id },
+        include: [{ model: Tag, as: 'tags' }],
+      });
 
       try {
         await task.update(form);
+        await task.setTags(tags);
 
         ctx.flash.set('Task has been updated');
         ctx.redirect(router.url('tasks', id));
       } catch (e) {
         ctx.status = 422;
+
+        const users = await User.findAll();
+        const taskStatuses = await TaskStatus.findAll();
+
         await ctx.render('tasks/edit', {
           f: buildFormObj(task, e),
           task,

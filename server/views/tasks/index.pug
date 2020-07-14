@@ -16,7 +16,7 @@ block content
             td
               a(href= urlFor('editTask', task.id))= task.name
             td= task.description
-            td= task.creator
-            td= task.assignedTo
-            td= task.status
+            td= task.maker.fullName
+            td= task.assignee.fullName
+            td= task.TaskStatus.name
     a(href= urlFor('newTask')) Create new task
