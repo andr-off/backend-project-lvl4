@@ -30,16 +30,34 @@ const getTagsFromStr = async (str) => {
 export default (router) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
-      const tasks = await Task.findAll({
+      const { filter, value } = ctx.query;
+      let tasks;
+
+      const query = {
         order: [['updatedAt', 'DESC']],
         include: [
           { model: User, as: 'maker' },
           { model: User, as: 'assignee' },
           TaskStatus,
         ],
-      });
+      };
 
-      await ctx.render('tasks', { tasks });
+      if (!filter || !value) {
+        tasks = await Task.findAll(query);
+      } else {
+        tasks = await Task.scope({ method: [filter, value] }).findAll(query);
+      }
+
+      const assignees = await User.scope('usedAssignees').findAll();
+      const statuses = await TaskStatus.scope('usedStatuses').findAll();
+      const tags = await Tag.scope('usedTags').findAll();
+
+      await ctx.render('tasks', {
+        tasks,
+        assignees,
+        statuses,
+        tags,
+      });
     })
 
     .get('newTask', '/tasks/new', async (ctx) => {
@@ -96,7 +114,6 @@ export default (router) => {
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.status = 422;
-        console.log(e);
 
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();

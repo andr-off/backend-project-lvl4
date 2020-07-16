@@ -53,7 +53,20 @@ export default (sequelize, DataTypes) => {
         return `${this.firstName} ${this.lastName}`;
       },
     },
+    scopes: {
+      usedAssignees: {
+        include: [
+          { model: sequelize.models.Task, where: { assignedTo: sequelize.col('user.id') } },
+        ],
+      },
+    },
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Task, {
+      foreignKey: 'assignedTo',
+    });
+  };
 
   return User;
 };

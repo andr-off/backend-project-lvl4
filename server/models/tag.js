@@ -17,7 +17,25 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-  }, {});
+  }, {
+    scopes: {
+      usedTags() {
+        return {
+          include: [
+            { model: sequelize.models.Task, where: { id: sequelize.col('tag.id') } },
+          ],
+        };
+      },
+    },
+  });
+
+  Tag.associate = (models) => {
+    Tag.belongsToMany(models.Task, {
+      through: models.TaskTag,
+      foreignKey: 'tagId',
+      otherKey: 'taskId',
+    });
+  };
 
   return Tag;
 };

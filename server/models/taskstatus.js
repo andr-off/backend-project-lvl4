@@ -17,7 +17,21 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
+  }, {
+    scopes: {
+      usedStatuses: {
+        include: [
+          { model: sequelize.models.Task, where: { status: sequelize.col('taskstatus.id') } },
+        ],
+      },
+    },
   });
+
+  TaskStatus.associate = (models) => {
+    TaskStatus.hasMany(models.Task, {
+      foreignKey: 'status',
+    });
+  };
 
   return TaskStatus;
 };
