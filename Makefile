@@ -18,6 +18,7 @@ test:
 
 deploy:
 	git push heroku master
+	heroku run "npx sequelize db:migrate"
 
 db-setup:
 	npx sequelize db:migrate

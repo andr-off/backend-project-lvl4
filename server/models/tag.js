@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
       usedTags() {
         return {
           include: [
-            { model: sequelize.models.Task, where: { id: sequelize.col('tag.id') } },
+            { model: sequelize.models.Task, required: true },
           ],
         };
       },

@@ -21,7 +21,7 @@ export default (sequelize, DataTypes) => {
     scopes: {
       usedStatuses: {
         include: [
-          { model: sequelize.models.Task, where: { status: sequelize.col('taskstatus.id') } },
+          { model: sequelize.models.Task, required: true },
         ],
       },
     },

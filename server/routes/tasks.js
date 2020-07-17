@@ -15,8 +15,8 @@ const getTagsFromStr = async (str) => {
     return [];
   }
 
-  const promises = str.split(',')
-    .map((name) => ({ name: name.trim() }))
+  const promises = str.split(' ')
+    .map((name) => ({ name: normalizeName(name) }))
     .map(async (item) => {
       const [tag] = await Tag.findCreateFind({ where: item });
       return tag;

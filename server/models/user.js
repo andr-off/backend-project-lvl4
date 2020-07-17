@@ -56,7 +56,7 @@ export default (sequelize, DataTypes) => {
     scopes: {
       usedAssignees: {
         include: [
-          { model: sequelize.models.Task, where: { assignedTo: sequelize.col('user.id') } },
+          { model: sequelize.models.Task, required: true },
         ],
       },
     },
