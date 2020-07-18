@@ -1,10 +1,12 @@
+import UnauthorizedError from '../errors/UnauthorizedError';
+
 const requiredAuthentication = async (ctx, next) => {
   const { isSignedIn } = ctx.state;
 
   if (isSignedIn()) {
     await next();
   } else {
-    ctx.status = 403;
+    throw new UnauthorizedError();
   }
 };
 

@@ -1,3 +1,5 @@
+import ForbiddenError from '../errors/ForbiddenError';
+
 const requiredAuthorizetion = async (ctx, next) => {
   const { id } = ctx.params;
   const userId = String(ctx.session.userId);
@@ -5,7 +7,7 @@ const requiredAuthorizetion = async (ctx, next) => {
   if (id === userId) {
     await next();
   } else {
-    ctx.status = 403;
+    throw new ForbiddenError();
   }
 };
 

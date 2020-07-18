@@ -17,8 +17,12 @@ const {
 
 module.exports = {
   development: {
-    storage: './db.development.sqlite',
-    dialect: 'sqlite',
+    username,
+    password,
+    database,
+    host,
+    port,
+    dialect,
   },
   test: {
     storage: ':memory:',

@@ -27,7 +27,7 @@ const getTagsFromStr = async (str) => {
   return tags;
 };
 
-export default (router) => {
+export default (router, container) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
       const { filter, value } = ctx.query;
@@ -78,13 +78,13 @@ export default (router) => {
         where: { id },
         include: [{ model: Tag, as: 'tags' }],
       });
-      const users = await User.findAll();
-      const taskStatuses = await TaskStatus.findAll();
 
       if (!task) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
+
+      const users = await User.findAll();
+      const taskStatuses = await TaskStatus.findAll();
 
       await ctx.render('tasks/edit', {
         f: buildFormObj(task),
@@ -143,6 +143,10 @@ export default (router) => {
         include: [{ model: Tag, as: 'tags' }],
       });
 
+      if (!task) {
+        throw new container.errors.NotFoundError();
+      }
+
       try {
         await task.update(form);
         await task.setTags(tags);
@@ -170,12 +174,10 @@ export default (router) => {
       const task = await Task.findByPk(id);
 
       if (!task) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
 
       await task.destroy();
-
       ctx.redirect(router.url('tasks'));
     });
 };

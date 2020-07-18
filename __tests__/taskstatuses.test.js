@@ -79,7 +79,7 @@ describe('requests to /taskstatuses', () => {
     const res1 = await req
       .post(taskStatusesUrl)
       .send({ form: { name: 'done' } });
-    expect(res1).toHaveHTTPStatus(403);
+    expect(res1).toHaveHTTPStatus(401);
 
     const cookie = await singIn(formData);
 
@@ -95,7 +95,7 @@ describe('requests to /taskstatuses', () => {
     const res1 = await req
       .post(taskStatusesUrl)
       .send({ form: { name: 'do' } });
-    expect(res1).toHaveHTTPStatus(403);
+    expect(res1).toHaveHTTPStatus(401);
 
     const cookie = await singIn(formData);
 
@@ -111,7 +111,7 @@ describe('requests to /taskstatuses', () => {
     const res1 = await req
       .patch(taskStatusUrl)
       .send({ form: { name: 'done' } });
-    expect(res1).toHaveHTTPStatus(403);
+    expect(res1).toHaveHTTPStatus(401);
 
     const cookie = await singIn(formData);
 
@@ -127,7 +127,7 @@ describe('requests to /taskstatuses', () => {
     const res1 = await req
       .patch(taskStatusUrl)
       .send({ form: { name: 'do' } });
-    expect(res1).toHaveHTTPStatus(403);
+    expect(res1).toHaveHTTPStatus(401);
 
     const cookie = await singIn(formData);
 
@@ -142,7 +142,7 @@ describe('requests to /taskstatuses', () => {
   test('DELETE /taskstatuses/:id', async () => {
     const res1 = await req
       .delete(taskStatusUrl);
-    expect(res1).toHaveHTTPStatus(403);
+    expect(res1).toHaveHTTPStatus(401);
 
     const cookie = await singIn(formData);
 
@@ -155,7 +155,7 @@ describe('requests to /taskstatuses', () => {
   test('DELETE /taskstatuses/:id (errors)', async () => {
     const res1 = await req
       .delete(taskStatusUnexistedUrl);
-    expect(res1).toHaveHTTPStatus(403);
+    expect(res1).toHaveHTTPStatus(401);
 
     const cookie = await singIn(formData);
 

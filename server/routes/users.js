@@ -8,7 +8,7 @@ import requiredAuthorization from '../middlewares/authorization.middleware';
 
 const { User } = db;
 
-export default (router) => {
+export default (router, container) => {
   router
     .get('users', '/users', async (ctx) => {
       const users = await User.findAll();
@@ -25,8 +25,7 @@ export default (router) => {
       const user = await User.findByPk(id);
 
       if (!user) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
 
       await ctx.render('users/edit', { f: buildFormObj(user), user });
@@ -37,8 +36,7 @@ export default (router) => {
       const user = await User.findByPk(id);
 
       if (!user) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
 
       await ctx.render('users/show', { user });
@@ -74,6 +72,10 @@ export default (router) => {
 
       const user = await User.findByPk(id);
 
+      if (!user) {
+        throw new container.errors.NotFoundError();
+      }
+
       try {
         await user.update(form);
 
@@ -91,8 +93,7 @@ export default (router) => {
       const user = await User.findByPk(id);
 
       if (!user) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
 
       await user.destroy();

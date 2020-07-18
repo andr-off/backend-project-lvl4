@@ -5,7 +5,7 @@ import requiredAuthentication from '../middlewares/authentication.middleware';
 
 const { TaskStatus } = db;
 
-export default (router) => {
+export default (router, container) => {
   router
     .get('taskStatuses', '/taskstatuses', async (ctx) => {
       const taskStatuses = await TaskStatus.findAll();
@@ -22,8 +22,7 @@ export default (router) => {
       const taskStatus = await TaskStatus.findByPk(id);
 
       if (!taskStatus) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
 
       await ctx.render('taskstatuses/edit', { f: buildFormObj(taskStatus), taskStatus });
@@ -51,6 +50,10 @@ export default (router) => {
       const { request: { body: { form } } } = ctx;
       const taskStatus = await TaskStatus.findByPk(id);
 
+      if (!taskStatus) {
+        throw new container.errors.NotFoundError();
+      }
+
       form.name = normalizeName(form.name);
 
       try {
@@ -68,8 +71,7 @@ export default (router) => {
       const taskStatus = await TaskStatus.findByPk(id);
 
       if (!taskStatus) {
-        ctx.status = 404;
-        return;
+        throw new container.errors.NotFoundError();
       }
 
       await taskStatus.destroy();

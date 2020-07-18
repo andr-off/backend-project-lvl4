@@ -33,7 +33,25 @@ export default () => {
       await next();
     } catch (err) {
       log(err);
-      rollbar.error(err, ctx.request);
+
+      switch (err.status) {
+        case 403:
+          ctx.status = err.status;
+          await ctx.render('403');
+          return;
+        case 401:
+          ctx.status = err.status;
+          await ctx.render('401');
+          return;
+        case 404:
+          ctx.status = err.status;
+          await ctx.render('404');
+          return;
+        default:
+          rollbar.error(err, ctx.request);
+          ctx.status = 500;
+          await ctx.render('500');
+      }
     }
   });
 
