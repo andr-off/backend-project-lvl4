@@ -63,8 +63,8 @@ export default (router, container) => {
     .get('newTask', '/tasks/new', async (ctx) => {
       const task = Task.build();
 
-      const [{ id }] = await TaskStatus.findCreateFind({ where: { name: 'New' } });
-      task.status = id;
+      const [status] = await TaskStatus.findCreateFind({ where: { name: 'New' } });
+      task.setTaskStatus(status);
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
@@ -98,13 +98,21 @@ export default (router, container) => {
 
       form.name = normalizeName(form.name);
       form.description = form.description.trim();
-      form.creator = Number(ctx.session.userId);
-      form.assignedTo = Number(form.assignedTo);
-      form.status = Number(form.status);
+
+      const creator = await User.findByPk(ctx.session.userId);
+      const assignedTo = await User.findByPk(form.assignedTo);
+      const status = await TaskStatus.findByPk(form.status);
+
+      if (!creator || !assignedTo || !status) {
+        throw new container.errors.NotFoundError();
+      }
 
       const tags = await getTagsFromStr(form.tags);
 
       const task = Task.build(form);
+      task.setTaskStatus(status);
+      task.setAssignee(assignedTo);
+      task.setMaker(creator);
 
       try {
         await task.save();
@@ -113,6 +121,7 @@ export default (router, container) => {
         ctx.flash.set('Task has been created');
         ctx.redirect(router.url('tasks'));
       } catch (e) {
+        console.log(e);
         ctx.status = 422;
 
         const users = await User.findAll();
