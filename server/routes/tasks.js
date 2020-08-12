@@ -121,7 +121,6 @@ export default (router, container) => {
         ctx.flash.set('Task has been created');
         ctx.redirect(router.url('tasks'));
       } catch (e) {
-        console.log(e);
         ctx.status = 422;
 
         const users = await User.findAll();

@@ -5,5 +5,5 @@ export const normalizeEmail = (email) => (
 );
 
 export const normalizeName = (name) => (
-  _.capitalize(name.trim())
+  _.capitalize(name.trim().toLowerCase())
 );

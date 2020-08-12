@@ -8,9 +8,9 @@ html(lang="en")
   body
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-3
       a.navbar-brand(href="/") Task Manager
-      button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
+      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
         span.navbar-toggler-icon
-      .collapse.navbar-collapse
+      .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
           li.nav-item
             a.nav-link(href=urlFor('users')) Users
@@ -23,12 +23,14 @@ html(lang="en")
             li.nav-item
               +buttonTo(urlFor('session'), 'delete')(class="btn nav-link" value="Sign Out").btn.btn-outline-success.my-2.my-sm-0
           else
-            li.nav-item.mr-2
-              a.nav-link.btn.btn-outline-secondary.my-sm-0(href=urlFor('newSession')) Sign In
             li.nav-item
-              a.nav-link.btn.btn-outline-primary.my-2.my-sm-0(href=urlFor('newUser')) Sign Up
+              a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession')) Sign In
+            li.nav-item
+              a.nav-link.btn.btn-outline-primary.my-sm-0(href=urlFor('newUser')) Sign Up
     - const msg = flash.get()
     if msg
       .container
-        .alert.alert-info.m-3= msg
+        div.alert.alert-info.alert-dismissible.fade.show(role='alert')= msg
+          button(type='button' class='close' data-dismiss='alert' aria-label='Close')
+            span(aria-hidden='true')!= '&times;'
     block content

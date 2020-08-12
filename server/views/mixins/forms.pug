@@ -13,9 +13,11 @@ mixin input(f, property, options = { as: 'text' })
   - const value = f.object[property] === undefined ? '' : Array.isArray(f.object[property]) ? f.object[property].map((tag) => tag.name).join(' ') : f.object[property];
   .form-group(class=(f.errors[property] && 'has-danger'))
     label= property
-    input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`)
     if f.errors[property]
-      .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
+      input(name=getInputName(f, property) class='form-control is-invalid' type=options['as'] value=`${value}`)
+      .invalid-feedback= f.errors[property].map(({ message }) => message).join('. ')
+    else
+      input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`)
 
 mixin select(f, property, items, itemProperty, size=1)
     label= property

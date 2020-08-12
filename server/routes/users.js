@@ -5,6 +5,7 @@ import {
   normalizeName,
 } from '../lib/normilazer';
 import requiredAuthorization from '../middlewares/authorization.middleware';
+import encrypt from '../lib/secure';
 
 const { User } = db;
 
@@ -28,7 +29,7 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      await ctx.render('users/edit', { f: buildFormObj(user), user });
+      await ctx.render('users/edit', { f: buildFormObj(user), p: buildFormObj(user, [], 'password') });
     })
 
     .get('user', '/users/:id', async (ctx) => {
@@ -64,11 +65,7 @@ export default (router, container) => {
 
     .patch('/users/:id', requiredAuthorization, async (ctx) => {
       const { id } = ctx.params;
-      const { request: { body: { form } } } = ctx;
-
-      form.email = normalizeEmail(form.email);
-      form.firstName = normalizeName(form.firstName);
-      form.lastName = normalizeName(form.lastName);
+      const { request: { body: { form, password } } } = ctx;
 
       const user = await User.findByPk(id);
 
@@ -76,14 +73,68 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      try {
-        await user.update(form);
+      if (form) {
+        form.email = normalizeEmail(form.email);
+        form.firstName = normalizeName(form.firstName);
+        form.lastName = normalizeName(form.lastName);
 
-        ctx.flash.set('User has been updated');
+        try {
+          await user.update(form);
+
+          ctx.flash.set('User has been updated');
+          ctx.redirect(router.url('editUser', id));
+        } catch (e) {
+          ctx.status = 422;
+          await ctx.render('users/edit', {
+            f: buildFormObj(user, e),
+            p: buildFormObj(user, e, 'password'),
+          });
+        }
+
+        return;
+      }
+
+      if (user.passwordDigest !== encrypt(password.current)) {
+        ctx.status = 422;
+        await ctx.render('users/edit', {
+          f: buildFormObj(user),
+          p: buildFormObj(user, {
+            errors: [
+              { path: 'current', message: 'Wrong password' },
+            ],
+          }, 'password'),
+        });
+
+        return;
+      }
+
+      if (password.password !== password.confirm) {
+        ctx.status = 422;
+        await ctx.render('users/edit', {
+          f: buildFormObj(user),
+          p: buildFormObj(user, {
+            errors: [
+              { path: 'password', message: 'Must be equal "Confirm password"' },
+              { path: 'confirm', message: 'Must be equal "New password"' },
+            ],
+          }, 'password'),
+        });
+
+        return;
+      }
+
+      try {
+        await user.update(password);
+
+        ctx.flash.set('Password has been updated');
         ctx.redirect(router.url('editUser', id));
       } catch (e) {
+        console.log(e);
         ctx.status = 422;
-        await ctx.render('users/edit', { f: buildFormObj(user, e), user });
+        await ctx.render('users/edit', {
+          f: buildFormObj(user, e),
+          p: buildFormObj(user, e, 'password'),
+        });
       }
     })
 

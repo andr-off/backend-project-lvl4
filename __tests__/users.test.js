@@ -51,6 +51,72 @@ describe('requests to /users', () => {
     form: dataForUser2,
   };
 
+  const wrongData1 = {
+    form: {
+      ...dataForUser1,
+      email: '',
+    },
+  };
+
+  const wrongData2 = {
+    form: {
+      ...dataForUser1,
+      password: '123',
+    },
+  };
+
+  const { password, ...personalData } = getDataForUser();
+
+  const patchReqPersonalFormData = {
+    form: personalData,
+  };
+
+  const wrongPatchReqPersonalFormData1 = {
+    form: {
+      ...personalData,
+      email: '',
+    },
+  };
+
+  const wrongPatchReqPersonalFormData2 = {
+    form: {
+      ...personalData,
+      password: '123',
+    },
+  };
+
+  const patchReqPasswordFormData = {
+    password: {
+      current: dataForUser1.password,
+      password: '12345',
+      confirm: '12345',
+    },
+  };
+
+  const wrongPatchReqPasswordFormData1 = {
+    password: {
+      current: 'wrongpassword',
+      password: '12345',
+      confirm: '12345',
+    },
+  };
+
+  const wrongPatchReqPasswordFormData2 = {
+    password: {
+      current: dataForUser1.password,
+      password: '1234',
+      confirm: '12345',
+    },
+  };
+
+  const wrongPatchReqPasswordFormData3 = {
+    password: {
+      current: dataForUser1.password,
+      password: '123',
+      confirm: '123',
+    },
+  };
+
   const getRequestTestCases = [
     ['GET 200', rootUrl, 200],
     ['GET 404', wrongUrl, 404],
@@ -64,13 +130,18 @@ describe('requests to /users', () => {
     ['POST /session', sessionUrl, formData1, 302],
     ['POST /users', usersUrl, { form: getDataForUser() }, 302],
     ['POST /session (errors)', sessionUrl, { form: { email: '', password: '' } }, 422],
-    ['POST /users (errors)', usersUrl, { form: { ...dataForUser1, email: '' } }, 422],
+    ['POST /users (errors1)', usersUrl, wrongData1, 422],
+    ['POST /users (errors2)', usersUrl, wrongData2, 422],
   ];
 
   const patchRequestTestCases = [
-    ['PATCH /users/:id', userUrl1, { form: getDataForUser() }, 302],
-    ['PATCH /users/:id (errors1)', userUrl1, { form: { ...formData1.form, email: '' } }, 422],
-    ['PATCH /users/:id (errors2)', userUrl1, { form: { ...formData1.form, password: '' } }, 422],
+    ['PATCH /users/:id personal', userUrl1, patchReqPersonalFormData, 302],
+    ['PATCH /users/:id personal (errors1)', userUrl1, wrongPatchReqPersonalFormData1, 422],
+    ['PATCH /users/:id personal (errors2)', userUrl1, wrongPatchReqPersonalFormData2, 422],
+    ['PATCH /users/:id password', userUrl1, patchReqPasswordFormData, 302],
+    ['PATCH /users/:id password (errors1)', userUrl1, wrongPatchReqPasswordFormData1, 422],
+    ['PATCH /users/:id password (errors2)', userUrl1, wrongPatchReqPasswordFormData2, 422],
+    ['PATCH /users/:id password (errors3)', userUrl1, wrongPatchReqPasswordFormData3, 422],
   ];
 
   beforeAll(async () => {
