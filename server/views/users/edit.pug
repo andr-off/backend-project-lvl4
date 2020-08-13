@@ -24,8 +24,8 @@ block content
 
       .col-3
         - const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }
-        - const createdAt = new Date(user.createdAt).toLocaleString('en-US', options)
-        - const updatedAt = new Date(user.updatedAt).toLocaleString('en-US', options)
+        - const createdAt = user.createdAt.toLocaleString('en-US', options)
+        - const updatedAt = user.updatedAt.toLocaleString('en-US', options)
 
         h5.h5 User is created at:
         p= createdAt

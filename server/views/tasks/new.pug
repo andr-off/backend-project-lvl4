@@ -9,7 +9,7 @@ block content
         +select(f, 'assignedTo', users, 'fullName')
       .form-group
         +select(f, 'status', taskStatuses, 'name')
-        a(href=urlFor('newTaskStatus')) Add new status
-      +input(f, 'tags')
+      .form-group
+        +select(f, 'tags', tags, 'name', 0, true, selectedTags)
       .text Use space to separate tags
       +button(f)

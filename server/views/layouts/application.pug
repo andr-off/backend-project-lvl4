@@ -21,7 +21,7 @@ html(lang="en")
             li.nav-item.mr-2
               a.nav-link(href=urlFor('editUser', user.id))= user.firstName
             li.nav-item
-              +buttonTo(urlFor('session'), 'delete')(class="btn nav-link" value="Sign Out").btn.btn-outline-success.my-2.my-sm-0
+              +buttonTo(urlFor('session'), 'delete')(class="btn nav-link" value="Sign Out").btn-outline-success.my-2.my-sm-0
           else
             li.nav-item
               a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession')) Sign In

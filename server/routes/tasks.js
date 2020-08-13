@@ -10,23 +10,6 @@ const {
   Tag,
 } = db;
 
-const getTagsFromStr = async (str) => {
-  if (str.length === 0) {
-    return [];
-  }
-
-  const promises = str.split(' ')
-    .map((name) => ({ name: normalizeName(name) }))
-    .map(async (item) => {
-      const [tag] = await Tag.findCreateFind({ where: item });
-      return tag;
-    });
-
-  const tags = await Promise.all(promises);
-
-  return tags;
-};
-
 export default (router, container) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
@@ -68,8 +51,14 @@ export default (router, container) => {
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
+      const tags = await Tag.findAll();
 
-      await ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
+      await ctx.render('tasks/new', {
+        f: buildFormObj(task),
+        users,
+        taskStatuses,
+        tags,
+      });
     })
 
     .get('editTask', '/tasks/:id/edit', async (ctx) => {
@@ -85,11 +74,15 @@ export default (router, container) => {
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
+      const tags = await Tag.findAll();
+      const selectedTags = await task.getTags();
 
       await ctx.render('tasks/edit', {
         f: buildFormObj(task),
         users,
         taskStatuses,
+        tags,
+        selectedTags,
       });
     })
 
@@ -103,11 +96,17 @@ export default (router, container) => {
       const assignedTo = await User.findByPk(form.assignedTo);
       const status = await TaskStatus.findByPk(form.status);
 
+      form.tags = form.tags || [];
+
+      const formTags = await Tag.findAll({
+        where: {
+          id: form.tags,
+        },
+      });
+
       if (!creator || !assignedTo || !status) {
         throw new container.errors.NotFoundError();
       }
-
-      const tags = await getTagsFromStr(form.tags);
 
       const task = Task.build(form);
       task.setTaskStatus(status);
@@ -116,7 +115,7 @@ export default (router, container) => {
 
       try {
         await task.save();
-        await task.setTags(tags);
+        await task.setTags(formTags);
 
         ctx.flash.set('Task has been created');
         ctx.redirect(router.url('tasks'));
@@ -125,11 +124,15 @@ export default (router, container) => {
 
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();
+        const tags = await Tag.findAll();
+        const selectedTags = formTags;
 
         await ctx.render('tasks/new', {
           f: buildFormObj(task, e),
           users,
           taskStatuses,
+          tags,
+          selectedTags,
         });
       }
     })
@@ -144,7 +147,7 @@ export default (router, container) => {
       form.assignedTo = Number(form.assignedTo);
       form.status = Number(form.status);
 
-      const tags = await getTagsFromStr(form.tags);
+      form.tags = form.tags || [];
 
       const task = await Task.findOne({
         where: { id },
@@ -155,9 +158,15 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
+      const formTags = await Tag.findAll({
+        where: {
+          id: form.tags,
+        },
+      });
+
       try {
         await task.update(form);
-        await task.setTags(tags);
+        await task.setTags(formTags);
 
         ctx.flash.set('Task has been updated');
         ctx.redirect(router.url('tasks', id));
@@ -166,12 +175,16 @@ export default (router, container) => {
 
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();
+        const tags = await Tag.findAll();
+        const selectedTags = formTags;
 
         await ctx.render('tasks/edit', {
           f: buildFormObj(task, e),
           task,
           users,
           taskStatuses,
+          tags,
+          selectedTags,
         });
       }
     })

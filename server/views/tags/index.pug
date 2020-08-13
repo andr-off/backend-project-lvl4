@@ -1,0 +1,26 @@
+extends /layouts/application.pug
+
+block content
+  .container
+    h1.h1.text-center Tags
+
+    .mb-2.mt-4
+      a(href = urlFor('newTag')) + add new tag
+
+    table.table.table-striped
+      thead
+        tr
+          th.w-50 Status
+          th Created at
+          th Actions
+          th(colspan="2")
+      tbody
+        each tag in tags
+          tr
+            td= tag.name
+            td= tag.createdAt.toDateString()
+            td
+              a(href= urlFor('editTag', tag.id)) Edit
+            td
+              +buttonTo(urlFor('tag', tag.id), 'delete')(class="btn btn-link p-0 border-0" value="Delete")
+

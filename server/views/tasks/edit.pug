@@ -7,12 +7,9 @@ block content
     +formFor(f, { url: urlFor('task', f.object.id), method: 'patch' })
       +input(f, 'name')
       +input(f, 'description')
-      .form-group
-        +select(f, 'assignedTo', users, 'fullName')
-      .form-group
-        +select(f, 'status', taskStatuses, 'name')
-      +input(f, 'tags')
-      .text Use space to separate tags
+      +select(f, 'assignedTo', users, 'fullName')
+      +select(f, 'status', taskStatuses, 'name')
+      +select(f, 'tags', tags, 'name', 0, true, selectedTags)
       +button(f)
 
     .row.justify-content-md-center

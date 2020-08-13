@@ -19,11 +19,12 @@ mixin input(f, property, options = { as: 'text' })
     else
       input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`)
 
-mixin select(f, property, items, itemProperty, size=1)
+mixin select(f, property, items, itemProperty, size=1, multiple=false, selectedTags=[])
+  .form-group(class=(f.errors[property] && 'has-danger'))
     label= property
-    select(class='custom-select', name=getInputName(f, property), size=`${size}`)
+    select(class='custom-select', name=getInputName(f, property), size=`${size}`, multiple=multiple)
       each item in items
-        if f.object[property] === item.id
+        if f.object[property] === item.id || selectedTags.find((tag) => tag.id === item.id)
           option(value= item.id, selected)= item[itemProperty]
         else
           option(value= item.id)= item[itemProperty]
@@ -35,4 +36,4 @@ mixin button(f, type = 'submit', value = 'Save')
 mixin buttonTo(action, method)
   form(action=action, method="post")
     input(name='_method' type='hidden' value=method)
-    input(type='submit' class='form-control')&attributes(attributes)
+    input.btn(type='submit')&attributes(attributes)

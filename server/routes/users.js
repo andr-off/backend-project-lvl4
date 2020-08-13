@@ -129,7 +129,6 @@ export default (router, container) => {
         ctx.flash.set('Password has been updated');
         ctx.redirect(router.url('editUser', id));
       } catch (e) {
-        console.log(e);
         ctx.status = 422;
         await ctx.render('users/edit', {
           f: buildFormObj(user, e),

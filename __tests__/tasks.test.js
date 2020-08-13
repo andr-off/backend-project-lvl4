@@ -36,6 +36,7 @@ describe('requests to /tasks', () => {
 
   const formData = { form: userData };
   let taskFormData;
+
   const wrongFormData = {
     form: {
       name: '',
@@ -43,7 +44,6 @@ describe('requests to /tasks', () => {
       creator: 1,
       assignedTo: 1,
       status: 1,
-      tags: '',
     },
   };
 
@@ -71,6 +71,8 @@ describe('requests to /tasks', () => {
 
     const { id: userId } = await User.create(userData);
     const { id: statusId } = await TaskStatus.create({ name: 'New' });
+    const { id: tagId1 } = await Tag.create({ name: 'UI' });
+    const { id: tagId2 } = await Tag.create({ name: 'Database' });
     await TaskStatus.create({ name: 'In progress' });
 
     const taskData = {
@@ -79,7 +81,7 @@ describe('requests to /tasks', () => {
       creator: userId,
       assignedTo: userId,
       status: statusId,
-      tags: 'foo, bar',
+      tags: [tagId1, tagId2],
     };
 
     taskFormData = { form: taskData };

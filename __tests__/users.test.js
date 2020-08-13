@@ -5,7 +5,6 @@ import db from '../server/models';
 
 import getApp from '../server';
 
-
 describe('requests to /users', () => {
   let req;
   let server;
