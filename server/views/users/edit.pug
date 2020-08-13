@@ -23,14 +23,10 @@ block content
             +button(p)
 
       .col-3
-        - const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }
-        - const createdAt = user.createdAt.toLocaleString('en-US', options)
-        - const updatedAt = user.updatedAt.toLocaleString('en-US', options)
-
         h5.h5 User is created at:
-        p= createdAt
+        p= formatDate(user.createdAt)
 
         h5.h5 User is updated at:
-        p= updatedAt
+        p= formatDate(user.updatedAt)
 
         +buttonTo(urlFor('user', f.object.id), 'delete')(class='btn-sm btn-danger' value='Delete User')

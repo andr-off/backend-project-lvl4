@@ -18,7 +18,7 @@ block content
         each tag in tags
           tr
             td= tag.name
-            td= tag.createdAt.toDateString()
+            td= formatDate(tag.createdAt)
             td
               a(href= urlFor('editTag', tag.id)) Edit
             td

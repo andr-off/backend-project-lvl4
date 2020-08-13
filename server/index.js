@@ -14,6 +14,7 @@ import koaLogger from 'koa-logger';
 
 import addRoutes from './routes';
 import container from './container';
+import formatDate from './lib/helpers';
 
 export default () => {
   const isDevelopment = process.env.NODE_ENV === 'development';
@@ -105,6 +106,7 @@ export default () => {
     helperPath: [
       { _ },
       { urlFor: (...args) => router.url(...args) },
+      { formatDate },
     ],
   });
 
