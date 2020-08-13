@@ -14,8 +14,13 @@ html(lang="en")
         ul.navbar-nav.mr-auto
           li.nav-item
             a.nav-link(href=urlFor('users')) Users
-          li.nav-item
-            a.nav-link(href=urlFor('tasks')) Tasks
+          if isSignedIn()
+            li.nav-item
+              a.nav-link(href=urlFor('taskStatuses')) Statuses
+            li.nav-item
+              a.nav-link(href=urlFor('tags')) Tags
+            li.nav-item
+              a.nav-link(href=urlFor('tasks')) Tasks
         ul.navbar-nav
           if isSignedIn()
             li.nav-item.mr-2
