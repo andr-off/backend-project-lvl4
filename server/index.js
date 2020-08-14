@@ -100,7 +100,7 @@ export default () => {
     viewPath: path.join(__dirname, 'views'),
     noCache: isDevelopment,
     // debug: isDevelopment,
-    // compileDebug: true,
+    compileDebug: true,
     locals: {},
     basedir: path.join(__dirname, 'views'),
     helperPath: [

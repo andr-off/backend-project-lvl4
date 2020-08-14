@@ -5,6 +5,6 @@ block content
     if message
       .alert.alert-warning.m-3= message
     +formFor(f, { url: urlFor('session'), method: 'post' })
-      +input(f, 'email')
-      +input(f, 'password', { as: 'password' })
-      +button(f)
+      +input(f, 'email', { as: 'email', label: 'Email', required: true })
+      +input(f, 'password', { as: 'password', label: 'Password' })
+      +button(f, 'Log In')

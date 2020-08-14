@@ -3,13 +3,9 @@ extends /layouts/application.pug
 block content
   .container
     +formFor(f, { url: urlFor('tasks'), method: 'post' })
-      +input(f, 'name')
-      +input(f, 'description')
-      .form-group
-        +select(f, 'assignedTo', users, 'fullName')
-      .form-group
-        +select(f, 'status', taskStatuses, 'name')
-      .form-group
-        +select(f, 'tags', tags, 'name', 0, true, selectedTags)
-      .text Use space to separate tags
-      +button(f)
+      +input(f, 'name', { as: 'text', label: 'Task name' })
+      +input(f, 'description', { as: 'text', label: 'Description' })
+      +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
+      +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
+      +select(f, 'tags', tags, 'name', { label: 'Tags', multiple: true })
+      +button(f, 'Create')

@@ -5,13 +5,13 @@ block content
     h1.h1.text-center Edit task
 
     +formFor(f, { url: urlFor('task', f.object.id), method: 'patch' })
-      +input(f, 'name')
-      +input(f, 'description')
-      +select(f, 'assignedTo', users, 'fullName')
-      +select(f, 'status', taskStatuses, 'name')
-      +select(f, 'tags', tags, 'name', 0, true, selectedTags)
+      +input(f, 'name', { as: 'text', label: 'Task name' })
+      +input(f, 'description', { as: 'text', label: 'Description' })
+      +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
+      +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
+      +select(f, 'tags', tags, 'name', { multiple: true, label: 'Tags' })
       +button(f)
 
     .row.justify-content-md-center
       .col-md-2
-        +buttonTo(urlFor('task', f.object.id), 'delete')(class="btn btn-danger" value="Delete Task")
+        +buttonTo(urlFor('task', f.object.id), 'delete')(class='btn-danger' value='Delete')

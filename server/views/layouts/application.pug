@@ -7,8 +7,8 @@ html(lang="en")
     script(src='/assets/main.js')
   body
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-3
-      a.navbar-brand(href="/") Task Manager
-      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+      a.navbar-brand(href='/') Task Manager
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
       .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
@@ -26,10 +26,10 @@ html(lang="en")
             li.nav-item.mr-2
               a.nav-link(href=urlFor('editUser', user.id))= user.firstName
             li.nav-item
-              +buttonTo(urlFor('session'), 'delete')(class="btn nav-link" value="Sign Out").btn-outline-success.my-2.my-sm-0
+              +buttonTo(urlFor('session'), 'delete')(class='btn nav-link btn-outline-success my-2 my-sm-0' value='Log out')
           else
             li.nav-item
-              a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession')) Sign In
+              a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession')) Log In
             li.nav-item
               a.nav-link.btn.btn-outline-primary.my-sm-0(href=urlFor('newUser')) Sign Up
     - const msg = flash.get()

@@ -9,17 +9,17 @@ block content
         h3.h3 Information
         .bg-light.rounded.p-3.mb-4
           +formFor(f, { url: urlFor('user', f.object.id), method: 'patch' })
-            +input(f, 'email')
-            +input(f, 'firstName')
-            +input(f, 'lastName')
+            +input(f, 'email', { as: 'email', label: 'Email' })
+            +input(f, 'firstName', { as: 'text', label: 'First name' })
+            +input(f, 'lastName', { as: 'text', label: 'Last name' })
             +button(f)
 
         h3.h3 Password
         .bg-light.rounded.p-3.mb-4
           +formFor(p, { url: urlFor('user', p.object.id), method: 'patch' })
-            +input(p, 'current', { as: 'password' })
-            +input(p, 'password', { as: 'password' })
-            +input(p, 'confirm', { as: 'password' })
+            +input(p, 'current', { as: 'password', label: 'Current password' })
+            +input(p, 'password', { as: 'password', label: 'New password' })
+            +input(p, 'confirm', { as: 'password', label: 'Confirm password' })
             +button(p)
 
       .col-3

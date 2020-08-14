@@ -1,39 +1,52 @@
-- const getInputName = (f, property) => `${f.name}[${property}]`
+-
+  const getInputName = (f, property) => `${f.name}[${property}]`
+
+  const getValueAsString = (data) => {
+    const value = data === undefined ? '' : data;
+    return Array.isArray(value) ? value.map((tag) => tag.name).join(' ') : value;
+  };
 
 mixin formFor(f, options = {})
   - const url = _.get(options, 'url');
   - const method = _.get(options, 'method', 'get').toLowerCase();
   - const isStandart = _.includes(['get', 'post'], method);
-  form(action= url method= isStandart ? method : 'post')
+  form(action=url method=isStandart ? method : 'post')
     if !isStandart
-      input(name='_method' type='hidden' value= method)
+      input(name='_method' type='hidden' value=method)
     block
 
 mixin input(f, property, options = { as: 'text' })
-  - const value = f.object[property] === undefined ? '' : Array.isArray(f.object[property]) ? f.object[property].map((tag) => tag.name).join(' ') : f.object[property];
-  .form-group(class=(f.errors[property] && 'has-danger'))
-    label= property
+  - const value = getValueAsString(f.object[property])
+  .form-group
+    label(for=property)= options['label'] || property
+    input(
+      id=property
+      name=getInputName(f, property)
+      class=f.errors[property] ? 'form-control is-invalid' : 'form-control'
+      type=options['as']
+      value=`${value}`
+    )
     if f.errors[property]
-      input(name=getInputName(f, property) class='form-control is-invalid' type=options['as'] value=`${value}`)
       .invalid-feedback= f.errors[property].map(({ message }) => message).join('. ')
-    else
-      input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`)
 
-mixin select(f, property, items, itemProperty, size=1, multiple=false, selectedTags=[])
-  .form-group(class=(f.errors[property] && 'has-danger'))
-    label= property
-    select(class='custom-select', name=getInputName(f, property), size=`${size}`, multiple=multiple)
+mixin select(f, property, items, itemProperty, options = {})
+  .form-group
+    label(for=property)=options['label'] || property
+    select(
+      id=property
+      class='custom-select'
+      name=getInputName(f, property)
+      size=options['size']
+      multiple=options['multiple']
+    )
       each item in items
-        if f.object[property] === item.id || selectedTags.find((tag) => tag.id === item.id)
-          option(value= item.id, selected)= item[itemProperty]
-        else
-          option(value= item.id)= item[itemProperty]
+        option(value=item.id, selected=item.selected)=item[itemProperty]
 
-mixin button(f, type = 'submit', value = 'Save')
+mixin button(f, value = 'Save', type = 'submit')
   .form-group
     input(class='btn btn-primary' type=`${type}` value=`${value}`)
 
-mixin buttonTo(action, method)
+mixin buttonTo(action, method, attributes)
   form(action=action, method="post")
     input(name='_method' type='hidden' value=method)
     input.btn(type='submit')&attributes(attributes)
