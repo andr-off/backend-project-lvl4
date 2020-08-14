@@ -2,18 +2,25 @@ extends /layouts/application.pug
 
 block content
   .container
+    h1.h1.text-center Statuses
+
+    .mb-2.mt-4
+      a(href = urlFor('newTaskStatus')) + add new status
+
     table.table.table-striped
       thead
         tr
-          th Status
+          th.w-50 Status name
+          th Created at
           th Actions
           th(colspan="2")
       tbody
         each taskStatus in taskStatuses
           tr
             td= taskStatus.name
+            td= formatDate(taskStatus.createdAt)
             td
-              a(href= urlFor('editTaskStatus', taskStatus.id)) edit
+              a(href= urlFor('editTaskStatus', taskStatus.id)) Edit
             td
-              +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class='btn-link' value="Delete")
+              +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class="btn-link p-0 border-0" value="Delete")
 
