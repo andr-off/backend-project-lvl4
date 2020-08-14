@@ -13,32 +13,51 @@ const {
 export default (router, container) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
-      const { filter, value } = ctx.query;
-      let tasks;
+      const { userId } = ctx.session;
+
+      const {
+        taskStatusId,
+        assignedToId,
+        myTasks,
+        tagId,
+      } = ctx.query;
+
+      const taskStatusQuery = taskStatusId
+        ? { model: TaskStatus, where: { id: taskStatusId } }
+        : { model: TaskStatus };
+
+      const assignedToQuery = assignedToId
+        ? { model: User, as: 'assignee', where: { id: assignedToId } }
+        : { model: User, as: 'assignee' };
+
+      const tagQuery = tagId
+        ? { model: Tag, as: 'tags', where: { id: tagId } }
+        : { model: Tag, as: 'tags' };
+
+      const mytasksQuery = myTasks && userId
+        ? { model: User, as: 'maker', where: { id: userId } }
+        : { model: User, as: 'maker' };
 
       const query = {
         order: [['updatedAt', 'DESC']],
         include: [
-          { model: User, as: 'maker' },
-          { model: User, as: 'assignee' },
-          TaskStatus,
+          taskStatusQuery,
+          assignedToQuery,
+          tagQuery,
+          mytasksQuery,
         ],
       };
 
-      if (!filter || !value) {
-        tasks = await Task.findAll(query);
-      } else {
-        tasks = await Task.scope({ method: [filter, value] }).findAll(query);
-      }
+      const tasks = await Task.findAll(query);
 
       const assignees = await User.scope('usedAssignees').findAll();
-      const statuses = await TaskStatus.scope('usedStatuses').findAll();
+      const taskStatuses = await TaskStatus.scope('usedStatuses').findAll();
       const tags = await Tag.scope('usedTags').findAll();
 
       await ctx.render('tasks', {
         tasks,
         assignees,
-        statuses,
+        taskStatuses,
         tags,
       });
     })

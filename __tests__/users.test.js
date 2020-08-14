@@ -219,7 +219,6 @@ describe('requests to /users', () => {
     expect(res3).toHaveHTTPStatus(404);
   });
 
-
   test('GET /users/:id/edit', async () => {
     const res1 = await req
       .get(editUserUrl1);
