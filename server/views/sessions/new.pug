@@ -3,8 +3,15 @@ extends /layouts/application.pug
 block content
   .container
     if message
-      .alert.alert-warning.m-3= message
-    +formFor(f, { url: urlFor('session'), method: 'post' })
-      +input(f, 'email', { as: 'email', label: 'Email', required: true })
-      +input(f, 'password', { as: 'password', label: 'Password' })
-      +button(f, 'Log In')
+      div.alert.alert-danger.alert-dismissible.fade.show(role='alert')=message
+        button(type='button' class='close' data-dismiss='alert' aria-label='Close')
+          span(aria-hidden='true')!='&times;'
+
+    h1.h1.text-center.mb-4 Login
+    .row.justify-content-center
+      .col-6
+        .bg-light.rounded.p-3.mb-4
+          +formFor(f, { url: urlFor('session'), method: 'post' })
+            +input(f, 'email', { as: 'email', label: 'Email', required: true })
+            +input(f, 'password', { as: 'password', label: 'Password' })
+            +button(f, 'Log in')
