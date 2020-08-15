@@ -117,7 +117,7 @@ export default (router, container) => {
 
       form.tags = form.tags || [];
 
-      const formTags = await Tag.findAll({
+      const selectedTags = await Tag.findAll({
         where: {
           id: form.tags,
         },
@@ -134,7 +134,7 @@ export default (router, container) => {
 
       try {
         await task.save();
-        await task.setTags(formTags);
+        await task.setTags(selectedTags);
 
         ctx.flash.set('Task has been created');
         ctx.redirect(router.url('tasks'));
@@ -144,7 +144,6 @@ export default (router, container) => {
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();
         const tags = await Tag.findAll();
-        const selectedTags = formTags;
 
         await ctx.render('tasks/new', {
           f: buildFormObj(task, e),

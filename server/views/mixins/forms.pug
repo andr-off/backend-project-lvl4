@@ -1,10 +1,4 @@
--
-  const getInputName = (f, property) => `${f.name}[${property}]`
-
-  const getValueAsString = (data) => {
-    const value = data === undefined ? '' : data;
-    return Array.isArray(value) ? value.map((tag) => tag.name).join(' ') : value;
-  };
+- const getInputName = (f, property) => `${f.name}[${property}]`
 
 mixin formFor(f, options = {})
   - const url = _.get(options, 'url');
@@ -16,7 +10,7 @@ mixin formFor(f, options = {})
     block
 
 mixin input(f, property, options = { as: 'text' })
-  - const value = getValueAsString(f.object[property])
+  - const value = f.object[property] === undefined ? '' : f.object[property]
   .form-group
     label(for=property)= options['label'] || property
     input(
@@ -29,24 +23,26 @@ mixin input(f, property, options = { as: 'text' })
     if f.errors[property]
       .invalid-feedback= f.errors[property].map(({ message }) => message).join('. ')
 
-mixin select(f, property, items, itemProperty, options = {})
+mixin select(f, property, items, itemProperty, options = {}, selectedItems = [])
   .form-group
     label(for=property)=options['label'] || property
-    select(
+    select.custom-select(
       id=property
-      class='custom-select'
       name=getInputName(f, property)
       size=options['size']
       multiple=options['multiple']
     )
       each item in items
-        option(value=item.id, selected=item.selected)=item[itemProperty]
+        option(
+          value=item.id
+          selected=f.object[property] === item.id || selectedItems.some((s) => s.id === item.id)
+        )=item[itemProperty]
 
 mixin button(f, value = 'Save', type = 'submit')
   .form-group
-    input(class='btn btn-primary' type=`${type}` value=`${value}`)
+    input.btn.btn-primary(type=`${type}` value=`${value}`)
 
-mixin buttonTo(action, method, attributes)
+mixin buttonTo(action, method)
   form(action=action, method="post")
     input(name='_method' type='hidden' value=method)
     input.btn(type='submit')&attributes(attributes)

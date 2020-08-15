@@ -9,7 +9,7 @@ block content
       +input(f, 'description', { as: 'text', label: 'Description' })
       +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
       +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
-      +select(f, 'tags', tags, 'name', { multiple: true, label: 'Tags' })
+      +select(f, 'tags', tags, 'name', { multiple: true, label: 'Tags' }, selectedTags)
       +button(f)
 
     .row.justify-content-md-center

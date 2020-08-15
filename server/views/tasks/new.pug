@@ -7,5 +7,5 @@ block content
       +input(f, 'description', { as: 'text', label: 'Description' })
       +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
       +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
-      +select(f, 'tags', tags, 'name', { label: 'Tags', multiple: true })
+      +select(f, 'tags', tags, 'name', { label: 'Tags', multiple: true }, selectedTags)
       +button(f, 'Create')
