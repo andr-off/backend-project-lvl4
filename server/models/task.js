@@ -17,37 +17,6 @@ export default (sequelize, DataTypes) => {
       },
     },
     description: DataTypes.TEXT,
-  }, {
-    scopes: {
-      getMyTasks(userId) {
-        return {
-          include: [
-            { model: sequelize.models.User, as: 'maker', where: { id: userId } },
-          ],
-        };
-      },
-      getAssigneeTasks(assigneeId) {
-        return {
-          include: [
-            { model: sequelize.models.User, as: 'assignee', where: { id: assigneeId } },
-          ],
-        };
-      },
-      getTasksByStatus(statusId) {
-        return {
-          include: [
-            { model: sequelize.models.TaskStatus, where: { id: statusId } },
-          ],
-        };
-      },
-      getTasksByTag(tagId) {
-        return {
-          include: [
-            { model: sequelize.models.Tag, as: 'tags', where: { id: tagId } },
-          ],
-        };
-      },
-    },
   });
 
   Task.associate = (models) => {
