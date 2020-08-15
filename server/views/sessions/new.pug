@@ -9,7 +9,7 @@ block content
   h1.h1.text-center.mb-4 Login
   .row.justify-content-center
     .col-6
-      .bg-light.rounded.p-3.mb-4
+      .bg-light.border.border-dark.rounded.p-3.mb-4
         +formFor(f, { url: urlFor('session'), method: 'post' })
           +input(f, 'email', { as: 'email', label: 'Email', required: true })
           +input(f, 'password', { as: 'password', label: 'Password' })

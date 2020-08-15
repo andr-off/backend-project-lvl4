@@ -4,7 +4,7 @@ block content
   h1.h1.text-center.mb-4 Sing up
   .row.justify-content-center
     .col-6
-      .bg-light.rounded.p-3.mb-4
+      .bg-light.border.border-dark.rounded.p-3.mb-4
         +formFor(f, { url: urlFor('users'), method: 'post' })
           +input(f, 'email', { as: 'email', label: 'Email' })
           +input(f, 'firstName', { as: 'text', label: 'First name' })

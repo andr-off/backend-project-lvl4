@@ -11,6 +11,6 @@ block content
     +select(f, 'tags', tags, 'name', { multiple: true, label: 'Tags' }, selectedTags)
     +button(f)
 
-  .row.justify-content-md-center
+  .row.justify-content-md-center.text-center
     .col-md-2
-      +buttonTo(urlFor('task', f.object.id), 'delete')(class='btn-danger' value='Delete')
+      +buttonTo(urlFor('task', f.object.id), 'delete')(class='btn-danger' value='Delete task')
