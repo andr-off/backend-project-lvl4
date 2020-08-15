@@ -32,10 +32,10 @@ html(lang="en")
               a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession')) Log In
             li.nav-item
               a.nav-link.btn.btn-outline-primary.my-sm-0(href=urlFor('newUser')) Sign Up
-    - const msg = flash.get()
-    if msg
-      .container
+    .container
+      - const msg = flash.get()
+      if msg
         div.alert.alert-info.alert-dismissible.fade.show(role='alert')= msg
           button(type='button' class='close' data-dismiss='alert' aria-label='Close')
             span(aria-hidden='true')!= '&times;'
-    block content
+      block content

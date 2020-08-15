@@ -1,9 +1,8 @@
 extends /layouts/application.pug
 
 block content
-  .container
-    h1.h1.text-center Edit tag
+  h1.h1.text-center Edit tag
 
-    +formFor(f, { url: urlFor('tag', tag.id), method: 'patch' })
-      +input(f, 'name', { as: 'text', label: 'Tag name' })
-      +button(f)
+  +formFor(f, { url: urlFor('tag', tag.id), method: 'patch' })
+    +input(f, 'name', { as: 'text', label: 'Tag name' })
+    +button(f)

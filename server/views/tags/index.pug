@@ -1,26 +1,25 @@
 extends /layouts/application.pug
 
 block content
-  .container
-    h1.h1.text-center Tags
+  h1.h1.text-center Tags
 
-    .mb-2.mt-4
-      a(href = urlFor('newTag')) + add new tag
+  .mb-2.mt-4
+    a(href = urlFor('newTag')) + add new tag
 
-    table.table.table-striped
-      thead
+  table.table.table-striped
+    thead
+      tr
+        th.w-50 Tag name
+        th Created at
+        th Actions
+        th(colspan="2")
+    tbody
+      each tag in tags
         tr
-          th.w-50 Tag name
-          th Created at
-          th Actions
-          th(colspan="2")
-      tbody
-        each tag in tags
-          tr
-            td= tag.name
-            td= formatDate(tag.createdAt)
-            td
-              a(href= urlFor('editTag', tag.id)) Edit
-            td
-              +buttonTo(urlFor('tag', tag.id), 'delete')(class="btn-link p-0 border-0" value="Delete")
+          td= tag.name
+          td= formatDate(tag.createdAt)
+          td
+            a(href= urlFor('editTag', tag.id)) Edit
+          td
+            +buttonTo(urlFor('tag', tag.id), 'delete')(class="btn-link p-0 border-0" value="Delete")
 

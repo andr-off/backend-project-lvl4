@@ -1,14 +1,13 @@
 extends /layouts/application.pug
 
 block content
-  .container
-    h1.h1.text-center.mb-4 Sing up
-    .row.justify-content-center
-      .col-6
-        .bg-light.rounded.p-3.mb-4
-          +formFor(f, { url: urlFor('users'), method: 'post' })
-            +input(f, 'email', { as: 'email', label: 'Email' })
-            +input(f, 'firstName', { as: 'text', label: 'First name' })
-            +input(f, 'lastName', { as: 'text', label: 'Last name' })
-            +input(f, 'password', { as: 'password', label: 'Password' })
-            +button(f, 'Sing up')
+  h1.h1.text-center.mb-4 Sing up
+  .row.justify-content-center
+    .col-6
+      .bg-light.rounded.p-3.mb-4
+        +formFor(f, { url: urlFor('users'), method: 'post' })
+          +input(f, 'email', { as: 'email', label: 'Email' })
+          +input(f, 'firstName', { as: 'text', label: 'First name' })
+          +input(f, 'lastName', { as: 'text', label: 'Last name' })
+          +input(f, 'password', { as: 'password', label: 'Password' })
+          +button(f, 'Sing up')

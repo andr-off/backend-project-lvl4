@@ -1,32 +1,31 @@
 extends /layouts/application.pug
 
 block content
-  .container
-    h1.h1.text-center User settings
+  h1.h1.text-center User settings
 
-    .row
-      .col-9
-        h3.h3 Information
-        .bg-light.rounded.p-3.mb-4
-          +formFor(f, { url: urlFor('user', f.object.id), method: 'patch' })
-            +input(f, 'email', { as: 'email', label: 'Email' })
-            +input(f, 'firstName', { as: 'text', label: 'First name' })
-            +input(f, 'lastName', { as: 'text', label: 'Last name' })
-            +button(f)
+  .row
+    .col-9
+      h3.h3 Information
+      .bg-light.rounded.p-3.mb-4
+        +formFor(f, { url: urlFor('user', f.object.id), method: 'patch' })
+          +input(f, 'email', { as: 'email', label: 'Email' })
+          +input(f, 'firstName', { as: 'text', label: 'First name' })
+          +input(f, 'lastName', { as: 'text', label: 'Last name' })
+          +button(f)
 
-        h3.h3 Password
-        .bg-light.rounded.p-3.mb-4
-          +formFor(p, { url: urlFor('user', p.object.id), method: 'patch' })
-            +input(p, 'current', { as: 'password', label: 'Current password' })
-            +input(p, 'password', { as: 'password', label: 'New password' })
-            +input(p, 'confirm', { as: 'password', label: 'Confirm password' })
-            +button(p)
+      h3.h3 Password
+      .bg-light.rounded.p-3.mb-4
+        +formFor(p, { url: urlFor('user', p.object.id), method: 'patch' })
+          +input(p, 'current', { as: 'password', label: 'Current password' })
+          +input(p, 'password', { as: 'password', label: 'New password' })
+          +input(p, 'confirm', { as: 'password', label: 'Confirm password' })
+          +button(p)
 
-      .col-3
-        h5.h5 User is created at:
-        p= formatDate(user.createdAt)
+    .col-3
+      h5.h5 User is created at:
+      p= formatDate(user.createdAt)
 
-        h5.h5 User is updated at:
-        p= formatDate(user.updatedAt)
+      h5.h5 User is updated at:
+      p= formatDate(user.updatedAt)
 
-        +buttonTo(urlFor('user', f.object.id), 'delete')(class='btn-sm btn-danger' value='Delete User')
+      +buttonTo(urlFor('user', f.object.id), 'delete')(class='btn-sm btn-danger' value='Delete User')

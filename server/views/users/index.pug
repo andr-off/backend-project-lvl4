@@ -1,21 +1,20 @@
 extends /layouts/application.pug
 
 block content
-  .container
-    h2.h2 Users
-    if !_.isEmpty(users)
-      table.table.table-striped
-        thead
+  h2.h2 Users
+  if !_.isEmpty(users)
+    table.table.table-striped
+      thead
+        tr
+          th Full Name
+          th Email
+          th Created At
+      tbody
+        each user in users
           tr
-            th Full Name
-            th Email
-            th Created At
-        tbody
-          each user in users
-            tr
-              td
-                a(href= urlFor('user', user.id ))= user.fullName
-              td= user.email
-              td= user.createdAt
-    else
-      p There is no users.
+            td
+              a(href= urlFor('user', user.id ))= user.fullName
+            td= user.email
+            td= user.createdAt
+  else
+    p There is no users.

@@ -1,84 +1,83 @@
 extends /layouts/application.pug
 
 block content
-  .container
-    h1.h1.mt-4.text-center Tasks
-    .mb-2
-      a(href= urlFor('newTask')) + add new task
+  h1.h1.mt-4.text-center Tasks
+  .mb-2
+    a(href= urlFor('newTask')) + add new task
 
-    .jumbotron.p-2.bg-dark.text-white-50
-      form.form-inline(action=urlFor('tasks'), method='get')
-        .form-group.mr-4
-          label.mr-2(for='status') Status
-          select(
-            id='status'
-            class='custom-select'
-            name='taskStatusId'
-          )
-            option
-            each taskStatus in taskStatuses
-              option(value=taskStatus.id)=taskStatus.name
+  .jumbotron.p-2.bg-dark.text-white-50
+    form.form-inline(action=urlFor('tasks'), method='get')
+      .form-group.mr-4
+        label.mr-2(for='status') Status
+        select(
+          id='status'
+          class='custom-select'
+          name='taskStatusId'
+        )
+          option
+          each taskStatus in taskStatuses
+            option(value=taskStatus.id)=taskStatus.name
 
-        .form-group.mr-4
-          label.mr-2(for='assignee') Assigned to
-          select(
-            id='assignee'
-            class='custom-select'
-            name='assignedToId'
-          )
-            option
-            each assignee in assignees
-              option(value=assignee.id)=assignee.fullName
+      .form-group.mr-4
+        label.mr-2(for='assignee') Assigned to
+        select(
+          id='assignee'
+          class='custom-select'
+          name='assignedToId'
+        )
+          option
+          each assignee in assignees
+            option(value=assignee.id)=assignee.fullName
 
-        .form-group.mr-4
-          label.mr-2(for='tags') Tags
-          select(
-            id='tags'
-            class='custom-select'
-            name='tagId'
-          )
-            option
-            each tag in tags
-              option(value=tag.id)=tag.name
+      .form-group.mr-4
+        label.mr-2(for='tags') Tags
+        select(
+          id='tags'
+          class='custom-select'
+          name='tagId'
+        )
+          option
+          each tag in tags
+            option(value=tag.id)=tag.name
 
-        .form-check.mr-4
-          input.form-check-input(type='checkbox' id='my-tasks' name='myTasks')
-          label.form-check-label(for='my-tasks') Only my tasks
+      .form-check.mr-4
+        input.form-check-input(type='checkbox' id='my-tasks' name='myTasks')
+        label.form-check-label(for='my-tasks') Only my tasks
 
-        .form-group.mr-4
-          input.btn.btn-primary(type='submit' value='Show')
+      .form-group.mr-4
+        input.btn.btn-primary(type='submit' value='Show')
 
-    if !_.isEmpty(tasks)
-      each task in tasks
-        .card.card-body.bg-light.border-dark.mb-3
-          h4.h4.card-title
-            small.text-muted.mr-3 Id: #{ task.id }
-            a(href= urlFor('editTask', task.id))=task.name
-          if task.description
-            a.mr-3(
-              data-toggle='collapse'
-              href='#collapseDescription' + task.id
-            ) Description:
-            p(class='collapse' id='collapseDescription' + task.id)=task.description
-          .row
-            .col-4
-              big.mr-3 Creator:
-              span.font-weight-bold=task.maker.fullName
-            .col-4
-              big.mr-3 Assigned to:
-              span.font-weight-bold=task.assignee.fullName
-            .col-4
-              big.mr-3 Status:
-              span.font-weight-bold=task.TaskStatus.name
-          .row.mt-2
-            .col-6
-              big.mr-3 Created at:
-              span=formatDate(task.createdAt)
-          .row.mt-2
-            .col-6
-              if task.tags.length > 0
-                  big.mr-3 Tags:
-                  each tag in task.tags
-                    span.badge.badge-dark.mr-2=tag.name
-    else
-      p There is no tasks.
+  if !_.isEmpty(tasks)
+    each task in tasks
+      .card.card-body.bg-light.border-dark.mb-3
+        h4.h4.card-title
+          small.text-muted.mr-3 Id: #{ task.id }
+          a(href= urlFor('editTask', task.id))=task.name
+        if task.description
+          a.mr-3(
+            data-toggle='collapse'
+            href='#collapseDescription' + task.id
+          ) Description:
+          p(class='collapse' id='collapseDescription' + task.id)=task.description
+        .row
+          .col-4
+            big.mr-3 Creator:
+            span.font-weight-bold=task.maker.fullName
+          .col-4
+            big.mr-3 Assigned to:
+            span.font-weight-bold=task.assignee.fullName
+          .col-4
+            big.mr-3 Status:
+            span.font-weight-bold=task.TaskStatus.name
+        .row.mt-2
+          .col-6
+            big.mr-3 Created at:
+            span=formatDate(task.createdAt)
+        .row.mt-2
+          .col-6
+            if task.tags.length > 0
+                big.mr-3 Tags:
+                each tag in task.tags
+                  span.badge.badge-dark.mr-2=tag.name
+  else
+    p There is no tasks.
