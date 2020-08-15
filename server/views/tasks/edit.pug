@@ -6,7 +6,7 @@ block content
 
     +formFor(f, { url: urlFor('task', f.object.id), method: 'patch' })
       +input(f, 'name', { as: 'text', label: 'Task name' })
-      +input(f, 'description', { as: 'text', label: 'Description' })
+      +textarea(f, 'description', { label: 'Description', rows: 3 })
       +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
       +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
       +select(f, 'tags', tags, 'name', { multiple: true, label: 'Tags' }, selectedTags)

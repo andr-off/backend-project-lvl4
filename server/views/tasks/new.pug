@@ -4,7 +4,7 @@ block content
   .container
     +formFor(f, { url: urlFor('tasks'), method: 'post' })
       +input(f, 'name', { as: 'text', label: 'Task name' })
-      +input(f, 'description', { as: 'text', label: 'Description' })
+      +textarea(f, 'description', { label: 'Description', rows: 3 })
       +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
       +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
       +select(f, 'tags', tags, 'name', { label: 'Tags', multiple: true }, selectedTags)

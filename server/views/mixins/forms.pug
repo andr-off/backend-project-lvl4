@@ -23,6 +23,19 @@ mixin input(f, property, options = { as: 'text' })
     if f.errors[property]
       .invalid-feedback= f.errors[property].map(({ message }) => message).join('. ')
 
+mixin textarea(f, property, options = { rows: 3 })
+  - const value = f.object[property] === undefined ? '' : f.object[property]
+  .form-group
+    label(for=property)= options['label'] || property
+    textarea(
+      id=property
+      name=getInputName(f, property)
+      class=f.errors[property] ? 'form-control is-invalid' : 'form-control'
+      rows=options['rows']
+    )=value
+    if f.errors[property]
+      .invalid-feedback= f.errors[property].map(({ message }) => message).join('. ')
+
 mixin select(f, property, items, itemProperty, options = {}, selectedItems = [])
   .form-group
     label(for=property)=options['label'] || property
