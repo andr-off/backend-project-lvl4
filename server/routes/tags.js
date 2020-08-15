@@ -75,6 +75,8 @@ export default (router, container) => {
       }
 
       await tag.destroy();
+
+      ctx.flash.set('Tag has been deleted');
       ctx.redirect(router.url('tags'));
     });
 };

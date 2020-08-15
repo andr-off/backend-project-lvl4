@@ -75,6 +75,8 @@ export default (router, container) => {
       }
 
       await taskStatus.destroy();
+
+      ctx.flash.set('Status has been deleted');
       ctx.redirect(router.url('taskStatuses'));
     });
 };

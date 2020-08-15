@@ -217,6 +217,8 @@ export default (router, container) => {
       }
 
       await task.destroy();
+
+      ctx.flash.set('Task has been deleted');
       ctx.redirect(router.url('tasks'));
     });
 };
