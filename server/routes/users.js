@@ -1,4 +1,3 @@
-import db from '../models';
 import buildFormObj from '../lib/formObjectBuilder';
 import {
   normalizeEmail,
@@ -7,21 +6,23 @@ import {
 import requiredAuthorization from '../middlewares/authorization.middleware';
 import encrypt from '../lib/secure';
 
-const { User } = db;
-
 export default (router, container) => {
   router
     .get('users', '/users', async (ctx) => {
+      const { User } = container.db;
+
       const users = await User.findAll();
       await ctx.render('users', { users });
     })
 
     .get('newUser', '/users/new', async (ctx) => {
+      const { User } = container.db;
       const user = User.build();
       await ctx.render('users/new', { f: buildFormObj(user) });
     })
 
     .get('editUser', '/users/:id/edit', requiredAuthorization, async (ctx) => {
+      const { User } = container.db;
       const { id } = ctx.params;
       const user = await User.findByPk(id);
 
@@ -33,6 +34,7 @@ export default (router, container) => {
     })
 
     .get('user', '/users/:id', async (ctx) => {
+      const { User } = container.db;
       const { id } = ctx.params;
       const user = await User.findByPk(id);
 
@@ -44,6 +46,7 @@ export default (router, container) => {
     })
 
     .post('/users', async (ctx) => {
+      const { User } = container.db;
       const { request: { body: { form } } } = ctx;
 
       form.email = normalizeEmail(form.email);
@@ -64,6 +67,7 @@ export default (router, container) => {
     })
 
     .patch('/users/:id', requiredAuthorization, async (ctx) => {
+      const { User } = container.db;
       const { id } = ctx.params;
       const { request: { body: { form, password } } } = ctx;
 
@@ -138,6 +142,7 @@ export default (router, container) => {
     })
 
     .delete('/users/:id', requiredAuthorization, async (ctx) => {
+      const { User } = container.db;
       const { id } = ctx.params;
 
       const user = await User.findByPk(id);

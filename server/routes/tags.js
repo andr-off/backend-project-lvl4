@@ -1,23 +1,25 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
-import db from '../models';
 import requiredAuthentication from '../middlewares/authentication.middleware';
-
-const { Tag } = db;
 
 export default (router, container) => {
   router
     .get('tags', '/tags', async (ctx) => {
+      const { Tag } = container.db;
+
       const tags = await Tag.findAll();
       await ctx.render('tags', { tags });
     })
 
     .get('newTag', '/tags/new', async (ctx) => {
+      const { Tag } = container.db;
+
       const tag = Tag.build();
       await ctx.render('tags/new', { f: buildFormObj(tag) });
     })
 
     .get('editTag', '/tags/:id/edit', async (ctx) => {
+      const { Tag } = container.db;
       const { id } = ctx.params;
       const tag = await Tag.findByPk(id);
 
@@ -29,6 +31,7 @@ export default (router, container) => {
     })
 
     .post('/tags', requiredAuthentication, async (ctx) => {
+      const { Tag } = container.db;
       const { request: { body: { form } } } = ctx;
 
       form.name = normalizeName(form.name);
@@ -46,8 +49,10 @@ export default (router, container) => {
     })
 
     .patch('tag', '/tags/:id', requiredAuthentication, async (ctx) => {
+      const { Tag } = container.db;
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
+
       const tag = await Tag.findByPk(id);
 
       if (!tag) {
@@ -67,7 +72,9 @@ export default (router, container) => {
     })
 
     .delete('/tags/:id', requiredAuthentication, async (ctx) => {
+      const { Tag } = container.db;
       const { id } = ctx.params;
+
       const tag = await Tag.findByPk(id);
 
       if (!tag) {

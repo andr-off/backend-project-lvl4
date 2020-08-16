@@ -1,18 +1,17 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
-import db from '../models';
 import requiredAuthentication from '../middlewares/authentication.middleware';
-
-const {
-  Task,
-  User,
-  TaskStatus,
-  Tag,
-} = db;
 
 export default (router, container) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
+      const {
+        Task,
+        User,
+        TaskStatus,
+        Tag,
+      } = container.db;
+
       const { userId } = ctx.session;
 
       const {
@@ -63,9 +62,16 @@ export default (router, container) => {
     })
 
     .get('newTask', '/tasks/new', async (ctx) => {
-      const task = Task.build();
+      const {
+        Task,
+        User,
+        TaskStatus,
+        Tag,
+      } = container.db;
 
+      const task = Task.build();
       const [status] = await TaskStatus.findCreateFind({ where: { name: 'New' } });
+
       task.setTaskStatus(status);
 
       const users = await User.findAll();
@@ -81,7 +87,15 @@ export default (router, container) => {
     })
 
     .get('editTask', '/tasks/:id/edit', async (ctx) => {
+      const {
+        Task,
+        User,
+        TaskStatus,
+        Tag,
+      } = container.db;
+
       const { id } = ctx.params;
+
       const task = await Task.findOne({
         where: { id },
         include: [{ model: Tag, as: 'tags' }],
@@ -106,6 +120,13 @@ export default (router, container) => {
     })
 
     .post('/tasks', requiredAuthentication, async (ctx) => {
+      const {
+        Task,
+        User,
+        TaskStatus,
+        Tag,
+      } = container.db;
+
       const { request: { body: { form } } } = ctx;
 
       form.name = normalizeName(form.name);
@@ -156,6 +177,13 @@ export default (router, container) => {
     })
 
     .patch('task', '/tasks/:id', requiredAuthentication, async (ctx) => {
+      const {
+        Task,
+        User,
+        TaskStatus,
+        Tag,
+      } = container.db;
+
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
 
@@ -208,6 +236,7 @@ export default (router, container) => {
     })
 
     .delete('/tasks/:id', requiredAuthentication, async (ctx) => {
+      const { Task } = container.db;
       const { id } = ctx.params;
 
       const task = await Task.findByPk(id);

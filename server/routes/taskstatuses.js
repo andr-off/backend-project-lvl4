@@ -3,22 +3,26 @@ import { normalizeName } from '../lib/normilazer';
 import db from '../models';
 import requiredAuthentication from '../middlewares/authentication.middleware';
 
-const { TaskStatus } = db;
-
 export default (router, container) => {
   router
     .get('taskStatuses', '/taskstatuses', async (ctx) => {
+      const { TaskStatus } = db;
+
       const taskStatuses = await TaskStatus.findAll();
       await ctx.render('taskstatuses', { taskStatuses });
     })
 
     .get('newTaskStatus', '/taskstatuses/new', async (ctx) => {
+      const { TaskStatus } = db;
+
       const taskStatus = TaskStatus.build();
       await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus) });
     })
 
     .get('editTaskStatus', '/taskstatuses/:id/edit', async (ctx) => {
+      const { TaskStatus } = db;
       const { id } = ctx.params;
+
       const taskStatus = await TaskStatus.findByPk(id);
 
       if (!taskStatus) {
@@ -29,6 +33,7 @@ export default (router, container) => {
     })
 
     .post('/taskstatuses', requiredAuthentication, async (ctx) => {
+      const { TaskStatus } = db;
       const { request: { body: { form } } } = ctx;
 
       form.name = normalizeName(form.name);
@@ -46,8 +51,10 @@ export default (router, container) => {
     })
 
     .patch('taskStatus', '/taskstatuses/:id', requiredAuthentication, async (ctx) => {
+      const { TaskStatus } = db;
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
+
       const taskStatus = await TaskStatus.findByPk(id);
 
       if (!taskStatus) {
@@ -67,7 +74,9 @@ export default (router, container) => {
     })
 
     .delete('/taskstatuses/:id', requiredAuthentication, async (ctx) => {
+      const { TaskStatus } = db;
       const { id } = ctx.params;
+
       const taskStatus = await TaskStatus.findByPk(id);
 
       if (!taskStatus) {
