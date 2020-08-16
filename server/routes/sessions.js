@@ -1,11 +1,8 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import encrypt from '../lib/secure';
-import db from '../models';
 import { normalizeEmail } from '../lib/normilazer';
 
-const { User } = db;
-
-export default (router) => {
+export default (router, container) => {
   router
     .get('newSession', '/session/new', async (ctx) => {
       const data = {};
@@ -13,6 +10,7 @@ export default (router) => {
     })
 
     .post('session', '/session', async (ctx) => {
+      const { User } = container.db;
       const { email, password } = ctx.request.body.form;
 
       const normalizedEmail = normalizeEmail(email);
