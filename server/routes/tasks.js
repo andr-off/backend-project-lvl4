@@ -21,31 +21,32 @@ export default (router, container) => {
         tagId,
       } = ctx.query;
 
-      const taskStatusQuery = taskStatusId
-        ? { model: TaskStatus, where: { id: taskStatusId } }
-        : { model: TaskStatus };
-
-      const assignedToQuery = assignedToId
-        ? { model: User, as: 'assignee', where: { id: assignedToId } }
-        : { model: User, as: 'assignee' };
-
-      const tagQuery = tagId
-        ? { model: Tag, as: 'tags', where: { id: tagId } }
-        : { model: Tag, as: 'tags' };
-
-      const mytasksQuery = myTasks && userId
-        ? { model: User, as: 'maker', where: { id: userId } }
-        : { model: User, as: 'maker' };
-
       const query = {
-        order: [['updatedAt', 'DESC']],
+        order: [['createdAt', 'DESC']],
         include: [
-          taskStatusQuery,
-          assignedToQuery,
-          tagQuery,
-          mytasksQuery,
+          { model: TaskStatus, as: 'taskStatus' },
+          { model: User, as: 'maker' },
+          { model: User, as: 'assignee' },
+          { model: Tag, as: 'tags' },
         ],
+        where: {},
       };
+
+      if (taskStatusId) {
+        query.where.status = taskStatusId;
+      }
+
+      if (assignedToId) {
+        query.where.assignedTo = assignedToId;
+      }
+
+      if (myTasks) {
+        query.where.creator = userId;
+      }
+
+      if (tagId) {
+        query.where['$tags.id$'] = tagId;
+      }
 
       const tasks = await Task.findAll(query);
 

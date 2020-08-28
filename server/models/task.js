@@ -1,4 +1,4 @@
-export default (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const Task = sequelize.define('Task', {
     id: {
       type: DataTypes.INTEGER,
@@ -32,6 +32,7 @@ export default (sequelize, DataTypes) => {
 
     Task.belongsTo(models.TaskStatus, {
       foreignKey: 'status',
+      as: 'taskStatus',
     });
 
     Task.belongsToMany(models.Tag, {

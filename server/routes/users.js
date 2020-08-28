@@ -151,10 +151,15 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      await user.destroy();
+      try {
+        await user.destroy();
 
-      ctx.session = {};
-      ctx.flash.set('User has been deleted');
-      ctx.redirect(router.url('root'));
+        ctx.session = {};
+        ctx.flash.set('User has been deleted');
+        ctx.redirect(router.url('root'));
+      } catch (e) {
+        ctx.flash.set('User has not been deleted');
+        ctx.redirect(router.url('editUser', id));
+      }
     });
 };

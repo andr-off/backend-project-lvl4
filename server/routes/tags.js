@@ -81,9 +81,14 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      await tag.destroy();
+      try {
+        await tag.destroy();
 
-      ctx.flash.set('Tag has been deleted');
-      ctx.redirect(router.url('tags'));
+        ctx.flash.set('Tag has been deleted');
+        ctx.redirect(router.url('tags'));
+      } catch (e) {
+        ctx.flash.set('Tag has not been deleted');
+        ctx.redirect(router.url('tags'));
+      }
     });
 };

@@ -1,6 +1,6 @@
 import encrypt from '../lib/secure';
 
-export default (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
       type: DataTypes.INTEGER,
@@ -65,6 +65,10 @@ export default (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Task, {
       foreignKey: 'assignedTo',
+    });
+
+    User.hasMany(models.Task, {
+      foreignKey: 'creator',
     });
   };
 

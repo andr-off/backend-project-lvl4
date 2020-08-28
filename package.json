@@ -46,8 +46,8 @@
     "pg": "^8.3.0",
     "popper.js": "^1.16.1",
     "rollbar": "^2.19.2",
-    "sequelize": "^5.22.3",
-    "sequelize-cli": "^5.5.1",
+    "sequelize": "^6.3.4",
+    "sequelize-cli": "^6.2.0",
     "sqlite3": "^4.2.0",
     "webpack": "^4.44.1"
   },

@@ -3,7 +3,6 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Tasks', {
       id: {
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
@@ -21,8 +20,9 @@ module.exports = {
           model: {
             tableName: 'Users',
           },
+          key: 'id',
         },
-        key: 'id',
+        onDelete: 'RESTRICT',
       },
       assignedTo: {
         type: Sequelize.INTEGER,
@@ -30,8 +30,9 @@ module.exports = {
           model: {
             tableName: 'Users',
           },
+          key: 'id',
         },
-        key: 'id',
+        onDelete: 'RESTRICT',
       },
       status: {
         type: Sequelize.INTEGER,
@@ -39,8 +40,9 @@ module.exports = {
           model: {
             tableName: 'TaskStatuses',
           },
+          key: 'id',
         },
-        key: 'id',
+        onDelete: 'RESTRICT',
       },
       createdAt: {
         allowNull: false,

@@ -83,9 +83,14 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      await taskStatus.destroy();
+      try {
+        await taskStatus.destroy();
 
-      ctx.flash.set('Status has been deleted');
-      ctx.redirect(router.url('taskStatuses'));
+        ctx.flash.set('Status has been deleted');
+        ctx.redirect(router.url('taskStatuses'));
+      } catch (e) {
+        ctx.flash.set('Status has not been deleted');
+        ctx.redirect(router.url('taskStatuses'));
+      }
     });
 };
