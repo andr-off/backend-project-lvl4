@@ -58,7 +58,7 @@ export default (router, container) => {
       try {
         await user.save();
 
-        ctx.flash.set('User has been created');
+        ctx.flash('info', 'User has been created');
         ctx.redirect(router.url('newSession'));
       } catch (e) {
         ctx.status = 422;
@@ -85,7 +85,7 @@ export default (router, container) => {
         try {
           await user.update(form);
 
-          ctx.flash.set('User has been updated');
+          ctx.flash('info', 'User has been updated');
           ctx.redirect(router.url('editUser', id));
         } catch (e) {
           ctx.status = 422;
@@ -130,7 +130,7 @@ export default (router, container) => {
       try {
         await user.update(password);
 
-        ctx.flash.set('Password has been updated');
+        ctx.flash('info', 'Password has been updated');
         ctx.redirect(router.url('editUser', id));
       } catch (e) {
         ctx.status = 422;
@@ -155,10 +155,10 @@ export default (router, container) => {
         await user.destroy();
 
         ctx.session = {};
-        ctx.flash.set('User has been deleted');
+        ctx.flash('info', 'User has been deleted');
         ctx.redirect(router.url('root'));
       } catch (e) {
-        ctx.flash.set('User has not been deleted');
+        ctx.flash('error', 'User has not been deleted');
         ctx.redirect(router.url('editUser', id));
       }
     });

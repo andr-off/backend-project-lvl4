@@ -22,7 +22,7 @@ export default (router, container) => {
       });
 
       if (user && user.passwordDigest === encrypt(password)) {
-        ctx.flash.set('You are logged in');
+        ctx.flash('info', 'You are logged in');
         ctx.session.userId = user.id;
         ctx.session.user = user;
         ctx.redirect(router.url('root'));
@@ -37,7 +37,7 @@ export default (router, container) => {
 
     .delete('/session', (ctx) => {
       ctx.session = {};
-      ctx.flash.set('You are logged out');
+      ctx.flash('info', 'You are logged out');
       ctx.redirect(router.url('root'));
     });
 };

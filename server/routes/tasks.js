@@ -158,7 +158,7 @@ export default (router, container) => {
         await task.save();
         await task.setTags(selectedTags);
 
-        ctx.flash.set('Task has been created');
+        ctx.flash('info', 'Task has been created');
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.status = 422;
@@ -215,7 +215,7 @@ export default (router, container) => {
         await task.update(form);
         await task.setTags(formTags);
 
-        ctx.flash.set('Task has been updated');
+        ctx.flash('info', 'Task has been updated');
         ctx.redirect(router.url('tasks', id));
       } catch (e) {
         ctx.status = 422;
@@ -248,7 +248,7 @@ export default (router, container) => {
 
       await task.destroy();
 
-      ctx.flash.set('Task has been deleted');
+      ctx.flash('info', 'Task has been deleted');
       ctx.redirect(router.url('tasks'));
     });
 };

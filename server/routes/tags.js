@@ -40,7 +40,7 @@ export default (router, container) => {
 
       try {
         await tag.save();
-        ctx.flash.set('Tag has been created');
+        ctx.flash('info', 'Tag has been created');
         ctx.redirect(router.url('tags'));
       } catch (e) {
         ctx.status = 422;
@@ -63,7 +63,7 @@ export default (router, container) => {
 
       try {
         await tag.update(form);
-        ctx.flash.set('Tag name has been updated');
+        ctx.flash('info', 'Tag name has been updated');
         ctx.redirect(router.url('tags'));
       } catch (e) {
         ctx.status = 422;
@@ -84,10 +84,10 @@ export default (router, container) => {
       try {
         await tag.destroy();
 
-        ctx.flash.set('Tag has been deleted');
+        ctx.flash('info', 'Tag has been deleted');
         ctx.redirect(router.url('tags'));
       } catch (e) {
-        ctx.flash.set('Tag has not been deleted');
+        ctx.flash('error', 'Tag has not been deleted');
         ctx.redirect(router.url('tags'));
       }
     });

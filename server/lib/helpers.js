@@ -1,4 +1,4 @@
-const formatDate = (dateObj, options) => {
+export const formatDate = (dateObj, options, locale = 'en-US') => {
   const opts = options || {
     year: 'numeric',
     month: 'long',
@@ -8,7 +8,16 @@ const formatDate = (dateObj, options) => {
     second: 'numeric',
   };
 
-  return dateObj.toLocaleString('en-US', opts);
+  return dateObj.toLocaleString(locale, opts);
 };
 
-export default formatDate;
+export const getAlertClass = (type) => {
+  switch (type) {
+    case 'error':
+      return 'danger';
+    case 'info':
+      return 'info';
+    default:
+      throw new Error(`Unknown type: '${type}'`);
+  }
+};

@@ -42,7 +42,7 @@ export default (router, container) => {
 
       try {
         await taskStatus.save();
-        ctx.flash.set('Status has been created');
+        ctx.flash('info', 'Status has been created');
         ctx.redirect(router.url('taskStatuses'));
       } catch (e) {
         ctx.status = 422;
@@ -65,7 +65,7 @@ export default (router, container) => {
 
       try {
         await taskStatus.update(form);
-        ctx.flash.set('Status has been updated');
+        ctx.flash('info', 'Status has been updated');
         ctx.redirect(router.url('taskStatuses'));
       } catch (e) {
         ctx.status = 422;
@@ -86,10 +86,10 @@ export default (router, container) => {
       try {
         await taskStatus.destroy();
 
-        ctx.flash.set('Status has been deleted');
+        ctx.flash('info', 'Status has been deleted');
         ctx.redirect(router.url('taskStatuses'));
       } catch (e) {
-        ctx.flash.set('Status has not been deleted');
+        ctx.flash('error', 'Status has not been deleted');
         ctx.redirect(router.url('taskStatuses'));
       }
     });

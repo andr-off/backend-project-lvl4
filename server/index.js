@@ -7,14 +7,14 @@ import koaWebpack from 'koa-webpack';
 import Router from 'koa-router';
 import Rollbar from 'rollbar';
 import session from 'koa-generic-session';
-import flash from 'koa-flash-simple';
+import flash from 'koa-better-flash';
 import bodyPareser from 'koa-bodyparser';
 import methodOverride from 'koa-methodoverride';
 import koaLogger from 'koa-logger';
 
 import addRoutes from './routes';
 import container from './container';
-import formatDate from './lib/helpers';
+import { formatDate, getAlertClass } from './lib/helpers';
 
 export default () => {
   const isDevelopment = process.env.NODE_ENV === 'development';
@@ -107,6 +107,7 @@ export default () => {
       { _ },
       { urlFor: (...args) => router.url(...args) },
       { formatDate },
+      { getAlertClass },
     ],
   });
 
