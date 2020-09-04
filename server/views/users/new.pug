@@ -4,7 +4,7 @@ block content
   h1.h1.text-center.mb-4=t('views.users.new.title')
   .row.justify-content-center
     .col-6
-      .bg-light.border.border-dark.rounded.p-3.mb-4
+      .bg-light.border.rounded.p-3.mb-4.shadow-lg
         +formFor(f, { url: urlFor('users'), method: 'post' })
           +input(f, 'email', { as: 'text', label: t('views.users.email'), required: true })
           +input(f, 'firstName', { as: 'text', label: t('views.users.firstName'), required: true })
