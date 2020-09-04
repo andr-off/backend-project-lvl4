@@ -6,7 +6,7 @@ block content
   .row
     .col-9
       h3.h3=t('views.users.edit.information')
-      .bg-light.rounded.p-3.mb-4
+      .p-3.mb-4
         +formFor(f, { url: urlFor('user', f.object.id), method: 'patch' })
           +input(f, 'email', { as: 'email', label: t('views.users.email'), required: true })
           +input(f, 'firstName', { as: 'text', label: t('views.users.firstName'), required: true })
@@ -14,7 +14,7 @@ block content
           +button(f, t('views.users.edit.submit'))
 
       h3.h3=t('views.users.password')
-      .bg-light.rounded.p-3.mb-4
+      .p-3.mb-4
         +formFor(p, { url: urlFor('user', p.object.id), method: 'patch' })
           +input(p, 'current', { as: 'password', label: t('views.users.edit.currentPassword'), required: true })
           +input(p, 'password', { as: 'password', label: t('views.users.edit.newPassword'), required: true })
