@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
 import requiredAuthentication from '../middlewares/authentication.middleware';
@@ -40,10 +41,11 @@ export default (router, container) => {
 
       try {
         await tag.save();
-        ctx.flash('info', 'Tag has been created');
+        ctx.flash('info', i18next.t('flash.tags.create.success'));
         ctx.redirect(router.url('tags'));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.tags.create.error'));
         await ctx.render('tags/new', { f: buildFormObj(tag, e) });
       }
     })
@@ -63,10 +65,11 @@ export default (router, container) => {
 
       try {
         await tag.update(form);
-        ctx.flash('info', 'Tag name has been updated');
+        ctx.flash('info', i18next.t('flash.tags.patch.success'));
         ctx.redirect(router.url('tags'));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.tags.patch.error'));
         await ctx.render('tags/new', { f: buildFormObj(tag, e) });
       }
     })
@@ -84,10 +87,10 @@ export default (router, container) => {
       try {
         await tag.destroy();
 
-        ctx.flash('info', 'Tag has been deleted');
+        ctx.flash('info', i18next.t('flash.tags.delete.success'));
         ctx.redirect(router.url('tags'));
       } catch (e) {
-        ctx.flash('error', 'Tag has not been deleted');
+        ctx.flash('error', i18next.t('flash.tags.delete.error'));
         ctx.redirect(router.url('tags'));
       }
     });

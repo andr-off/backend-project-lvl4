@@ -2,12 +2,12 @@ extends /layouts/application.pug
 
 block content
   .jumbotron.jumbotron-flued
-    h2.display-4 Welcome to cool task manager!
-    p.lead It's the best task manager ever!
+    h2.display-4=t('views.welcome.index.title')
+    p.lead=t('views.welcome.index.lead')
     hr.my-4
-    p Plan, manage and track all your team's tasks in one flexible software. Move fast and adapt quickly with cool task manager!
-    p Already member?
+    p=t('views.welcome.index.description')
+    p=t('views.welcome.index.isMember')
       |
       |
-      a(href=urlFor('newSession')) Log In
-    a.btn.btn-lg.btn-primary.text-white(href=urlFor('newUser')) Sing Up
+      a(href=urlFor('newSession'))=t('layouts.application.logIn')
+    a.btn.btn-lg.btn-primary.text-white(href=urlFor('newUser'))=t('layouts.application.signUp')

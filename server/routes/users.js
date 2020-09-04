@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
 import {
   normalizeEmail,
@@ -58,10 +59,11 @@ export default (router, container) => {
       try {
         await user.save();
 
-        ctx.flash('info', 'User has been created');
+        ctx.flash('info', i18next.t('flash.users.create.success'));
         ctx.redirect(router.url('newSession'));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.users.create.error'));
         await ctx.render('users/new', { f: buildFormObj(user, e) });
       }
     })
@@ -85,10 +87,11 @@ export default (router, container) => {
         try {
           await user.update(form);
 
-          ctx.flash('info', 'User has been updated');
+          ctx.flash('info', i18next.t('flash.users.patch.success'));
           ctx.redirect(router.url('editUser', id));
         } catch (e) {
           ctx.status = 422;
+          ctx.flash('error', i18next.t('flash.users.patch.error'));
           await ctx.render('users/edit', {
             f: buildFormObj(user, e),
             p: buildFormObj(user, e, 'password'),
@@ -100,11 +103,12 @@ export default (router, container) => {
 
       if (user.passwordDigest !== encrypt(password.current)) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.users.patch.error'));
         await ctx.render('users/edit', {
           f: buildFormObj(user),
           p: buildFormObj(user, {
             errors: [
-              { path: 'current', message: 'Wrong password' },
+              { path: 'current', message: i18next.t('validation.users.wrongPassword') },
             ],
           }, 'password'),
         });
@@ -114,12 +118,13 @@ export default (router, container) => {
 
       if (password.password !== password.confirm) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.users.patch.error'));
         await ctx.render('users/edit', {
           f: buildFormObj(user),
           p: buildFormObj(user, {
             errors: [
-              { path: 'password', message: 'Must be equal "Confirm password"' },
-              { path: 'confirm', message: 'Must be equal "New password"' },
+              { path: 'password', message: i18next.t('validation.users.passwordsMustBeEqual') },
+              { path: 'confirm', message: i18next.t('validation.users.passwordsMustBeEqual') },
             ],
           }, 'password'),
         });
@@ -130,10 +135,11 @@ export default (router, container) => {
       try {
         await user.update(password);
 
-        ctx.flash('info', 'Password has been updated');
+        ctx.flash('info', i18next.t('flash.users.patch.success'));
         ctx.redirect(router.url('editUser', id));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.users.patch.error'));
         await ctx.render('users/edit', {
           f: buildFormObj(user, e),
           p: buildFormObj(user, e, 'password'),
@@ -155,10 +161,10 @@ export default (router, container) => {
         await user.destroy();
 
         ctx.session = {};
-        ctx.flash('info', 'User has been deleted');
+        ctx.flash('info', i18next.t('flash.users.delete.success'));
         ctx.redirect(router.url('root'));
       } catch (e) {
-        ctx.flash('error', 'User has not been deleted');
+        ctx.flash('error', i18next.t('flash.users.delete.error'));
         ctx.redirect(router.url('editUser', id));
       }
     });

@@ -1,31 +1,31 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center User settings
+  h1.h1.text-center.mb-4=t('views.users.edit.title')
 
   .row
     .col-9
-      h3.h3 Information
+      h3.h3=t('views.users.edit.information')
       .bg-light.rounded.p-3.mb-4
         +formFor(f, { url: urlFor('user', f.object.id), method: 'patch' })
-          +input(f, 'email', { as: 'email', label: 'Email' })
-          +input(f, 'firstName', { as: 'text', label: 'First name' })
-          +input(f, 'lastName', { as: 'text', label: 'Last name' })
-          +button(f)
+          +input(f, 'email', { as: 'email', label: t('views.users.email') })
+          +input(f, 'firstName', { as: 'text', label: t('views.users.firstName') })
+          +input(f, 'lastName', { as: 'text', label: t('views.users.lastName') })
+          +button(f, t('views.users.edit.submit'))
 
-      h3.h3 Password
+      h3.h3=t('views.users.password')
       .bg-light.rounded.p-3.mb-4
         +formFor(p, { url: urlFor('user', p.object.id), method: 'patch' })
-          +input(p, 'current', { as: 'password', label: 'Current password' })
-          +input(p, 'password', { as: 'password', label: 'New password' })
-          +input(p, 'confirm', { as: 'password', label: 'Confirm password' })
-          +button(p)
+          +input(p, 'current', { as: 'password', label: t('views.users.edit.currentPassword') })
+          +input(p, 'password', { as: 'password', label: t('views.users.edit.newPassword') })
+          +input(p, 'confirm', { as: 'password', label: t('views.users.edit.confirmPassword') })
+          +button(p, t('views.users.edit.submit'))
 
     .col-3
-      h5.h5 User is created at:
+      h5.h5 #{t('views.users.createdAt')}:
       p= formatDate(user.createdAt)
 
-      h5.h5 User is updated at:
+      h5.h5  #{t('views.users.updatedAt')}:
       p= formatDate(user.updatedAt)
 
-      +buttonTo(urlFor('user', f.object.id), 'delete')(class='btn-sm btn-danger' value='Delete User')
+      +buttonTo(urlFor('user', f.object.id), 'delete')(class='btn-sm btn-danger' value=t('views.users.edit.deleteUser'))

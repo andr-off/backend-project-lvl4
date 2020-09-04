@@ -1,13 +1,13 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center.mb-4 Sing up
+  h1.h1.text-center.mb-4=t('views.users.new.title')
   .row.justify-content-center
     .col-6
       .bg-light.border.border-dark.rounded.p-3.mb-4
         +formFor(f, { url: urlFor('users'), method: 'post' })
-          +input(f, 'email', { as: 'email', label: 'Email' })
-          +input(f, 'firstName', { as: 'text', label: 'First name' })
-          +input(f, 'lastName', { as: 'text', label: 'Last name' })
-          +input(f, 'password', { as: 'password', label: 'Password' })
-          +button(f, 'Sing up')
+          +input(f, 'email', { as: 'email', label: t('views.users.email') })
+          +input(f, 'firstName', { as: 'text', label: t('views.users.firstName') })
+          +input(f, 'lastName', { as: 'text', label: t('views.users.lastName') })
+          +input(f, 'password', { as: 'password', label: t('views.users.password') })
+          +button(f, t('views.users.new.submit'))

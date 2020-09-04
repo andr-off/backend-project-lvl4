@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
 import encrypt from '../lib/secure';
 import { normalizeEmail } from '../lib/normilazer';
@@ -22,22 +23,21 @@ export default (router, container) => {
       });
 
       if (user && user.passwordDigest === encrypt(password)) {
-        ctx.flash('info', 'You are logged in');
+        ctx.flash('info', i18next.t('flash.session.create.success'));
         ctx.session.userId = user.id;
         ctx.session.user = user;
         ctx.redirect(router.url('root'));
         return;
       }
 
-      const message = 'email or password were wrong';
-
+      ctx.flash('error', i18next.t('flash.session.create.error'));
       ctx.status = 422;
-      await ctx.render('sessions/new', { f: buildFormObj({ email }), message });
+      await ctx.render('sessions/new', { f: buildFormObj({ email }) });
     })
 
     .delete('/session', (ctx) => {
       ctx.session = {};
-      ctx.flash('info', 'You are logged out');
+      ctx.flash('info', i18next.t('flash.session.delete.success'));
       ctx.redirect(router.url('root'));
     });
 };

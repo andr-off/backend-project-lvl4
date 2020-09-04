@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 module.exports = (sequelize, DataTypes) => {
   const Tag = sequelize.define('Tag', {
     id: {
@@ -12,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isLongEnough(value) {
           if (value.length < 2) {
-            throw new Error('Name must be at least 2 characters long');
+            throw new Error(i18next.t('validation.tags.nameLength'));
           }
         },
       },

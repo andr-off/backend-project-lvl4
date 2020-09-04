@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import encrypt from '../lib/secure';
 
 module.exports = (sequelize, DataTypes) => {
@@ -10,8 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     firstName: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {
-          msg: 'This field must be filled out',
+        isLongEnough(value) {
+          if (value.length < 2) {
+            throw new Error(i18next.t('validation.users.nameLength'));
+          }
         },
       },
     },
@@ -42,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isLongEnough(value) {
           if (value.length < 4) {
-            throw new Error('Password must be at least 4 characters long');
+            throw new Error(i18next.t('validation.users.passwordLenght'));
           }
         },
       },

@@ -1,11 +1,11 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center.mb-4 Login
+  h1.h1.text-center.mb-4=t('views.session.new.title')
   .row.justify-content-center
     .col-6
       .bg-light.border.border-dark.rounded.p-3.mb-4
         +formFor(f, { url: urlFor('session'), method: 'post' })
-          +input(f, 'email', { as: 'email', label: 'Email', required: true })
-          +input(f, 'password', { as: 'password', label: 'Password' })
-          +button(f, 'Log in')
+          +input(f, 'email', { as: 'email', label: t('views.session.email') })
+          +input(f, 'password', { as: 'password', label: t('views.session.password') })
+          +button(f, `${t('views.session.new.submit')}`)

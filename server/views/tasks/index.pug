@@ -1,14 +1,14 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.mt-4.text-center Tasks
+  h1.h1.mt-4.text-center=t('layouts.application.tasks')
   .mb-2
-    a(href= urlFor('newTask')) + add new task
+    a(href= urlFor('newTask')) + #{t('views.tasks.addTask')}
 
   .jumbotron.p-2.bg-dark.text-white-50
     form.form-inline(action=urlFor('tasks'), method='get')
       .form-group.mr-4
-        label.mr-2(for='status') Status
+        label.mr-2(for='status')=t('views.tasks.status')
         select(
           id='status'
           class='custom-select'
@@ -19,7 +19,7 @@ block content
             option(value=taskStatus.id)=taskStatus.name
 
       .form-group.mr-4
-        label.mr-2(for='assignee') Assigned to
+        label.mr-2(for='assignee')=t('views.tasks.assignedTo')
         select(
           id='assignee'
           class='custom-select'
@@ -30,7 +30,7 @@ block content
             option(value=assignee.id)=assignee.fullName
 
       .form-group.mr-4
-        label.mr-2(for='tags') Tags
+        label.mr-2(for='tags')=t('views.tasks.tags')
         select(
           id='tags'
           class='custom-select'
@@ -42,16 +42,16 @@ block content
 
       .form-check.mr-4
         input.form-check-input(type='checkbox' id='my-tasks' name='myTasks')
-        label.form-check-label(for='my-tasks') Only my tasks
+        label.form-check-label(for='my-tasks')=t('views.tasks.myTasks')
 
       .form-group.mr-4
-        input.btn.btn-primary(type='submit' value='Show')
+        input.btn.btn-primary(type='submit' value=t('views.tasks.submit'))
 
   if !_.isEmpty(tasks)
     each task in tasks
       .card.card-body.bg-light.border-dark.mb-3
         h4.h4.card-title
-          small.text-muted.mr-3 Id: #{ task.id }
+          small.text-muted.mr-3 #{t('views.tasks.id')}: #{ task.id }
           a(href= urlFor('editTask', task.id))=task.name
         if task.description
           a.mr-3(
@@ -61,23 +61,23 @@ block content
           p(class='collapse' id='collapseDescription' + task.id)=task.description
         .row
           .col-4
-            big.mr-3 Creator:
+            big.mr-3 #{t('views.tasks.creator')}:
             span.font-weight-bold=task.maker.fullName
           .col-4
-            big.mr-3 Assigned to:
+            big.mr-3 #{t('views.tasks.assignedTo')}:
             span.font-weight-bold=task.assignee.fullName
           .col-4
-            big.mr-3 Status:
+            big.mr-3 #{t('views.tasks.status')}:
             span.font-weight-bold=task.taskStatus.name
         .row.mt-2
           .col-6
-            big.mr-3 Created at:
+            big.mr-3 #{t('views.tasks.createdAt')}:
             span=formatDate(task.createdAt)
         .row.mt-2
           .col-6
             if task.tags.length > 0
-                big.mr-3 Tags:
+                big.mr-3 #{t('views.tasks.tags')}:
                 each tag in task.tags
                   span.badge.badge-dark.mr-2=tag.name
   else
-    p There is no tasks.
+    p #{t('views.tasks.noTasks')}.

@@ -1,20 +1,22 @@
 extends /layouts/application.pug
 
 block content
-  h2.h2 Users
+  h1.h1.text-center.mb-4=t('layouts.application.users')
   if !_.isEmpty(users)
     table.table.table-striped
       thead
         tr
-          th Full Name
-          th Email
-          th Created At
+          th=t('views.users.id')
+          th=t('views.users.fullName')
+          th=t('views.users.email')
+          th=t('views.users.createdAt')
       tbody
         each user in users
           tr
+            td=user.id
             td
-              a(href= urlFor('user', user.id ))= user.fullName
-            td= user.email
-            td= formatDate(user.createdAt)
+              a(href= urlFor('user', user.id ))=user.fullName
+            td=user.email
+            td=formatDate(user.createdAt)
   else
-    p There is no users.
+    p #{t('views.users.noUsers')}.

@@ -1,6 +1,8 @@
 extends /layouts/application.pug
 
 block content
+  h1.h1.text-center.mb-4=t('views.taskStatuses.new.title')
+
   +formFor(f, { url: urlFor('taskStatuses'), method: 'post' })
-    +input(f, 'name', { as: 'text', label: 'Status name' })
-    +button(f, 'Create')
+    +input(f, 'name', { as: 'text', label: t('views.taskStatuses.statusName') })
+    +button(f, t('views.taskStatuses.new.submit'))

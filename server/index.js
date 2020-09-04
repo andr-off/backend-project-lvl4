@@ -11,10 +11,12 @@ import flash from 'koa-better-flash';
 import bodyPareser from 'koa-bodyparser';
 import methodOverride from 'koa-methodoverride';
 import koaLogger from 'koa-logger';
+import i18next from 'i18next';
 
+import ru from './locales/ru';
 import addRoutes from './routes';
 import container from './container';
-import { formatDate, getAlertClass } from './lib/helpers';
+import { formatDate, getAlertClass, t } from './lib/helpers';
 
 export default () => {
   const isDevelopment = process.env.NODE_ENV === 'development';
@@ -28,6 +30,16 @@ export default () => {
     captureUncaught: true,
     captureUnhandledRejections: true,
   });
+
+  i18next
+    .init({
+      lng: 'ru',
+      fallbackLng: 'en',
+      debug: isDevelopment,
+      resources: {
+        ru,
+      },
+    });
 
   app.use(async (ctx, next) => {
     try {
@@ -108,6 +120,7 @@ export default () => {
       { urlFor: (...args) => router.url(...args) },
       { formatDate },
       { getAlertClass },
+      { t },
     ],
   });
 

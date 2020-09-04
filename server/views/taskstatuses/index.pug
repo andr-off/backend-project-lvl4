@@ -1,25 +1,27 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center Statuses
+  h1.h1.text-center.mb-4=t('layouts.application.taskStatuses')
 
   .mb-2.mt-4
-    a(href = urlFor('newTaskStatus')) + add new status
+    a(href = urlFor('newTaskStatus')) + #{t('views.taskStatuses.addStatus')}
 
   table.table.table-striped
     thead
       tr
-        th.w-50 Status name
-        th Created at
-        th Actions
+        th=t('views.taskStatuses.id')
+        th.w-50=t('views.taskStatuses.statusName')
+        th=t('views.taskStatuses.createdAt')
+        th=t('views.taskStatuses.actions')
         th(colspan="2")
     tbody
       each taskStatus in taskStatuses
         tr
-          td= taskStatus.name
-          td= formatDate(taskStatus.createdAt)
+          td=taskStatus.id
+          td=taskStatus.name
+          td=formatDate(taskStatus.createdAt)
           td
-            a(href= urlFor('editTaskStatus', taskStatus.id)) Edit
+            a(href=urlFor('editTaskStatus', taskStatus.id))=t('views.taskStatuses.editStatus')
           td
-            +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class="btn-link p-0 border-0" value="Delete")
+            +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class="btn-link p-0 border-0" value=t('views.taskStatuses.delete'))
 

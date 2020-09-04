@@ -1,13 +1,12 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center Edit Status
+  h1.h1.text-center.mb-4=t('views.taskStatuses.edit.title')
 
   +formFor(f, { url: urlFor('taskStatus', taskStatus.id), method: 'patch' })
-    +input(f, 'name', { as: 'text', label: 'Status name' })
-    +button(f)
+    +input(f, 'name', { as: 'text', label: t('views.taskStatuses.statusName') })
+    +button(f, t('views.taskStatuses.edit.submit'))
 
-
-  .row.justify-content-md-center
-    .col-md-6
-      +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class='btn-danger' value='Delete')
+  .row.justify-content-md-center.text-center
+    .col-md-2
+      +buttonTo(urlFor('taskStatus', taskStatus.id), 'delete')(class='btn-danger' value=t('views.taskStatuses.edit.deleteStatus'))

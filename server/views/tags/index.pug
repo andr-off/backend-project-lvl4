@@ -1,25 +1,27 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center Tags
+  h1.h1.text-center=t('layouts.application.tags')
 
   .mb-2.mt-4
-    a(href = urlFor('newTag')) + add new tag
+    a(href = urlFor('newTag')) + #{t('views.tags.addTag')}
 
   table.table.table-striped
     thead
       tr
-        th.w-50 Tag name
-        th Created at
-        th Actions
+        th=t('views.tags.id')
+        th.w-50=t('views.tags.tagName')
+        th=t('views.tags.createdAt')
+        th=t('views.tags.actions')
         th(colspan="2")
     tbody
       each tag in tags
         tr
-          td= tag.name
-          td= formatDate(tag.createdAt)
+          td=tag.id
+          td=tag.name
+          td=formatDate(tag.createdAt)
           td
-            a(href= urlFor('editTag', tag.id)) Edit
+            a(href= urlFor('editTag', tag.id))=t('views.tags.editTag')
           td
-            +buttonTo(urlFor('tag', tag.id), 'delete')(class="btn-link p-0 border-0" value="Delete")
+            +buttonTo(urlFor('tag', tag.id), 'delete')(class="btn-link p-0 border-0" value=t('views.tags.delete'))
 

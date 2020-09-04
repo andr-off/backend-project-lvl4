@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
 import db from '../models';
@@ -42,10 +43,11 @@ export default (router, container) => {
 
       try {
         await taskStatus.save();
-        ctx.flash('info', 'Status has been created');
+        ctx.flash('info', i18next.t('flash.taskStatuses.create.success'));
         ctx.redirect(router.url('taskStatuses'));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.taskStatuses.create.error'));
         await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus, e) });
       }
     })
@@ -65,10 +67,11 @@ export default (router, container) => {
 
       try {
         await taskStatus.update(form);
-        ctx.flash('info', 'Status has been updated');
+        ctx.flash('info', i18next.t('flash.taskStatuses.patch.success'));
         ctx.redirect(router.url('taskStatuses'));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.taskStatuses.patch.error'));
         await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus, e) });
       }
     })
@@ -86,10 +89,10 @@ export default (router, container) => {
       try {
         await taskStatus.destroy();
 
-        ctx.flash('info', 'Status has been deleted');
+        ctx.flash('info', i18next.t('flash.taskStatuses.delete.success'));
         ctx.redirect(router.url('taskStatuses'));
       } catch (e) {
-        ctx.flash('error', 'Status has not been deleted');
+        ctx.flash('error', i18next.t('flash.taskStatuses.delete.error'));
         ctx.redirect(router.url('taskStatuses'));
       }
     });

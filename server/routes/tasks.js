@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
 import requiredAuthentication from '../middlewares/authentication.middleware';
@@ -158,10 +159,11 @@ export default (router, container) => {
         await task.save();
         await task.setTags(selectedTags);
 
-        ctx.flash('info', 'Task has been created');
+        ctx.flash('info', i18next.t('flash.tasks.create.success'));
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.tasks.create.error'));
 
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();
@@ -215,10 +217,11 @@ export default (router, container) => {
         await task.update(form);
         await task.setTags(formTags);
 
-        ctx.flash('info', 'Task has been updated');
+        ctx.flash('info', i18next.t('flash.tasks.patch.success'));
         ctx.redirect(router.url('tasks', id));
       } catch (e) {
         ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.tasks.patch.error'));
 
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();
@@ -248,7 +251,7 @@ export default (router, container) => {
 
       await task.destroy();
 
-      ctx.flash('info', 'Task has been deleted');
+      ctx.flash('info', i18next.t('flash.tasks.delete.success'));
       ctx.redirect(router.url('tasks'));
     });
 };

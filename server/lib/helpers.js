@@ -1,3 +1,7 @@
+import i18next from 'i18next';
+
+export const t = (key) => i18next.t(key);
+
 export const formatDate = (dateObj, options, locale = 'en-US') => {
   const opts = options || {
     year: 'numeric',

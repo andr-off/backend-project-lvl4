@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 module.exports = (sequelize, DataTypes) => {
   const TaskStatus = sequelize.define('TaskStatus', {
     id: {
@@ -12,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isLongEnough(value) {
           if (value.length < 3) {
-            throw new Error('Name must be at least 3 characters long');
+            throw new Error(i18next.t('validation.taskStatuses.nameLength'));
           }
         },
       },

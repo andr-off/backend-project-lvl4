@@ -30,6 +30,7 @@
     "bootstrap": "^4.5.2",
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
+    "i18next": "^19.7.0",
     "jquery": "^3.5.1",
     "koa": "^2.13.0",
     "koa-better-flash": "0.0.4",

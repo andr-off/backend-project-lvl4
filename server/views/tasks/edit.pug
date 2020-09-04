@@ -1,16 +1,16 @@
 extends /layouts/application.pug
 
 block content
-  h1.h1.text-center Edit task
+  h1.h1.text-center=t('views.tasks.edit.title')
 
   +formFor(f, { url: urlFor('task', f.object.id), method: 'patch' })
-    +input(f, 'name', { as: 'text', label: 'Task name' })
-    +textarea(f, 'description', { label: 'Description', rows: 3 })
-    +select(f, 'assignedTo', users, 'fullName', { label: 'Assigned to' })
-    +select(f, 'status', taskStatuses, 'name', { label: 'Status' })
-    +select(f, 'tags', tags, 'name', { multiple: true, label: 'Tags' }, selectedTags)
-    +button(f)
+    +input(f, 'name', { as: 'text', label: t('views.tasks.taskName') })
+    +textarea(f, 'description', { label: t('views.tasks.description'), rows: 3 })
+    +select(f, 'assignedTo', users, 'fullName', { label: t('views.tasks.assignedTo') })
+    +select(f, 'status', taskStatuses, 'name', { label: t('views.tasks.status') })
+    +select(f, 'tags', tags, 'name', { multiple: true, label: t('views.tasks.tags') }, selectedTags)
+    +button(f, t('views.tasks.edit.submit'))
 
   .row.justify-content-md-center.text-center
     .col-md-2
-      +buttonTo(urlFor('task', f.object.id), 'delete')(class='btn-danger' value='Delete task')
+      +buttonTo(urlFor('task', f.object.id), 'delete')(class='btn-danger' value= t('views.tasks.edit.deleteTask'))

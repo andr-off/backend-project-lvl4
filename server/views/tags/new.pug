@@ -1,6 +1,8 @@
 extends /layouts/application.pug
 
 block content
+  h1.h1.text-center.mb-4=t('views.tags.new.title')
+
   +formFor(f, { url: urlFor('tags'), method: 'post' })
-    +input(f, 'name', { as: 'text', label: 'Tag name' })
-    +button(f, 'Create')
+    +input(f, 'name', { as: 'text', label: t('views.tags.tagName') })
+    +button(f, t('views.tags.new.submit'))

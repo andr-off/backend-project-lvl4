@@ -3,36 +3,36 @@ include /mixins/forms.pug
 doctype html
 html(lang="en")
   head
-    title= Title
+    title=t('appName')
     script(src='/assets/main.js')
     link(href='/assets/main.css' rel='stylesheet')
   body
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-3
-      a.navbar-brand(href='/') Task Manager
+      a.navbar-brand(href='/')=t('appName')
       button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
       .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
           li.nav-item
-            a.nav-link(href=urlFor('users')) Users
+            a.nav-link(href=urlFor('users'))=t('layouts.application.users')
           if isSignedIn()
             li.nav-item
-              a.nav-link(href=urlFor('taskStatuses')) Statuses
+              a.nav-link(href=urlFor('taskStatuses'))=t('layouts.application.taskStatuses')
             li.nav-item
-              a.nav-link(href=urlFor('tags')) Tags
+              a.nav-link(href=urlFor('tags'))=t('layouts.application.tags')
             li.nav-item
-              a.nav-link(href=urlFor('tasks')) Tasks
+              a.nav-link(href=urlFor('tasks'))=t('layouts.application.tasks')
         ul.navbar-nav
           if isSignedIn()
             li.nav-item.mr-2
               a.nav-link(href=urlFor('editUser', user.id))= user.firstName
             li.nav-item
-              +buttonTo(urlFor('session'), 'delete')(class='btn nav-link btn-outline-success my-2 my-sm-0' value='Log out')
+              +buttonTo(urlFor('session'), 'delete')(class='btn nav-link btn-outline-success my-2 my-sm-0' value=`${t('layouts.application.logOut')}`)
           else
             li.nav-item
-              a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession')) Log In
+              a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession'))=t('layouts.application.logIn')
             li.nav-item
-              a.nav-link.btn.btn-outline-primary.my-sm-0(href=urlFor('newUser')) Sign Up
+              a.nav-link.btn.btn-outline-primary.my-sm-0(href=urlFor('newUser'))=t('layouts.application.signUp')
     .container
       each messages, type in flash() || []
         each message in messages
