@@ -4,9 +4,9 @@ block content
   h1.h1.text-center.mb-4=t('views.tasks.new.title')
 
   +formFor(f, { url: urlFor('tasks'), method: 'post' })
-    +input(f, 'name', { as: 'text', label: t('views.tasks.taskName') })
+    +input(f, 'name', { as: 'text', label: t('views.tasks.taskName'), required: true })
     +textarea(f, 'description', { label: t('views.tasks.description'), rows: 3 })
-    +select(f, 'assignedTo', users, 'fullName', { label: t('views.tasks.assignedTo') })
-    +select(f, 'status', taskStatuses, 'name', { label: t('views.tasks.status') })
+    +select(f, 'assignedTo', users, 'fullName', { label: t('views.tasks.assignedTo'), required: true })
+    +select(f, 'status', taskStatuses, 'name', { label: t('views.tasks.status'), required: true })
     +select(f, 'tags', tags, 'name', { label: t('views.tasks.tags'), multiple: true }, selectedTags)
     +button(f, t('views.tasks.new.submit'))

@@ -98,6 +98,7 @@ module.exports = {
       },
     },
     views: {
+      requiredField: 'Обязятельное поле',
       session: {
         email: 'Email',
         password: 'Пароль',

@@ -8,17 +8,17 @@ block content
       h3.h3=t('views.users.edit.information')
       .bg-light.rounded.p-3.mb-4
         +formFor(f, { url: urlFor('user', f.object.id), method: 'patch' })
-          +input(f, 'email', { as: 'email', label: t('views.users.email') })
-          +input(f, 'firstName', { as: 'text', label: t('views.users.firstName') })
+          +input(f, 'email', { as: 'email', label: t('views.users.email'), required: true })
+          +input(f, 'firstName', { as: 'text', label: t('views.users.firstName'), required: true })
           +input(f, 'lastName', { as: 'text', label: t('views.users.lastName') })
           +button(f, t('views.users.edit.submit'))
 
       h3.h3=t('views.users.password')
       .bg-light.rounded.p-3.mb-4
         +formFor(p, { url: urlFor('user', p.object.id), method: 'patch' })
-          +input(p, 'current', { as: 'password', label: t('views.users.edit.currentPassword') })
-          +input(p, 'password', { as: 'password', label: t('views.users.edit.newPassword') })
-          +input(p, 'confirm', { as: 'password', label: t('views.users.edit.confirmPassword') })
+          +input(p, 'current', { as: 'password', label: t('views.users.edit.currentPassword'), required: true })
+          +input(p, 'password', { as: 'password', label: t('views.users.edit.newPassword'), required: true })
+          +input(p, 'confirm', { as: 'password', label: t('views.users.edit.confirmPassword'), required: true })
           +button(p, t('views.users.edit.submit'))
 
     .col-3
