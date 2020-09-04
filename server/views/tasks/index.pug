@@ -49,7 +49,7 @@ block content
 
   if !_.isEmpty(tasks)
     each task in tasks
-      .card.card-body.bg-light.border-dark.mb-3
+      .card.card-body.bg-light.mb-4.shadow
         h4.h4.card-title
           small.text-muted.mr-3 #{t('views.tasks.id')}: #{ task.id }
           a(href= urlFor('editTask', task.id))=task.name
