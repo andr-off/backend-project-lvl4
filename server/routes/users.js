@@ -34,18 +34,6 @@ export default (router, container) => {
       await ctx.render('users/edit', { f: buildFormObj(user), p: buildFormObj(user, [], 'password') });
     })
 
-    .get('user', '/users/:id', async (ctx) => {
-      const { User } = container.db;
-      const { id } = ctx.params;
-      const user = await User.findByPk(id);
-
-      if (!user) {
-        throw new container.errors.NotFoundError();
-      }
-
-      await ctx.render('users/show', { user });
-    })
-
     .post('/users', async (ctx) => {
       const { User } = container.db;
       const { request: { body: { form } } } = ctx;

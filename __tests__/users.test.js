@@ -121,8 +121,6 @@ describe('requests to /users', () => {
     ['GET 404', wrongUrl, 404],
     ['GET /session/new', newSessionUrl, 200],
     ['GET /users/new', newUserUrl, 200],
-    ['GET /users/:id', userUrl1, 200],
-    ['GET /users/:id 404', wrongUserUrl, 404],
   ];
 
   const postRequestTestCases = [
@@ -212,11 +210,6 @@ describe('requests to /users', () => {
       .set('Cookie', cookie)
       .delete(userUrl1);
     expect(res2).toHaveHTTPStatus(302);
-
-    const res3 = await req
-      .set('Cookie', cookie)
-      .get(userUrl1);
-    expect(res3).toHaveHTTPStatus(404);
   });
 
   test('GET /users/:id/edit', async () => {

@@ -15,7 +15,7 @@ block content
           tr
             td=user.id
             td
-              a(href= urlFor('user', user.id ))=user.fullName
+              a(href= urlFor('editUser', user.id ))=user.fullName
             td=user.email
             td=formatDate(user.createdAt)
   else
