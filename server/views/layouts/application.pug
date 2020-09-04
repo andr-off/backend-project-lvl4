@@ -4,7 +4,6 @@ doctype html
 html(lang="en")
   head
     title=t('appName')
-    script(src='/assets/main.js')
     link(href='/assets/main.css' rel='stylesheet')
   body
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-3
@@ -33,10 +32,17 @@ html(lang="en")
               a.nav-link.btn.btn-outline-secondary.mr-lg-2.my-sm-0(href=urlFor('newSession'))=t('layouts.application.logIn')
             li.nav-item
               a.nav-link.btn.btn-outline-primary.my-sm-0(href=urlFor('newUser'))=t('layouts.application.signUp')
-    .container
+    .container.min-vh-100
       each messages, type in flash() || []
         each message in messages
           div.alert.alert-dismissible.fade.show(role='alert' class=`alert-${getAlertClass(type)}`)= message
             button(type='button' class='close' data-dismiss='alert' aria-label='Close')
               span(aria-hidden='true')!= '&times;'
+
       block content
+
+    footer.bg-dark.p-3.mt-5.text-white
+      .container
+        p.text-center.mb-0 Powered by Node.js
+
+    script(src='/assets/main.js')
