@@ -5,7 +5,7 @@ import requiredAuthentication from '../middlewares/authentication.middleware';
 
 export default (router, container) => {
   router
-    .get('tasks', '/tasks', async (ctx) => {
+    .get('tasks', '/tasks', requiredAuthentication, async (ctx) => {
       const {
         Task,
         User,
@@ -63,7 +63,7 @@ export default (router, container) => {
       });
     })
 
-    .get('newTask', '/tasks/new', async (ctx) => {
+    .get('newTask', '/tasks/new', requiredAuthentication, async (ctx) => {
       const {
         Task,
         User,
@@ -88,7 +88,7 @@ export default (router, container) => {
       });
     })
 
-    .get('editTask', '/tasks/:id/edit', async (ctx) => {
+    .get('editTask', '/tasks/:id/edit', requiredAuthentication, async (ctx) => {
       const {
         Task,
         User,

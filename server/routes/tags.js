@@ -5,21 +5,21 @@ import requiredAuthentication from '../middlewares/authentication.middleware';
 
 export default (router, container) => {
   router
-    .get('tags', '/tags', async (ctx) => {
+    .get('tags', '/tags', requiredAuthentication, async (ctx) => {
       const { Tag } = container.db;
 
       const tags = await Tag.findAll();
       await ctx.render('tags', { tags });
     })
 
-    .get('newTag', '/tags/new', async (ctx) => {
+    .get('newTag', '/tags/new', requiredAuthentication, async (ctx) => {
       const { Tag } = container.db;
 
       const tag = Tag.build();
       await ctx.render('tags/new', { f: buildFormObj(tag) });
     })
 
-    .get('editTag', '/tags/:id/edit', async (ctx) => {
+    .get('editTag', '/tags/:id/edit', requiredAuthentication, async (ctx) => {
       const { Tag } = container.db;
       const { id } = ctx.params;
       const tag = await Tag.findByPk(id);

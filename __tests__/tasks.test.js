@@ -96,21 +96,42 @@ describe('requests to /tasks', () => {
   });
 
   test('GET /tasks', async () => {
-    const res = await req
+    const res1 = await req
       .get(tasksUrl);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(401);
+
+    const cookie = await singIn(formData);
+
+    const res2 = await req
+      .set('Cookie', cookie)
+      .get(tasksUrl);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   test('GET /tasks/new', async () => {
-    const res = await req
+    const res1 = await req
       .get(newTaskUrl);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(401);
+
+    const cookie = await singIn(formData);
+
+    const res2 = await req
+      .set('Cookie', cookie)
+      .get(newTaskUrl);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   test('GET /tasks/:id/edit', async () => {
-    const res = await req
+    const res1 = await req
       .get(editTaskUrl);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(401);
+
+    const cookie = await singIn(formData);
+
+    const res2 = await req
+      .set('Cookie', cookie)
+      .get(editTaskUrl);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   test('POST /tasks', async () => {

@@ -14,7 +14,6 @@ describe('requests to /users', () => {
   const rootUrl = '/';
   const wrongUrl = '/wrong-path';
   const userUrl1 = '/users/1';
-  const wrongUserUrl = '/users/5';
   const newUserUrl = '/users/new';
   const usersUrl = '/users';
   const editUserUrl1 = '/users/1/edit';

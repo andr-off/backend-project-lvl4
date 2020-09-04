@@ -58,21 +58,42 @@ describe('requests to /tags', () => {
   });
 
   test('GET /tags', async () => {
+    const res1 = await req
+      .get(tagsUrl);
+    expect(res1).toHaveHTTPStatus(401);
+
+    const cookie = await singIn(formData);
+
     const res = await req
+      .set('Cookie', cookie)
       .get(tagsUrl);
     expect(res).toHaveHTTPStatus(200);
   });
 
   test('GET /tags/new', async () => {
-    const res = await req
+    const res1 = await req
       .get(newTagUrl);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(401);
+
+    const cookie = await singIn(formData);
+
+    const res2 = await req
+      .set('Cookie', cookie)
+      .get(newTagUrl);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   test('GET /tags/:id/edit', async () => {
-    const res = await req
+    const res1 = await req
       .get(editTagUrl);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(401);
+
+    const cookie = await singIn(formData);
+
+    const res2 = await req
+      .set('Cookie', cookie)
+      .get(editTagUrl);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   test('POST /tags', async () => {

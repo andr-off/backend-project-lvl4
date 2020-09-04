@@ -6,21 +6,21 @@ import requiredAuthentication from '../middlewares/authentication.middleware';
 
 export default (router, container) => {
   router
-    .get('taskStatuses', '/taskstatuses', async (ctx) => {
+    .get('taskStatuses', '/taskstatuses', requiredAuthentication, async (ctx) => {
       const { TaskStatus } = db;
 
       const taskStatuses = await TaskStatus.findAll();
       await ctx.render('taskstatuses', { taskStatuses });
     })
 
-    .get('newTaskStatus', '/taskstatuses/new', async (ctx) => {
+    .get('newTaskStatus', '/taskstatuses/new', requiredAuthentication, async (ctx) => {
       const { TaskStatus } = db;
 
       const taskStatus = TaskStatus.build();
       await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus) });
     })
 
-    .get('editTaskStatus', '/taskstatuses/:id/edit', async (ctx) => {
+    .get('editTaskStatus', '/taskstatuses/:id/edit', requiredAuthentication, async (ctx) => {
       const { TaskStatus } = db;
       const { id } = ctx.params;
 
