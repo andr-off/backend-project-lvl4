@@ -12,14 +12,14 @@ html(lang="en")
         span.navbar-toggler-icon
       .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
-          li.nav-item
+          li.nav-item(class = currentUrl === '/users' ? 'active' : '')
             a.nav-link(href=urlFor('users'))=t('layouts.application.users')
           if isSignedIn()
-            li.nav-item
+            li.nav-item(class = currentUrl === '/taskstatuses' ? 'active' : '')
               a.nav-link(href=urlFor('taskStatuses'))=t('layouts.application.taskStatuses')
-            li.nav-item
+            li.nav-item(class = currentUrl === '/tags' ? 'active' : '')
               a.nav-link(href=urlFor('tags'))=t('layouts.application.tags')
-            li.nav-item
+            li.nav-item(class = currentUrl === '/tasks' ? 'active' : '')
               a.nav-link(href=urlFor('tasks'))=t('layouts.application.tasks')
         ul.navbar-nav
           if isSignedIn()

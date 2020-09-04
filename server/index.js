@@ -76,6 +76,7 @@ export default () => {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
       user: ctx.session.user,
+      currentUrl: ctx.request.url,
     };
     await next();
   });
