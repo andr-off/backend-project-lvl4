@@ -50,20 +50,20 @@ export default () => {
       switch (err.status) {
         case 403:
           ctx.status = err.status;
-          await ctx.render('403');
+          await ctx.render('errors/403');
           return;
         case 401:
           ctx.status = err.status;
-          await ctx.render('401');
+          await ctx.render('errors/401');
           return;
         case 404:
           ctx.status = err.status;
-          await ctx.render('404');
+          await ctx.render('errors/404');
           return;
         default:
           rollbar.error(err, ctx.request);
           ctx.status = 500;
-          await ctx.render('500');
+          await ctx.render('errors/500');
       }
     }
   });
