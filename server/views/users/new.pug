@@ -6,7 +6,7 @@ block content
     .col-6
       .bg-light.border.rounded.p-3.mb-4.shadow-lg
         +formFor(f, { url: urlFor('users'), method: 'post' })
-          +input(f, 'email', { as: 'text', label: t('views.users.email'), required: true })
+          +input(f, 'email', { as: 'email', label: t('views.users.email'), required: true })
           +input(f, 'firstName', { as: 'text', label: t('views.users.firstName'), required: true })
           +input(f, 'lastName', { as: 'text', label: t('views.users.lastName') })
           +input(f, 'password', { as: 'password', label: t('views.users.password'), required: true })
