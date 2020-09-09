@@ -56,7 +56,7 @@ export default (router, container) => {
       }
     })
 
-    .patch('/users/:id', requiredAuthorization, async (ctx) => {
+    .patch('user', '/users/:id', requiredAuthorization, async (ctx) => {
       const { User } = container.db;
       const { id } = ctx.params;
       const { request: { body: { form, password } } } = ctx;
