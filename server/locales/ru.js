@@ -177,6 +177,7 @@ module.exports = {
         status: 'Статус',
         tags: 'Теги',
         createdAt: 'Дата создания',
+        updatedAt: 'Дата обновления',
         addTask: 'Создать новую задачу',
         submit: 'Показать',
         myTasks: 'Только мои задачи',

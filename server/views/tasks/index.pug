@@ -88,6 +88,9 @@ block content
           .col-6
             big.mr-3 #{t('views.tasks.createdAt')}:
             span=formatDate(task.createdAt)
+          .col-6
+            big.mr-3 #{t('views.tasks.updatedAt')}:
+            span=formatDate(task.updatedAt)
         .row.mt-2
           .col-6
             if task.tags.length > 0
