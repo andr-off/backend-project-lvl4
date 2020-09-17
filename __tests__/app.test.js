@@ -35,110 +35,17 @@ describe('app', () => {
     TaskTag,
   } = db;
 
-  const rootUrl = '/';
-  const wrongUrl = '/wrong-path';
-
-  const sessionUrl = '/session';
-  const newSessionUrl = '/session/new';
-
-  const editUserUrl = '/users/1/edit';
-  const userUrl1 = '/users/1';
-  const userUrl2 = '/users/2';
-
   const usersUrl = '/users';
-  const newUserUrl = '/users/new';
-  const unexistedEditUserUrl = '/users/1000/edit';
-
-  const editTaskStatusUrl = '/taskstatuses/1/edit';
-  const taskStatusUrl1 = '/taskstatuses/1';
-  const taskStatusUrl2 = '/taskstatuses/2';
   const taskStatusesUrl = '/taskstatuses';
-  const newTaskStatusUrl = '/taskstatuses/new';
-  const unexistedEditTaskStatusUrl = '/taskstatuses/1000/edit';
-  const unexistedTaskStatusUrl = '/taskstatuses/1000';
-
-  const editTagUrl = '/tags/1/edit';
-  const tagsUrl1 = '/tags/1';
-  const tagsUrl2 = '/tags/2';
   const tagsUrl = '/tags';
-  const newTagUrl = '/tags/new';
-  const unexistedEditTagUrl = '/tags/1000/edit';
-  const unexistedTagUrl = '/tags/1000';
-
-  const editTaskUrl = '/tasks/1/edit';
-  const taskUrl = '/tasks/1';
   const tasksUrl = '/tasks';
-  const newTaskUrl = '/tasks/new';
-  const unexistedEditTaskUrl = '/tasks/1000/edit';
-  const unexistedTaskUrl = '/tasks/1000';
+
+  const taskUrl = '/tasks/1';
 
   const dataForUser1 = getDataForUser();
   const dataForUser2 = getDataForUser();
 
   const userFormData1 = { form: dataForUser1 };
-  const userFormData2 = { form: dataForUser2 };
-
-  const patchPersonalUserFormData1 = {
-    form: {
-      email: dataForUser1.email,
-      firstName: 'Mike',
-      lastName: dataForUser1.lastName,
-    },
-  };
-
-  const patchPersonalUserFormData2 = {
-    form: {
-      email: 'admin@gmail.com',
-      firstName: dataForUser1.firstName,
-      lastName: dataForUser1.lastName,
-    },
-  };
-
-  const wrongPatchPersonalUserFormData = {
-    form: {
-      email: '',
-      firstName: '',
-      lastName: '',
-    },
-  };
-
-  const patchPasswordUserFormData = {
-    password: {
-      current: dataForUser1.password,
-      password: '12345',
-      confirm: '12345',
-    },
-  };
-
-  const wrongPatchPasswordUserFormData1 = {
-    password: {
-      current: '',
-      password: '12345',
-      confirm: '12345',
-    },
-  };
-
-  const wrongPatchPasswordUserFormData2 = {
-    password: {
-      current: dataForUser1.password,
-      password: '',
-      confirm: '',
-    },
-  };
-
-  const wrongUserFormData = {
-    form: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      password: '',
-    },
-  };
-
-  const taskstatusFormData = { form: { name: 'Done' } };
-  const patchTaskstatusFormData = { form: { name: 'Finished' } };
-  const tagFormData = { form: { name: 'Backend' } };
-  const patchTagFormData = { form: { name: 'Frontend' } };
   const wrongFormData = { form: { name: 'h' } };
 
   const taskFormData = {
@@ -149,17 +56,6 @@ describe('app', () => {
       assignedTo: 1,
       status: 1,
       tags: 1,
-    },
-  };
-
-  const patchTaskFormData = {
-    form: {
-      name: taskFormData.form.name,
-      description: 'All tags that unused must be deleted',
-      creator: 1,
-      assignedTo: 1,
-      status: 1,
-      tags: [],
     },
   };
 
@@ -208,13 +104,29 @@ describe('app', () => {
     };
 
     const task = await Task.create(dataForTask);
-    task.setTags(tag);
+    await task.setTags(tag);
 
     server = getApp().listen();
     req = request.agent(server);
   });
 
   describe('GET requests', () => {
+    const rootUrl = '/';
+    const wrongUrl = '/wrong-path';
+    const newSessionUrl = '/session/new';
+    const editUserUrl = '/users/1/edit';
+    const newUserUrl = '/users/new';
+    const unexistedEditUserUrl = '/users/1000/edit';
+    const editTaskStatusUrl = '/taskstatuses/1/edit';
+    const newTaskStatusUrl = '/taskstatuses/new';
+    const unexistedEditTaskStatusUrl = '/taskstatuses/1000/edit';
+    const editTagUrl = '/tags/1/edit';
+    const newTagUrl = '/tags/new';
+    const unexistedEditTagUrl = '/tags/1000/edit';
+    const editTaskUrl = '/tasks/1/edit';
+    const newTaskUrl = '/tasks/new';
+    const unexistedEditTaskUrl = '/tasks/1000/edit';
+
     const getRequestTestCases = [
       ['GET /', rootUrl, 200],
       ['GET /wrongUrl', wrongUrl, 404],
@@ -261,6 +173,20 @@ describe('app', () => {
   });
 
   describe('POST requests', () => {
+    const sessionUrl = '/session';
+
+    const wrongUserFormData = {
+      form: {
+        email: '',
+        firstName: '',
+        lastName: '',
+        password: '',
+      },
+    };
+
+    const taskstatusFormData = { form: { name: 'Done' } };
+    const tagFormData = { form: { name: 'Backend' } };
+
     const postRequestTestCases = [
       ['POST /session', sessionUrl, userFormData1, 302],
       ['POST /session (error)', sessionUrl, wrongUserFormData, 422],
@@ -296,6 +222,72 @@ describe('app', () => {
   });
 
   describe('PATCH requests', () => {
+    const userUrl1 = '/users/1';
+    const taskStatusUrl1 = '/taskstatuses/1';
+    const tagsUrl1 = '/tags/1';
+
+    const patchPersonalUserFormData1 = {
+      form: {
+        email: dataForUser1.email,
+        firstName: 'Mike',
+        lastName: dataForUser1.lastName,
+      },
+    };
+
+    const patchPersonalUserFormData2 = {
+      form: {
+        email: 'admin@gmail.com',
+        firstName: dataForUser1.firstName,
+        lastName: dataForUser1.lastName,
+      },
+    };
+
+    const wrongPatchPersonalUserFormData = {
+      form: {
+        email: '',
+        firstName: '',
+        lastName: '',
+      },
+    };
+
+    const patchPasswordUserFormData = {
+      password: {
+        current: dataForUser1.password,
+        password: '12345',
+        confirm: '12345',
+      },
+    };
+
+    const wrongPatchPasswordUserFormData1 = {
+      password: {
+        current: '',
+        password: '12345',
+        confirm: '12345',
+      },
+    };
+
+    const wrongPatchPasswordUserFormData2 = {
+      password: {
+        current: dataForUser1.password,
+        password: '',
+        confirm: '',
+      },
+    };
+
+    const patchTaskstatusFormData = { form: { name: 'Finished' } };
+    const patchTagFormData = { form: { name: 'Frontend' } };
+
+    const patchTaskFormData = {
+      form: {
+        name: taskFormData.form.name,
+        description: 'All tags that unused must be deleted',
+        creator: 1,
+        assignedTo: 1,
+        status: 1,
+        tags: [],
+      },
+    };
+
     const patchRequestTestWithAuthCases = [
       ['PATCH /users/1 (personal)', userUrl1, patchPersonalUserFormData1, 302],
       ['PATCH /users/1 (personal)', userUrl1, patchPersonalUserFormData2, 302],
@@ -323,6 +315,15 @@ describe('app', () => {
   });
 
   describe('DELETE requests', () => {
+    const userUrl2 = '/users/2';
+    const unexistedTaskStatusUrl = '/taskstatuses/1000';
+    const taskStatusUrl2 = '/taskstatuses/2';
+    const tagsUrl2 = '/tags/2';
+    const unexistedTagUrl = '/tags/1000';
+    const unexistedTaskUrl = '/tasks/1000';
+
+    const userFormData2 = { form: dataForUser2 };
+
     const deleteRequestTestWithAuthCases = [
       ['DELETE /users/2', userUrl2, 302],
       ['DELETE /taskstatuses/2', taskStatusUrl2, 302],
