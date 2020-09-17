@@ -26,7 +26,7 @@ export default (router, container) => {
         ctx.flash('info', i18next.t('flash.session.create.success'));
         ctx.session.userId = user.id;
         ctx.session.user = user;
-        ctx.redirect(router.url('root'));
+        ctx.redirect(router.url('tasks'));
         return;
       }
 
