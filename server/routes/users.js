@@ -12,7 +12,11 @@ export default (router, container) => {
     .get('users', '/users', async (ctx) => {
       const { User } = container.db;
 
-      const users = await User.findAll();
+      const dbQuery = {
+        order: [['createdAt', 'DESC']],
+      };
+
+      const users = await User.findAll(dbQuery);
       await ctx.render('users', { users });
     })
 
