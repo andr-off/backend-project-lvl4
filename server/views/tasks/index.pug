@@ -72,7 +72,7 @@ block content
           a.mr-3(
             data-toggle='collapse'
             href='#collapseDescription' + task.id
-          ) Description:
+          )  #{t('views.tasks.description')}:
           p(class='collapse' id='collapseDescription' + task.id)=task.description
         .row
           .col-4
