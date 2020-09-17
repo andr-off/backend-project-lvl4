@@ -22,7 +22,7 @@ export default (router, container) => {
         tagId,
       } = ctx.query;
 
-      const query = {
+      const dbQuery = {
         order: [['createdAt', 'DESC']],
         include: [
           { model: TaskStatus, as: 'taskStatus' },
@@ -34,32 +34,34 @@ export default (router, container) => {
       };
 
       if (taskStatusId) {
-        query.where.status = taskStatusId;
+        dbQuery.where.status = taskStatusId;
       }
 
       if (assignedToId) {
-        query.where.assignedTo = assignedToId;
+        dbQuery.where.assignedTo = assignedToId;
       }
 
       if (myTasks) {
-        query.where.creator = userId;
+        dbQuery.where.creator = userId;
       }
 
       if (tagId) {
-        query.where['$tags.id$'] = tagId;
+        dbQuery.where['$tags.id$'] = tagId;
       }
 
-      const tasks = await Task.findAll(query);
+      const tasks = await Task.findAll(dbQuery);
 
       const assignees = await User.scope('usedAssignees').findAll();
       const taskStatuses = await TaskStatus.scope('usedStatuses').findAll();
       const tags = await Tag.scope('usedTags').findAll();
+      console.log(ctx.query);
 
       await ctx.render('tasks', {
         tasks,
         assignees,
         taskStatuses,
         tags,
+        filterState: ctx.query,
       });
     })
 

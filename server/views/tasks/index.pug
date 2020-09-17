@@ -16,7 +16,11 @@ block content
         )
           option
           each taskStatus in taskStatuses
-            option(value=taskStatus.id)=taskStatus.name
+            option(
+              value=taskStatus.id
+              class=filterState.taskStatusId
+              selected=filterState.taskStatusId === taskStatus.id.toString()
+            )=taskStatus.name
 
       .form-group.mr-4
         label.mr-2(for='assignee')=t('views.tasks.assignedTo')
@@ -27,7 +31,10 @@ block content
         )
           option
           each assignee in assignees
-            option(value=assignee.id)=assignee.fullName
+            option(
+              value=assignee.id
+              selected=filterState.assignedToId === assignee.id.toString()
+            )=assignee.fullName
 
       .form-group.mr-4
         label.mr-2(for='tags')=t('views.tasks.tags')
@@ -38,10 +45,18 @@ block content
         )
           option
           each tag in tags
-            option(value=tag.id)=tag.name
+            option(
+              value=tag.id
+              selected=filterState.tagId === tag.id.toString()
+            )=tag.name
 
       .form-check.mr-4
-        input.form-check-input(type='checkbox' id='my-tasks' name='myTasks')
+        input.form-check-input(
+          type='checkbox'
+          id='my-tasks'
+          name='myTasks'
+          checked=Boolean(filterState.myTasks)
+        )
         label.form-check-label(for='my-tasks')=t('views.tasks.myTasks')
 
       .form-group.mr-4
