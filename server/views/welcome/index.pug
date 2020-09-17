@@ -6,8 +6,9 @@ block content
     p.lead=t('views.welcome.index.lead')
     hr.my-4
     p=t('views.welcome.index.description')
-    p=t('views.welcome.index.isMember')
-      |
-      |
-      a(href=urlFor('newSession'))=t('layouts.application.logIn')
-    a.btn.btn-lg.btn-primary.text-white(href=urlFor('newUser'))=t('layouts.application.signUp')
+    if !isSignedIn()
+      p=t('views.welcome.index.isMember')
+        |
+        |
+        a(href=urlFor('newSession'))=t('layouts.application.logIn')
+      a.btn.btn-lg.btn-primary.text-white(href=urlFor('newUser'))=t('layouts.application.signUp')
