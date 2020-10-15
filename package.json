@@ -80,7 +80,10 @@
     "webpack-cli": "^3.3.12"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/__tests__/helpers/"
+    ]
   },
   "files": [
     "dist"
