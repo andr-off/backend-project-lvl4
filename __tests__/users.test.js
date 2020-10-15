@@ -27,13 +27,6 @@ describe('requests to /users', () => {
     user,
   };
 
-  // const patchRequestTestCases = [
-  //   ['PATCH /users/:id personal', userUrl1, formUserData.patch, 302],
-  //   ['PATCH /users/:id personal (errors1)', userUrl1, formUserData.wrongPatch1, 422],
-  //   ['PATCH /users/:id personal (errors2)', userUrl1, formUserData.wrongPatch2, 422],
-  //   ['PATCH /users/:id personal (errors2)', userUrl1, formUserData.wrongPatch3, 422],
-  // ];
-
   beforeAll(async () => {
     expect.extend(matchers);
 

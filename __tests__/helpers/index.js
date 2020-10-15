@@ -1,7 +1,8 @@
 import path from 'path';
 import { promises as fs } from 'fs';
-import db from '../../server/models';
 import faker from 'faker';
+
+import db from '../../server/models';
 
 export const signIn = async (req, data) => {
   const res = await req
@@ -29,6 +30,7 @@ export const resetDb = () => db.sequelize.sync({ force: true });
 
 export const populateDb = async (dbData) => {
   await db.User.create(dbData.user);
+  await db.TaskStatus.create(dbData.taskStatus);
 
   // const { id: statusId } = await TaskStatus.create({ name: 'New' });
   // await TaskStatus.create({ name: 'In progress' });

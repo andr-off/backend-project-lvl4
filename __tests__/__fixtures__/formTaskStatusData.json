@@ -1,0 +1,17 @@
+{
+  "taskStatus": {
+    "form": {
+      "name": "Done"
+    }
+  },
+  "wrong": {
+    "form": {
+      "name": ""
+    }
+  },
+  "patch": {
+    "form": {
+      "name": "New status"
+    }
+  }
+}
