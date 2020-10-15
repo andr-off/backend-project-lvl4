@@ -13,7 +13,7 @@ import getApp from '../server';
 describe('requests to /session', () => {
   let req;
   let server;
-  let formUserData;
+  let formData;
 
   const sessionUrl = '/session';
   const newSessionUrl = '/session/new';
@@ -27,11 +27,11 @@ describe('requests to /session', () => {
   beforeAll(async () => {
     expect.extend(matchers);
 
-    const formUserDataJson = await readFile('formUserData.json');
+    const formDataJson = await readFile('formData.json');
 
-    formUserData = JSON.parse(formUserDataJson);
+    formData = JSON.parse(formDataJson);
 
-    formUserData.user = {
+    formData.user.user = {
       form: user,
     };
   });
@@ -54,7 +54,7 @@ describe('requests to /session', () => {
     const res = await req
       .post(sessionUrl)
       .type('form')
-      .send(formUserData.user);
+      .send(formData.user.user);
     expect(res).toHaveHTTPStatus(302);
   });
 
@@ -62,7 +62,7 @@ describe('requests to /session', () => {
     const res = await req
       .post(sessionUrl)
       .type('form')
-      .send(formUserData.wrong1);
+      .send(formData.user.wrong1);
     expect(res).toHaveHTTPStatus(422);
   });
 
@@ -70,7 +70,7 @@ describe('requests to /session', () => {
     const res1 = await req
       .post('/session')
       .type('form')
-      .send(formUserData.user);
+      .send(formData.user.user);
     expect(res1).toHaveHTTPStatus(302);
 
     const res2 = await req

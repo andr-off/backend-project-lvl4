@@ -1,0 +1,77 @@
+{
+  "user": {
+    "wrong1": {
+      "form": {
+        "firstName": "Mike",
+        "lastName": "",
+        "email": "",
+        "password": "12345"
+      }
+    },
+    "wrong2": {
+      "form": {
+        "firstName": "Bob",
+        "lastName": "",
+        "email": "bob@mail.ru",
+        "password": "123"
+      }
+    },
+    "wrong3": {
+      "form": {
+        "firstName": "",
+        "lastName": "",
+        "email": "bob@mail.ru",
+        "password": "12345"
+      }
+    },
+    "patch": {
+      "form": {
+        "firstName": "administrator",
+        "lastName": "",
+        "email": "administrator@mail.ru",
+        "password": "verystrongpassword"
+      }
+    },
+    "wrongPatch1": {
+      "form": {
+        "firstName": "administrator",
+        "lastName": "",
+        "email": "hello",
+        "password": "verystrongpassword"
+      }
+    },
+    "wrongPatch2": {
+      "form": {
+        "firstName": "",
+        "lastName": "",
+        "email": "administrator@mail.ru",
+        "password": "verystrongpassword"
+      }
+    },
+    "wrongPatch3": {
+      "form": {
+        "firstName": "administrator",
+        "lastName": "",
+        "email": "administrator@mail.ru",
+        "password": "123"
+      }
+    }
+  },
+  "taskStatus": {
+    "taskStatus": {
+      "form": {
+        "name": "Done"
+      }
+    },
+    "wrong": {
+      "form": {
+        "name": ""
+      }
+    },
+    "patch": {
+      "form": {
+        "name": "New status"
+      }
+    }
+  }
+}

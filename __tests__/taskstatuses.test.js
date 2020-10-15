@@ -14,30 +14,26 @@ import getApp from '../server';
 describe('requests to /users', () => {
   let req;
   let server;
-  let formUserData;
-  let formTaskStatusData;
+  let formData;
   let dbData;
 
   const taskStatusesUrl = '/taskstatuses';
   const editTaskStatusUrl = '/taskstatuses/1/edit';
-  const taskStatusUrl  = '/taskstatuses/1';
+  const taskStatusUrl = '/taskstatuses/1';
   const newTaskStatusUrl = '/taskstatuses/new';
-  const unexistedEditTaskStatusUrl = '/taskstatuses/1000/edit';
 
   const user = getDataForUser();
 
   beforeAll(async () => {
     expect.extend(matchers);
 
-    const formUserDataJson = await readFile('formUserData.json');
-    const formTaskStatusDataJson = await readFile('formTaskStatusData.json');
+    const formDataJson = await readFile('formData.json');
     const dbDataJson = await readFile('dbData.json');
 
-    formUserData = JSON.parse(formUserDataJson);
-    formTaskStatusData = JSON.parse(formTaskStatusDataJson);
+    formData = JSON.parse(formDataJson);
     dbData = JSON.parse(dbDataJson);
 
-    formUserData.user = {
+    formData.user.user = {
       form: user,
     };
 
@@ -57,7 +53,7 @@ describe('requests to /users', () => {
       .get(newTaskStatusUrl);
     expect(res1).toHaveHTTPStatus(401);
 
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res2 = await req
       .set('Cookie', cookie)
@@ -66,7 +62,7 @@ describe('requests to /users', () => {
   });
 
   test('GET /taskstatuses/1/edit', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
@@ -75,46 +71,46 @@ describe('requests to /users', () => {
   });
 
   test('POST /taskstatuses', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .post(taskStatusesUrl)
       .type('form')
-      .send(formTaskStatusData.taskStatus);
+      .send(formData.taskStatus.taskStatus);
     expect(res).toHaveHTTPStatus(302);
   });
 
   test('POST /taskstatuses (errors)', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .post(taskStatusesUrl)
       .type('form')
-      .send(formTaskStatusData.wrong);
+      .send(formData.taskStatus.wrong);
     expect(res).toHaveHTTPStatus(422);
   });
 
   test('PATCH /taskstatuses/1', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .patch(taskStatusUrl)
       .type('form')
-      .send(formTaskStatusData.patch);
+      .send(formData.taskStatus.patch);
     expect(res).toHaveHTTPStatus(302);
   });
 
   test('PATCH /taskstatuses/1 (errors)', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .patch(taskStatusUrl)
       .type('form')
-      .send(formTaskStatusData.wrong);
+      .send(formData.taskStatus.wrong);
     expect(res).toHaveHTTPStatus(422);
   });
 
@@ -123,7 +119,7 @@ describe('requests to /users', () => {
       .delete(taskStatusUrl);
     expect(res1).toHaveHTTPStatus(401);
 
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res2 = await req
       .set('Cookie', cookie)

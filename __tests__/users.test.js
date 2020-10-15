@@ -14,7 +14,7 @@ import getApp from '../server';
 describe('requests to /users', () => {
   let req;
   let server;
-  let formUserData;
+  let formData;
 
   const userUrl = '/users/1';
   const newUserUrl = '/users/new';
@@ -30,11 +30,11 @@ describe('requests to /users', () => {
   beforeAll(async () => {
     expect.extend(matchers);
 
-    const formUserDataJson = await readFile('formUserData.json');
+    const formDataJson = await readFile('formData.json');
 
-    formUserData = JSON.parse(formUserDataJson);
+    formData = JSON.parse(formDataJson);
 
-    formUserData.user = {
+    formData.user.user = {
       form: user,
     };
   });
@@ -58,7 +58,7 @@ describe('requests to /users', () => {
       .get(editUserUrl);
     expect(res1).toHaveHTTPStatus(403);
 
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res2 = await req
       .set('Cookie', cookie)
@@ -80,7 +80,7 @@ describe('requests to /users', () => {
     const res = await req
       .post(usersUrl)
       .type('form')
-      .send(formUserData.wrong1);
+      .send(formData.user.wrong1);
     expect(res).toHaveHTTPStatus(422);
   });
 
@@ -88,7 +88,7 @@ describe('requests to /users', () => {
     const res = await req
       .post(usersUrl)
       .type('form')
-      .send(formUserData.wrong2);
+      .send(formData.user.wrong2);
     expect(res).toHaveHTTPStatus(422);
   });
 
@@ -96,51 +96,51 @@ describe('requests to /users', () => {
     const res = await req
       .post(usersUrl)
       .type('form')
-      .send(formUserData.wrong3);
+      .send(formData.user.wrong3);
     expect(res).toHaveHTTPStatus(422);
   });
 
   test('PATCH /users', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .patch(userUrl)
       .type('form')
-      .send(formUserData.patch);
+      .send(formData.user.patch);
     expect(res).toHaveHTTPStatus(302);
   });
 
   test('PATCH /users (errors1)', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .patch(userUrl)
       .type('form')
-      .send(formUserData.wrongPatch1);
+      .send(formData.user.wrongPatch1);
     expect(res).toHaveHTTPStatus(422);
   });
 
   test('PATCH /users (errors2)', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .patch(userUrl)
       .type('form')
-      .send(formUserData.wrongPatch2);
+      .send(formData.user.wrongPatch2);
     expect(res).toHaveHTTPStatus(422);
   });
 
   test('PATCH /users (errors3)', async () => {
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res = await req
       .set('Cookie', cookie)
       .patch(userUrl)
       .type('form')
-      .send(formUserData.wrongPatch3);
+      .send(formData.user.wrongPatch3);
     expect(res).toHaveHTTPStatus(422);
   });
 
@@ -149,7 +149,7 @@ describe('requests to /users', () => {
       .delete(userUrl);
     expect(res1).toHaveHTTPStatus(403);
 
-    const cookie = await signIn(req, formUserData.user);
+    const cookie = await signIn(req, formData.user.user);
 
     const res2 = await req
       .set('Cookie', cookie)
