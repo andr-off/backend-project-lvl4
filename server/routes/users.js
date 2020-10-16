@@ -137,7 +137,8 @@ export default (router, container) => {
       try {
         await user.destroy();
 
-        ctx.session = {};
+        ctx.session.userId = null;
+        ctx.session.user = null;
         ctx.flash('info', i18next.t('flash.users.delete.success'));
         ctx.redirect(router.url('root'));
       } catch (e) {

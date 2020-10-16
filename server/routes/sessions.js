@@ -36,7 +36,8 @@ export default (router, container) => {
     })
 
     .delete('/session', (ctx) => {
-      ctx.session = {};
+      ctx.session.userId = null;
+      ctx.session.user = null;
       ctx.flash('info', i18next.t('flash.session.delete.success'));
       ctx.redirect(router.url('root'));
     });
