@@ -31,21 +31,5 @@ export const resetDb = () => db.sequelize.sync({ force: true });
 export const populateDb = async (dbData) => {
   await db.User.create(dbData.user);
   await db.TaskStatus.create(dbData.taskStatus);
-
-  // const { id: statusId } = await TaskStatus.create({ name: 'New' });
-  // await TaskStatus.create({ name: 'In progress' });
-
-  // const tag = await Tag.create({ name: 'UI' });
-  // await Tag.create({ name: 'Important' });
-
-  // const dataForTask = {
-  //   name: 'Create sum function',
-  //   description: 'Function must add two numbers',
-  //   status: statusId,
-  //   creator: userId,
-  //   assignedTo: userId,
-  // };
-
-  // const task = await Task.create(dataForTask);
-  // await task.setTags(tag);
+  await db.Task.create(dbData.task);
 };

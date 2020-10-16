@@ -73,5 +73,34 @@
         "name": "New status"
       }
     }
+  },
+  "task": {
+    "task": {
+      "form": {
+        "name": "Add devide function",
+        "description": "",
+        "status": "1",
+        "creator": "1",
+        "assignedTo": "1"
+      }
+    },
+    "wrong": {
+      "form": {
+        "name": "",
+        "description": "",
+        "status": "1",
+        "creator":"1",
+        "assignedTo": "1"
+      }
+    },
+    "patch": {
+      "form": {
+        "name": "Add sum function",
+        "description": "That add three numbers",
+        "status": "1",
+        "creator":"1",
+        "assignedTo": "1"
+      }
+    }
   }
 }

@@ -1,5 +1,12 @@
 {
   "taskStatus": {
     "name": "New"
+  },
+  "task": {
+    "name": "Add sum function",
+    "description": "",
+    "status": "1",
+    "creator": "1",
+    "assignedTo": "1"
   }
 }
