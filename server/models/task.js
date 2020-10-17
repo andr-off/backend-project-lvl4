@@ -19,6 +19,16 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     description: DataTypes.TEXT,
+  }, {
+    defaultScope: {
+      order: [['createdAt', 'DESC']],
+      include: [
+        'taskStatus',
+        'maker',
+        'assignee',
+        'tags',
+      ],
+    }
   });
 
   Task.associate = (models) => {

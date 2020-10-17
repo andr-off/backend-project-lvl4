@@ -8,11 +8,7 @@ export default (router, container) => {
     .get('tags', '/tags', requiredAuthentication, async (ctx) => {
       const { Tag } = container.db;
 
-      const dbQuery = {
-        order: [['createdAt', 'DESC']],
-      };
-
-      const tags = await Tag.findAll(dbQuery);
+      const tags = await Tag.findAll();
       await ctx.render('tags', { tags });
     })
 

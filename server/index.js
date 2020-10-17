@@ -74,7 +74,7 @@ export default () => {
   app.use(async (ctx, next) => {
     ctx.state = {
       flash: ctx.flash,
-      isSignedIn: () => ctx.session.userId !== undefined,
+      isSignedIn: () => Boolean(ctx.session.userId),
       user: ctx.session.user,
       currentUrl: ctx.request.url,
     };

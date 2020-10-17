@@ -56,6 +56,9 @@ module.exports = (sequelize, DataTypes) => {
         return `${this.firstName} ${this.lastName}`;
       },
     },
+    defaultScope: {
+      order: [['createdAt', 'DESC']],
+    },
     scopes: {
       usedAssignees: {
         include: [

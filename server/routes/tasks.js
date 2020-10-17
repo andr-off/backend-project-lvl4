@@ -23,13 +23,6 @@ export default (router, container) => {
       } = ctx.query;
 
       const dbQuery = {
-        order: [['createdAt', 'DESC']],
-        include: [
-          { model: TaskStatus, as: 'taskStatus' },
-          { model: User, as: 'maker' },
-          { model: User, as: 'assignee' },
-          { model: Tag, as: 'tags' },
-        ],
         where: {},
       };
 
@@ -54,7 +47,6 @@ export default (router, container) => {
       const assignees = await User.scope('usedAssignees').findAll();
       const taskStatuses = await TaskStatus.scope('usedStatuses').findAll();
       const tags = await Tag.scope('usedTags').findAll();
-      console.log(ctx.query);
 
       await ctx.render('tasks', {
         tasks,
@@ -100,10 +92,7 @@ export default (router, container) => {
 
       const { id } = ctx.params;
 
-      const task = await Task.findOne({
-        where: { id },
-        include: [{ model: Tag, as: 'tags' }],
-      });
+      const task = await Task.findByPk(id);
 
       if (!task) {
         throw new container.errors.NotFoundError();
@@ -200,10 +189,7 @@ export default (router, container) => {
 
       form.tags = form.tags || [];
 
-      const task = await Task.findOne({
-        where: { id },
-        include: [{ model: Tag, as: 'tags' }],
-      });
+      const task = await Task.findByPk(id);
 
       if (!task) {
         throw new container.errors.NotFoundError();
@@ -215,8 +201,10 @@ export default (router, container) => {
         },
       });
 
+      const { creator, ...formWithoutCreator } = form;
+
       try {
-        await task.update(form);
+        await task.update(formWithoutCreator);
         await task.setTags(formTags);
 
         ctx.flash('info', i18next.t('flash.tasks.patch.success'));

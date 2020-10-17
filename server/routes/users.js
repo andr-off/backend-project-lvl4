@@ -12,11 +12,8 @@ export default (router, container) => {
     .get('users', '/users', async (ctx) => {
       const { User } = container.db;
 
-      const dbQuery = {
-        order: [['createdAt', 'DESC']],
-      };
+      const users = await User.findAll();
 
-      const users = await User.findAll(dbQuery);
       await ctx.render('users', { users });
     })
 

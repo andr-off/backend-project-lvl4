@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   }, {
+    defaultScope: {
+      order: [['createdAt', 'DESC']],
+    },
     scopes: {
       usedStatuses: {
         include: [

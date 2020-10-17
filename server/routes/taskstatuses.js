@@ -9,11 +9,7 @@ export default (router, container) => {
     .get('taskStatuses', '/taskstatuses', requiredAuthentication, async (ctx) => {
       const { TaskStatus } = db;
 
-      const dbQuery = {
-        order: [['createdAt', 'DESC']],
-      };
-
-      const taskStatuses = await TaskStatus.findAll(dbQuery);
+      const taskStatuses = await TaskStatus.findAll();
       await ctx.render('taskstatuses', { taskStatuses });
     })
 
