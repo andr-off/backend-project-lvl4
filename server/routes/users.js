@@ -122,13 +122,30 @@ export default (router, container) => {
     })
 
     .delete('/users/:id', requiredAuthorization, async (ctx) => {
-      const { User } = container.db;
+      const { User, Task } = container.db;
       const { id } = ctx.params;
 
       const user = await User.findByPk(id);
 
       if (!user) {
         throw new container.errors.NotFoundError();
+      }
+
+      const tasks = await Task.findAll({
+        where: {
+          [container.db.Sequelize.Op.or]: [
+            { creator: user.id },
+            { assignedTo: user.id },
+          ],
+        },
+      });
+
+      if (tasks.length > 0) {
+        ctx.flash('info', i18next.t('flash.users.delete.error'));
+        await ctx.render('users/edit', {
+          f: buildFormObj(user),
+          p: buildFormObj(user, 'password'),
+        });
       }
 
       try {
