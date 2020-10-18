@@ -125,7 +125,7 @@ export default (router, container) => {
       form.name = normalizeName(form.name);
       form.description = form.description.trim();
 
-      const creator = await User.findByPk(ctx.session.userId);
+      const creator = ctx.session.user;
       const assignedTo = await User.findByPk(form.assignedTo);
       const status = await TaskStatus.findByPk(form.status);
 
@@ -183,7 +183,6 @@ export default (router, container) => {
 
       form.name = normalizeName(form.name);
       form.description = form.description.trim();
-      form.creator = Number(ctx.session.userId);
       form.assignedTo = Number(form.assignedTo);
       form.status = Number(form.status);
 
