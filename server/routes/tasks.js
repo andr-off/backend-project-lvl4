@@ -63,7 +63,6 @@ export default (router, container) => {
         Task,
         User,
         TaskStatus,
-        Tag,
       } = container.db;
 
       const task = Task.build();
@@ -73,13 +72,11 @@ export default (router, container) => {
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
-      const tags = await Tag.findAll();
 
       await ctx.render('tasks/new', {
         f: buildFormObj(task),
         users,
         taskStatuses,
-        tags,
       });
     })
 
@@ -88,7 +85,6 @@ export default (router, container) => {
         Task,
         User,
         TaskStatus,
-        Tag,
       } = container.db;
 
       const { id } = ctx.params;
@@ -101,15 +97,11 @@ export default (router, container) => {
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
-      const tags = await Tag.findAll();
-      const selectedTags = await task.getTags();
 
       await ctx.render('tasks/edit', {
         f: buildFormObj(task),
         users,
         taskStatuses,
-        tags,
-        selectedTags,
       });
     })
 
@@ -152,7 +144,6 @@ export default (router, container) => {
           users,
           taskStatuses,
           tags,
-          selectedTags,
         });
 
         return;
@@ -177,7 +168,6 @@ export default (router, container) => {
           users,
           taskStatuses,
           tags,
-          selectedTags,
         });
       }
     })
@@ -204,13 +194,13 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      const formTags = await getTagsFromStr(Tag, form.tags);
+      const selectedTags = await getTagsFromStr(Tag, form.tags);
 
       const { creator, ...formWithoutCreator } = form;
 
       try {
         await task.update(formWithoutCreator);
-        await task.setTags(formTags);
+        await task.setTags(selectedTags);
 
         ctx.flash('info', i18next.t('flash.tasks.patch.success'));
         ctx.redirect(router.url('tasks', id));
@@ -221,15 +211,12 @@ export default (router, container) => {
         const users = await User.findAll();
         const taskStatuses = await TaskStatus.findAll();
         const tags = await Tag.findAll();
-        const selectedTags = formTags;
 
         await ctx.render('tasks/edit', {
           f: buildFormObj(task, e),
-          task,
           users,
           taskStatuses,
           tags,
-          selectedTags,
         });
       }
     })

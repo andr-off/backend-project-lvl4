@@ -1,27 +1,26 @@
 import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
 import { normalizeName } from '../lib/normilazer';
-import db from '../models';
 import requiredAuthentication from '../middlewares/authentication.middleware';
 
 export default (router, container) => {
   router
     .get('taskStatuses', '/taskstatuses', requiredAuthentication, async (ctx) => {
-      const { TaskStatus } = db;
+      const { TaskStatus } = container.db;
 
       const taskStatuses = await TaskStatus.findAll();
       await ctx.render('taskstatuses', { taskStatuses });
     })
 
     .get('newTaskStatus', '/taskstatuses/new', requiredAuthentication, async (ctx) => {
-      const { TaskStatus } = db;
+      const { TaskStatus } = container.db;
 
       const taskStatus = TaskStatus.build();
       await ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus) });
     })
 
     .get('editTaskStatus', '/taskstatuses/:id/edit', requiredAuthentication, async (ctx) => {
-      const { TaskStatus } = db;
+      const { TaskStatus } = container.db;
       const { id } = ctx.params;
 
       const taskStatus = await TaskStatus.findByPk(id);
@@ -30,11 +29,11 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      await ctx.render('taskstatuses/edit', { f: buildFormObj(taskStatus), taskStatus });
+      await ctx.render('taskstatuses/edit', { f: buildFormObj(taskStatus) });
     })
 
     .post('/taskstatuses', requiredAuthentication, async (ctx) => {
-      const { TaskStatus } = db;
+      const { TaskStatus } = container.db;
       const { request: { body: { form } } } = ctx;
 
       form.name = normalizeName(form.name);
@@ -53,7 +52,7 @@ export default (router, container) => {
     })
 
     .patch('taskStatus', '/taskstatuses/:id', requiredAuthentication, async (ctx) => {
-      const { TaskStatus } = db;
+      const { TaskStatus } = container.db;
       const { id } = ctx.params;
       const { request: { body: { form } } } = ctx;
 
@@ -77,13 +76,25 @@ export default (router, container) => {
     })
 
     .delete('/taskstatuses/:id', requiredAuthentication, async (ctx) => {
-      const { TaskStatus } = db;
+      const { TaskStatus, Task } = container.db;
       const { id } = ctx.params;
 
       const taskStatus = await TaskStatus.findByPk(id);
 
       if (!taskStatus) {
         throw new container.errors.NotFoundError();
+      }
+
+      const tasks = await Task.findAll({
+        where: {
+          status: taskStatus.id,
+        },
+      });
+
+      if (tasks.length > 0) {
+        ctx.flash('error', i18next.t('flash.taskStatuses.delete.dependError'));
+        ctx.redirect(router.url('taskStatuses'));
+        return;
       }
 
       try {

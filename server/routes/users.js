@@ -108,10 +108,11 @@ export default (router, container) => {
       });
 
       if (tasks.length > 0) {
-        ctx.flash('info', i18next.t('flash.users.delete.error'));
+        ctx.flash('error', i18next.t('flash.users.delete.dependError'));
         await ctx.render('users/edit', {
           f: buildFormObj(user),
         });
+        return;
       }
 
       try {
