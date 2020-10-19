@@ -84,6 +84,7 @@ module.exports = {
         delete: {
           success: 'Задача успешно удалена',
         },
+        mustExist: 'Сущность должна существовать',
       },
     },
     layouts: {

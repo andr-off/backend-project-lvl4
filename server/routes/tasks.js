@@ -137,11 +137,32 @@ export default (router, container) => {
         },
       });
 
-      if (!creator || !assignedTo || !status) {
-        throw new container.errors.NotFoundError();
-      }
+      const users = await User.findAll();
+      const taskStatuses = await TaskStatus.findAll();
+      const tags = await Tag.findAll();
 
       const task = Task.build(form);
+
+      if (!assignedTo || !status) {
+        ctx.status = 422;
+        ctx.flash('error', i18next.t('flash.tasks.create.error'));
+
+        await ctx.render('tasks/new', {
+          f: buildFormObj(task, {
+            errors: [
+              { path: 'assignedTo', message: i18next.t('flash.tasks.mustExist') },
+              { path: 'status', message: i18next.t('flash.tasks.mustExist') },
+            ],
+          }),
+          users,
+          taskStatuses,
+          tags,
+          selectedTags,
+        });
+
+        return;
+      }
+
       task.setTaskStatus(status);
       task.setAssignee(assignedTo);
       task.setMaker(creator);
@@ -155,10 +176,6 @@ export default (router, container) => {
       } catch (e) {
         ctx.status = 422;
         ctx.flash('error', i18next.t('flash.tasks.create.error'));
-
-        const users = await User.findAll();
-        const taskStatuses = await TaskStatus.findAll();
-        const tags = await Tag.findAll();
 
         await ctx.render('tasks/new', {
           f: buildFormObj(task, e),
