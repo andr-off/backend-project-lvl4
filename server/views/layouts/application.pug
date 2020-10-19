@@ -17,8 +17,6 @@ html(lang="en")
           if isSignedIn()
             li.nav-item(class = currentUrl === '/taskstatuses' ? 'active' : '')
               a.nav-link(href=urlFor('taskStatuses'))=t('layouts.application.taskStatuses')
-            li.nav-item(class = currentUrl === '/tags' ? 'active' : '')
-              a.nav-link(href=urlFor('tags'))=t('layouts.application.tags')
             li.nav-item(class = currentUrl === '/tasks' ? 'active' : '')
               a.nav-link(href=urlFor('tasks'))=t('layouts.application.tasks')
         ul.navbar-nav

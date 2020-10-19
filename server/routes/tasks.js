@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
+import { getTagsFromStr } from '../lib/helpers';
 import { normalizeName } from '../lib/normilazer';
 import requiredAuthentication from '../middlewares/authentication.middleware';
 
@@ -129,13 +130,7 @@ export default (router, container) => {
       const assignedTo = await User.findByPk(form.assignedTo);
       const status = await TaskStatus.findByPk(form.status);
 
-      form.tags = form.tags || [];
-
-      const selectedTags = await Tag.findAll({
-        where: {
-          id: form.tags,
-        },
-      });
+      const selectedTags = await getTagsFromStr(Tag, form.tags);
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
@@ -203,19 +198,13 @@ export default (router, container) => {
       form.assignedTo = Number(form.assignedTo);
       form.status = Number(form.status);
 
-      form.tags = form.tags || [];
-
       const task = await Task.findByPk(id);
 
       if (!task) {
         throw new container.errors.NotFoundError();
       }
 
-      const formTags = await Tag.findAll({
-        where: {
-          id: form.tags,
-        },
-      });
+      const formTags = await getTagsFromStr(Tag, form.tags);
 
       const { creator, ...formWithoutCreator } = form;
 

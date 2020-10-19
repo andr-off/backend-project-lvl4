@@ -8,7 +8,7 @@ block content
     +textarea(f, 'description', { label: t('views.tasks.description'), rows: 3 })
     +select(f, 'assignedTo', users, 'fullName', { label: t('views.tasks.assignedTo'), required: true })
     +select(f, 'status', taskStatuses, 'name', { label: t('views.tasks.status'), required: true })
-    +select(f, 'tags', tags, 'name', { multiple: true, label: t('views.tasks.tags') }, selectedTags)
+    +input(f, 'tags', { description: t('views.tasks.separator'), label: t('views.tasks.tags') })
     +button(f, t('views.tasks.edit.submit'))
 
   .row.justify-content-md-center.text-center

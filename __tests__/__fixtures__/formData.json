@@ -81,7 +81,8 @@
         "description": "",
         "status": "1",
         "creator": "1",
-        "assignedTo": "1"
+        "assignedTo": "1",
+        "tags": ""
       }
     },
     "wrong": {
@@ -90,7 +91,8 @@
         "description": "",
         "status": "1",
         "creator":"1",
-        "assignedTo": "1"
+        "assignedTo": "1",
+        "tags": ""
       }
     },
     "patch": {
@@ -99,7 +101,8 @@
         "description": "That add three numbers",
         "status": "1",
         "creator":"1",
-        "assignedTo": "1"
+        "assignedTo": "1",
+        "tags": "UI, frontend"
       }
     }
   }

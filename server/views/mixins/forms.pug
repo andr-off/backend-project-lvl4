@@ -1,4 +1,5 @@
 - const getInputName = (f, property) => `${f.name}[${property}]`
+- const buildValue = (value) => Array.isArray(value) ? value.map(({ name }) => name).join(', ') : value;
 
 mixin formFor(f, options = {})
   - const url = _.get(options, 'url');
@@ -10,7 +11,7 @@ mixin formFor(f, options = {})
     block
 
 mixin input(f, property, options = { as: 'text' })
-  - const value = f.object[property] === undefined ? '' : f.object[property]
+  - const value = f.object[property] === undefined ? '' : buildValue(f.object[property])
   .form-group
     label(for=property)= options['label'] || property
       if options.required
@@ -24,6 +25,8 @@ mixin input(f, property, options = { as: 'text' })
       type=options['as']
       value=`${value}`
     )
+    if options.description
+      small.form-text.text-muted= options.description
     if f.errors[property]
       .invalid-feedback= f.errors[property].map(({ message }) => message).join('. ')
 
