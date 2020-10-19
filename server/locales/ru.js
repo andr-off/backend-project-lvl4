@@ -125,9 +125,7 @@ module.exports = {
         edit: {
           title: 'Настройки пользователя',
           information: 'Информация о пользователе',
-          newPassword: 'Новый пароль',
-          currentPassword: 'Текущий пароль',
-          confirmPassword: 'Подтверждение пароля',
+          password: 'Пароль',
           deleteUser: 'Удалить пользователя',
           submit: 'Сохранить',
         },

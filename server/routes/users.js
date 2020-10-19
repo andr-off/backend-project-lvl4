@@ -5,7 +5,6 @@ import {
   normalizeName,
 } from '../lib/normilazer';
 import requiredAuthorization from '../middlewares/authorization.middleware';
-import encrypt from '../lib/secure';
 
 export default (router, container) => {
   router
@@ -32,7 +31,7 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      await ctx.render('users/edit', { f: buildFormObj(user), p: buildFormObj(user, [], 'password') });
+      await ctx.render('users/edit', { f: buildFormObj(user) });
     })
 
     .post('/users', async (ctx) => {
@@ -59,7 +58,7 @@ export default (router, container) => {
     .patch('user', '/users/:id', requiredAuthorization, async (ctx) => {
       const { User } = container.db;
       const { id } = ctx.params;
-      const { request: { body: { form, password } } } = ctx;
+      const { request: { body: { form } } } = ctx;
 
       const user = await User.findByPk(id);
 
@@ -67,44 +66,13 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      const userData = form || password;
+      form.email = normalizeEmail(form.email);
+      form.firstName = normalizeName(form.firstName);
+      form.lastName = normalizeName(form.lastName);
 
-      if (form) {
-        userData.email = normalizeEmail(userData.email);
-        userData.firstName = normalizeName(userData.firstName);
-        userData.lastName = normalizeName(userData.lastName);
-      } else {
-        if (user.passwordDigest !== encrypt(password.current)) {
-          ctx.status = 422;
-          ctx.flash('error', i18next.t('flash.users.patch.error'));
-          await ctx.render('users/edit', {
-            f: buildFormObj(user),
-            p: buildFormObj(user, {
-              errors: [
-                { path: 'current', message: i18next.t('validation.users.wrongPassword') },
-              ],
-            }, 'password'),
-          });
+      const { password, ...formWithoutPassword } = form;
 
-          return;
-        }
-
-        if (password.password !== password.confirm) {
-          ctx.status = 422;
-          ctx.flash('error', i18next.t('flash.users.patch.error'));
-          await ctx.render('users/edit', {
-            f: buildFormObj(user),
-            p: buildFormObj(user, {
-              errors: [
-                { path: 'password', message: i18next.t('validation.users.passwordsMustBeEqual') },
-                { path: 'confirm', message: i18next.t('validation.users.passwordsMustBeEqual') },
-              ],
-            }, 'password'),
-          });
-
-          return;
-        }
-      }
+      const userData = password === '' ? formWithoutPassword : form;
 
       try {
         await user.update(userData);
@@ -116,7 +84,6 @@ export default (router, container) => {
         ctx.flash('error', i18next.t('flash.users.patch.error'));
         await ctx.render('users/edit', {
           f: buildFormObj(user, e),
-          p: buildFormObj(user, e, 'password'),
         });
       }
     })
@@ -144,7 +111,6 @@ export default (router, container) => {
         ctx.flash('info', i18next.t('flash.users.delete.error'));
         await ctx.render('users/edit', {
           f: buildFormObj(user),
-          p: buildFormObj(user, 'password'),
         });
       }
 
