@@ -26,23 +26,17 @@ export const getAlertClass = (type) => {
   }
 };
 
-export const getTagsFromStr = async (TagModel, str) => {
+export const getTagObjectsFromStr = async (str) => {
   if (str.length === 0) {
     return [];
   }
 
-  const promises = str.split(',')
+  const tagObjects = str.split(',')
     .map((tagName) => {
       const name = tagName.trim();
       return name.length >= 2 ? { name } : null;
     })
-    .filter((item) => item)
-    .map(async (item) => {
-      const [tag] = await TagModel.findCreateFind({ where: item });
-      return tag;
-    });
+    .filter((item) => item);
 
-  const tags = await Promise.all(promises);
-
-  return tags;
+  return tagObjects;
 };

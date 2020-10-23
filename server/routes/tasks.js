@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import buildFormObj from '../lib/formObjectBuilder';
-import { getTagsFromStr } from '../lib/helpers';
+import { getTagObjectsFromStr } from '../lib/helpers';
 import { normalizeName } from '../lib/normilazer';
 import requiredAuthentication from '../middlewares/authentication.middleware';
 
@@ -109,7 +109,7 @@ export default (router, container) => {
       const assignedTo = await User.findByPk(form.assignedTo);
       const status = await TaskStatus.findByPk(form.status);
 
-      const selectedTags = await getTagsFromStr(Tag, form.tags);
+      const tagObjects = await getTagObjectsFromStr(form.tags);
 
       const users = await User.findAll();
       const taskStatuses = await TaskStatus.findAll();
@@ -140,13 +140,29 @@ export default (router, container) => {
       task.setAssignee(assignedTo);
       task.setMaker(creator);
 
+      const t = await container.db.sequelize.transaction();
+
       try {
-        await task.save();
-        await task.setTags(selectedTags);
+        await task.save({ transaction: t });
+
+        const createdTags = await Tag.bulkCreate(tagObjects, {
+          ignoreDuplicates: true,
+          transaction: t,
+        });
+
+        const tagNames = createdTags.map(({ name }) => name);
+
+        const selectedTags = await Tag.findAll({ where: { name: tagNames } });
+
+        await task.setTags(selectedTags, { transaction: t });
+
+        await t.commit();
 
         ctx.flash('info', i18next.t('flash.tasks.create.success'));
         ctx.redirect(router.url('tasks'));
       } catch (e) {
+        await t.rollback();
+
         ctx.status = 422;
         ctx.flash('error', i18next.t('flash.tasks.create.error'));
 
@@ -181,17 +197,33 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      const selectedTags = await getTagsFromStr(Tag, form.tags);
+      const tagObjects = await getTagObjectsFromStr(form.tags);
 
       const { creator, ...formWithoutCreator } = form;
 
+      const t = await container.db.sequelize.transaction();
+
       try {
-        await task.update(formWithoutCreator);
-        await task.setTags(selectedTags);
+        await task.update(formWithoutCreator, { transaction: t });
+
+        const createdTags = await Tag.bulkCreate(tagObjects, {
+          ignoreDuplicates: true,
+          transaction: t,
+        });
+
+        const tagNames = createdTags.map(({ name }) => name);
+
+        const selectedTags = await Tag.findAll({ where: { name: tagNames } });
+
+        await task.setTags(selectedTags, { transaction: t });
+
+        await t.commit();
 
         ctx.flash('info', i18next.t('flash.tasks.patch.success'));
         ctx.redirect(router.url('tasks', id));
       } catch (e) {
+        await t.rollback();
+
         ctx.status = 422;
         ctx.flash('error', i18next.t('flash.tasks.patch.error'));
 
