@@ -22,13 +22,57 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     defaultScope: {
       order: [['createdAt', 'DESC']],
-      include: [
-        'taskStatus',
-        'maker',
-        'assignee',
-        'tags',
-      ],
-    }
+      include: { all: true },
+    },
+    scopes: {
+      byStatus(statusId) {
+        if (!statusId) {
+          return {};
+        }
+
+        return {
+          where: { status: statusId || 0 },
+        };
+      },
+      byCreator(creatorId) {
+        if (!creatorId) {
+          return {};
+        }
+
+        return {
+          where: {
+            creator: creatorId,
+          },
+        };
+      },
+      byAssignedTo(assignedToId) {
+        if (!assignedToId) {
+          return {};
+        }
+
+        return {
+          where: { assignedTo: assignedToId },
+        };
+      },
+      byTag(tagId) {
+        if (!tagId) {
+          return {};
+        }
+
+        return {
+          include: [
+            {
+              model: sequelize.models.Tag,
+              as: 'tags',
+              through: sequelize.models.TaskTag,
+              where: {
+                id: tagId,
+              },
+            }
+          ],
+        };
+      }
+    },
   });
 
   Task.associate = (models) => {

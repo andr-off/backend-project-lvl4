@@ -85,11 +85,7 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      const tasks = await Task.findAll({
-        where: {
-          status: taskStatus.id,
-        },
-      });
+      const tasks = await Task.scope([{ method: ['byStatus', taskStatus.id] }]).findAll();
 
       if (tasks.length > 0) {
         ctx.flash('error', i18next.t('flash.taskStatuses.delete.dependError'));

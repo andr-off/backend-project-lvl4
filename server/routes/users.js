@@ -98,18 +98,13 @@ export default (router, container) => {
         throw new container.errors.NotFoundError();
       }
 
-      const tasks = await Task.findAll({
-        where: {
-          [container.db.Sequelize.Op.or]: [
-            { creator: user.id },
-            { assignedTo: user.id },
-          ],
-        },
-      });
+      const tasks = await Task.scope([
+        { method: ['byCreator', user.id] },
+        { method: ['byAssignedTo', user.id] },
+      ]).findAll();
 
       if (tasks.length > 0) {
         ctx.flash('error', i18next.t('flash.users.delete.dependError'));
-        ctx.status = 422;
         await ctx.render('users/edit', {
           f: buildFormObj(user),
         });

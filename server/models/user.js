@@ -59,13 +59,6 @@ module.exports = (sequelize, DataTypes) => {
     defaultScope: {
       order: [['createdAt', 'DESC']],
     },
-    scopes: {
-      usedAssignees: {
-        include: [
-          { model: sequelize.models.Task, required: true },
-        ],
-      },
-    },
   });
 
   User.associate = (models) => {

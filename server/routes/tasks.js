@@ -23,31 +23,18 @@ export default (router, container) => {
         tagId,
       } = ctx.query;
 
-      const dbQuery = {
-        where: {},
-      };
+      const scopes = [
+        { method: ['byStatus', taskStatusId] },
+        { method: ['byCreator', myTasks === 'on' ? userId : null] },
+        { method: ['byAssignedTo', assignedToId] },
+        { method: ['byTag', tagId] },
+      ];
 
-      if (taskStatusId) {
-        dbQuery.where.status = taskStatusId;
-      }
+      const tasks = await Task.scope(['defaultScope', ...scopes]).findAll();
 
-      if (assignedToId) {
-        dbQuery.where.assignedTo = assignedToId;
-      }
-
-      if (myTasks) {
-        dbQuery.where.creator = userId;
-      }
-
-      if (tagId) {
-        dbQuery.where['$tags.id$'] = tagId;
-      }
-
-      const tasks = await Task.findAll(dbQuery);
-
-      const assignees = await User.scope('usedAssignees').findAll();
-      const taskStatuses = await TaskStatus.scope('usedStatuses').findAll();
-      const tags = await Tag.scope('usedTags').findAll();
+      const assignees = await User.findAll();
+      const taskStatuses = await TaskStatus.findAll();
+      const tags = await Tag.findAll();
 
       await ctx.render('tasks', {
         tasks,

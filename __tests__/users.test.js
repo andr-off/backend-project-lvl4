@@ -164,9 +164,7 @@ describe('requests to /users', () => {
   test('DELETE /users/1', async () => {
     const taskUrl = '/tasks/1';
 
-    const res1 = await req
-      .delete(userUrl);
-    expect(res1).toHaveHTTPStatus(422);
+    req.delete(userUrl);
 
     const userFromDb1 = await db.User.findByPk(1);
 

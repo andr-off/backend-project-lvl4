@@ -23,15 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     defaultScope: {
       order: [['createdAt', 'DESC']],
     },
-    scopes: {
-      usedTags() {
-        return {
-          include: [
-            { model: sequelize.models.Task, required: true },
-          ],
-        };
-      },
-    },
   });
 
   Tag.associate = (models) => {
