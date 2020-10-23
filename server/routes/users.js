@@ -109,6 +109,7 @@ export default (router, container) => {
 
       if (tasks.length > 0) {
         ctx.flash('error', i18next.t('flash.users.delete.dependError'));
+        ctx.status = 422;
         await ctx.render('users/edit', {
           f: buildFormObj(user),
         });

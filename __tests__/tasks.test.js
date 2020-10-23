@@ -1,5 +1,6 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
+import db from '../server/models';
 
 import {
   readFile,
@@ -38,54 +39,58 @@ describe('requests to /tasks', () => {
     };
 
     dbData.user = user;
+
+    server = getApp().listen();
+    req = request.agent(server);
   });
 
   beforeEach(async () => {
     await resetDb();
     await populateDb(dbData);
 
-    server = getApp().listen();
-    req = request.agent(server);
+    const cookie = await signIn(req, formData.user.user);
+    await req.set('Cookie', cookie);
+  });
+
+  test('GET /tasks', async () => {
+    const res1 = await req
+      .get(tasksUrl);
+    expect(res1).toHaveHTTPStatus(200);
+
+    await req.delete('/session');
+
+    const res2 = await req
+      .get(tasksUrl);
+    expect(res2).toHaveHTTPStatus(401);
   });
 
   test('GET /tasks/new', async () => {
-    const res1 = await req
-      .get(newTaskUrl);
-    expect(res1).toHaveHTTPStatus(401);
-
-    const cookie = await signIn(req, formData.user.user);
-
     const res2 = await req
-      .set('Cookie', cookie)
       .get(newTaskUrl);
     expect(res2).toHaveHTTPStatus(200);
   });
 
   test('GET /tasks/1/edit', async () => {
-    const cookie = await signIn(req, formData.user.user);
-
     const res = await req
-      .set('Cookie', cookie)
       .get(editTaskUrl);
     expect(res).toHaveHTTPStatus(200);
   });
 
   test('POST /tasks', async () => {
-    const cookie = await signIn(req, formData.user.user);
-
     const res = await req
-      .set('Cookie', cookie)
       .post(tasksUrl)
       .type('form')
-      .send(formData.task.task);
+      .send(formData.task.newTask);
     expect(res).toHaveHTTPStatus(302);
+
+    const newTaskName = formData.task.newTask.form.name;
+    const task = await db.Task.findOne({ where: { name: newTaskName } });
+
+    expect(task).not.toBeNull();
   });
 
   test('POST /tasks (errors)', async () => {
-    const cookie = await signIn(req, formData.user.user);
-
     const res = await req
-      .set('Cookie', cookie)
       .post(tasksUrl)
       .type('form')
       .send(formData.task.wrong);
@@ -93,21 +98,22 @@ describe('requests to /tasks', () => {
   });
 
   test('PATCH /tasks/1', async () => {
-    const cookie = await signIn(req, formData.user.user);
-
     const res = await req
-      .set('Cookie', cookie)
       .patch(taskUrl)
       .type('form')
       .send(formData.task.patch);
     expect(res).toHaveHTTPStatus(302);
+
+    const taskNewName = formData.task.patch.form.name;
+    const taskNewDescription = formData.task.patch.form.description;
+    const task = await db.Task.findByPk(1);
+
+    expect(task.name).toMatch(taskNewName);
+    expect(task.description).toMatch(taskNewDescription);
   });
 
   test('PATCH /tasks/1 (errors)', async () => {
-    const cookie = await signIn(req, formData.user.user);
-
     const res = await req
-      .set('Cookie', cookie)
       .patch(taskUrl)
       .type('form')
       .send(formData.task.wrong);
@@ -115,19 +121,16 @@ describe('requests to /tasks', () => {
   });
 
   test('DELETE /tasks/1', async () => {
-    const res1 = await req
+    const res = await req
       .delete(taskUrl);
-    expect(res1).toHaveHTTPStatus(401);
+    expect(res).toHaveHTTPStatus(302);
 
-    const cookie = await signIn(req, formData.user.user);
+    const task = await db.Task.findByPk(1);
 
-    const res2 = await req
-      .set('Cookie', cookie)
-      .delete(taskUrl);
-    expect(res2).toHaveHTTPStatus(302);
+    expect(task).toBeNull();
   });
 
-  afterEach((done) => {
+  afterAll((done) => {
     server.close();
     done();
   });

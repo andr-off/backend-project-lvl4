@@ -12,9 +12,6 @@ describe('requests to /', () => {
 
   beforeAll(async () => {
     expect.extend(matchers);
-  });
-
-  beforeEach(async () => {
     server = getApp().listen();
     req = request.agent(server);
   });
@@ -31,7 +28,7 @@ describe('requests to /', () => {
     expect(res).toHaveHTTPStatus(404);
   });
 
-  afterEach((done) => {
+  afterAll((done) => {
     server.close();
     done();
   });

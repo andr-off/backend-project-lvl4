@@ -38,7 +38,6 @@ export const getTagsFromStr = async (TagModel, str) => {
     })
     .filter((item) => item)
     .map(async (item) => {
-      console.log(item);
       const [tag] = await TagModel.findCreateFind({ where: item });
       return tag;
     });

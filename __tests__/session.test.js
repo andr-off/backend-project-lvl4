@@ -6,6 +6,7 @@ import {
   resetDb,
   populateDb,
   getDataForUser,
+  signIn,
 } from './helpers';
 
 import getApp from '../server';
@@ -34,14 +35,14 @@ describe('requests to /session', () => {
     formData.user.user = {
       form: user,
     };
+
+    server = getApp().listen();
+    req = request.agent(server);
   });
 
   beforeEach(async () => {
     await resetDb();
     await populateDb(dbData);
-
-    server = getApp().listen();
-    req = request.agent(server);
   });
 
   test('GET /session/new', async () => {
@@ -67,18 +68,15 @@ describe('requests to /session', () => {
   });
 
   test('DELETE /session', async () => {
-    const res1 = await req
-      .post('/session')
-      .type('form')
-      .send(formData.user.user);
-    expect(res1).toHaveHTTPStatus(302);
+    const cookie = await signIn(req, formData.user.user);
 
-    const res2 = await req
+    const res = await req
+      .set('Cookie', cookie)
       .delete('/session');
-    expect(res2).toHaveHTTPStatus(302);
+    expect(res).toHaveHTTPStatus(302);
   });
 
-  afterEach((done) => {
+  afterAll((done) => {
     server.close();
     done();
   });
